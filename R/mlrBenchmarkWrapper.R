@@ -1,8 +1,9 @@
 makeMLRBenchmarkWrapper = function(input.file) {
   bmr = readRDS(input.file)
-  # Add problem column
+  # General variables
   learner.count = length(bmr$learners)
   tasks.count = length(bmr$result)
+  # Add problem column
   tasks = rep(names(bmr$result), rep(learner.count, tasks.count))
   df = data.frame(problem = tasks)
   # Add problem parameters column
@@ -16,6 +17,9 @@ makeMLRBenchmarkWrapper = function(input.file) {
   task.parameter = rep(task.params, rep(learner.count, tasks.count))
   df$problem.parameter = task.parameter
   # Add algorithm column
+  learners = rep(names(bmr$learners),tasks.count)
+  df$algorithm = learners
+  # Add algorithm parameters
 
 }
 
