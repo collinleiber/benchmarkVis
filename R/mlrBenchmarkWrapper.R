@@ -1,13 +1,16 @@
 #' @title Insert mlr benchmark object into benchmarkVis application
 #'
 #' @description
-#' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object. All importont imformation will be read out of the input file and transformed in a matching build dataframe
+#' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
+#' All importont imformation will be read out of the input file and transformed in a matching build dataframe
 #'
-#' @param input.file Path to the input mlr benchmark file
+#' @param bmr a mlr benchmark result object
 #' @return a dataframe with the benchmarkVis specific structure
 #' @export
-makeMlrBenchmarkWrapper = function(input.file) {
-  bmr = readRDS(input.file)
+#' @examples
+#' data("mlr.benchmark")
+#' df = useMlrBenchmarkWrapper(mlr.benchmark)
+useMlrBenchmarkWrapper = function(bmr) {
   # General variables
   learner.count = length(bmr$learners)
   tasks.count = length(bmr$result)
@@ -72,5 +75,17 @@ makeMlrBenchmarkWrapper = function(input.file) {
   return(df)
 }
 
-# input.file = "data/mlrBenchmark.rds"
-# makeMlrBenchmarkWrapper(input.file)
+#' @title Insert mlr benchmark RDS file into benchmarkVis application
+#'
+#' @description
+#' Load the specified file and path it on the the useMlrBenchmarkWrapper function.
+#' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
+#' All importont imformation will be read out of the input file and transformed in a matching build dataframe
+#'
+#' @param input.file Path to the input mlr benchmark RDS file
+#' @return a dataframe with the benchmarkVis specific structure
+#' @export
+useMlrBenchmarkWrapperWithRdsFile = function(input.file) {
+  mlr.bmr = readRDS(input.file)
+  return(useMlrBenchmarkWrapper(mlr.bmr))
+}
