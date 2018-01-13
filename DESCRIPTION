@@ -15,4 +15,5 @@ Imports:
 Suggests: 
 	testthat,
 	lintr (>= 1.0.0.9001),
-	checkmate (>= 1.8.2)
+	checkmate (>= 1.8.2),
+	mlr(>= 2.12)
