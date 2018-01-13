@@ -13,7 +13,7 @@ useMlrBenchmarkWrapperWithRdsFile(input.file)
 a dataframe with the benchmarkVis specific structure
 }
 \description{
-Load the specified file and path it on the the useMlrBenchmarkWrapper function.
+Load the specified file and pass it on the the useMlrBenchmarkWrapper function.
 Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
 All importont imformation will be read out of the input file and transformed in a matching build dataframe
 }

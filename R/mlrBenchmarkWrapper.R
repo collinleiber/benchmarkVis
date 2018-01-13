@@ -29,7 +29,7 @@ useMlrBenchmarkWrapper = function(bmr) {
   df$problem.parameter = task.parameter
   # Add algorithm column
   learners = rep(names(bmr$learners), tasks.count)
-  df$algorithm = learners
+  df$algorithm = sapply(learners, as.factor)
   # Add algorithm parameters
   learner.params = list()
   for (i in 1:learner.count) {
@@ -43,7 +43,8 @@ useMlrBenchmarkWrapper = function(bmr) {
     replications[[i]] = bmr$results[[i]][[1]]$pred$instance$desc$id
   }
   replications = rep(replications, rep(learner.count, tasks.count))
-  df$replication = replications
+  # Convert to factor
+  df$replication = sapply(replications, as.factor)
   # Add replications parameters
   replication.params = list()
   for (i in 1:tasks.count) {
@@ -65,7 +66,7 @@ useMlrBenchmarkWrapper = function(bmr) {
             1]]
       }
     }
-    df[[names(bmr$results[[1]][[1]]$aggr)[[measure.nr]]]] = measure.list
+    df[[names(bmr$results[[1]][[1]]$aggr)[[measure.nr]]]] = sapply(measure.list, as.numeric)
     replication.results[[measure.nr]] = replication.list
   }
   for (i in seq(replication.results)) {
@@ -78,7 +79,7 @@ useMlrBenchmarkWrapper = function(bmr) {
 #' @title Insert mlr benchmark RDS file into benchmarkVis application
 #'
 #' @description
-#' Load the specified file and path it on the the useMlrBenchmarkWrapper function.
+#' Load the specified file and pass it on the the useMlrBenchmarkWrapper function.
 #' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
 #' All importont imformation will be read out of the input file and transformed in a matching build dataframe
 #'
