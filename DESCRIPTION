@@ -15,4 +15,6 @@ Imports:
 	BBmisc (>= 1.11)
 Suggests: 
 	testthat,
-	mlr
+	mlr,
+	lintr (>= 1.0.0.9001),
+	checkmate (>= 1.8.2)
