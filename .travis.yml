@@ -11,5 +11,6 @@ notifications:
   email:
     recipients:
       - collin.leiber@campus.lmu.de
+      - alona.sydorova@campus.lmu.de
 on_success: change
 on_failure: always
