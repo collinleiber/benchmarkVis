@@ -1,7 +1,9 @@
 Package: benchmarkVis
 Title: Benchmark result visualisation
 Version: 0.0.0.1
-Authors@R: person("Collin", "Leiber", email = "collin.leiber@campus.lmu.de", role = c("aut", "cre"))
+Authors@R: c(
+	person("Collin", "Leiber", email = "collin.leiber@campus.lmu.de", role = c("aut", "cre")),
+	person("Alona", "Sydorova", email = "alona.sydorova@campus.lmu.de", role = "aut"))
 Description: Implementation of an intuitive Shiny application to easily visualize benachmark results
 Depends: R (>= 3.4.2)
 License: file LICENSE
@@ -16,4 +18,5 @@ Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),
 	checkmate (>= 1.8.2),
-	mlr(>= 2.12)
+	mlr(>= 2.12),
+	microbenchmark

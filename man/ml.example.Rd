@@ -3,13 +3,13 @@
 \docType{data}
 \name{ml.example}
 \alias{ml.example}
-\title{Example input dataframe}
+\title{Example CSV file}
 \description{
-Contains the dataframe (\code{ml.example}).
-This file is a basic Version of a useable benchmark result dataframe.
-It can be loaded with "data("mlExample")" and will then be accessible through "ml.df".
+Contains the same dataframe as (\code{mlr.benchmark.example}).
+This file is an example of how a useable csv file should be structered.
+It can be loaded into the benchmarkVis application through the csvImport method.
 }
 \references{
-See \url{data/ml.example.RData}
+See \url{data/ml.example.csv}
 }
 \keyword{data}

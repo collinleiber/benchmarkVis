@@ -14,9 +14,12 @@ a dataframe with the benchmarkVis specific structure
 }
 \description{
 Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
-All importont imformation will be read out of the input file and transformed in a matching build dataframe
+All important imformation will be exluded from the input object and transformed into a appropriate dataframe
 }
 \examples{
-data("mlr.benchmark")
-df = useMlrBenchmarkWrapper(mlr.benchmark)
+library(mlr)
+lrns = list(makeLearner("classif.lda"), makeLearner("classif.rpart"))
+rdesc = makeResampleDesc("Holdout")
+bmr = benchmark(lrns, sonar.task, rdesc)
+df = useMlrBenchmarkWrapper(bmr)
 }

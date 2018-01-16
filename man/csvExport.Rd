@@ -16,6 +16,5 @@ Export the specified benchmarkVis compatible data frame as an csv file. Lists wi
 "list(valA = abc, valB = xyz)"
 }
 \examples{
-data("ml.example")
-csvExport(ml.example, "test.csv")
+csvExport(mlr.benchmark.example, "test.csv")
 }

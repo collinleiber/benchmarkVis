@@ -15,10 +15,11 @@ csvImport = function(input.csv) {
   df$algorithm.parameter = lapply(df$algorithm.parameter, stringToList)
   df$replication.parameter = lapply(df$replication.parameter, stringToList)
   # Change replication list strings back to lists
-  for (i in 1:getMeasureCount(df)) {
+  for (i in 1:getReplicationMeasureCount(df)) {
     column.name = names(df)[ncol(df) - (i - 1)]
     df[[column.name]] = lapply(df[, ncol(df) - (i - 1)], stringToList)
   }
+  # Return dataframe
   return(df)
 }
 
@@ -32,8 +33,7 @@ csvImport = function(input.csv) {
 #' @param file.path path to save the file to
 #' @export
 #' @examples
-#' data("ml.example")
-#' csvExport(ml.example, "test.csv")
+#' csvExport(mlr.benchmark.example, "test.csv")
 csvExport = function(df, file.path) {
   # Create copy of the original dataframe
   df.copy = cbind(df)
@@ -42,7 +42,7 @@ csvExport = function(df, file.path) {
   df.copy$algorithm.parameter = sapply(df$algorithm.parameter, listToString)
   df.copy$replication.parameter = sapply(df$replication.parameter, listToString)
   # Change replication lists to string
-  for (i in 1:getMeasureCount(df)) {
+  for (i in 1:getReplicationMeasureCount(df)) {
     column.name = names(df)[ncol(df) - (i - 1)]
     df.copy[[column.name]] = sapply(df[[column.name]], function(x)
       paste("c(", toString(x), ")", sep = ""))
@@ -61,6 +61,8 @@ listToString = function(x) {
   values = sapply(x, function(y)
     if (is.factor(y) || is.character(y)) {
       paste("'", as.character(y), "'", sep = "")
+    #} else if (is.integer(y)) {
+    #  paste(as.character(y), "L", sep = "")
     } else {
       as.character(y)
     })

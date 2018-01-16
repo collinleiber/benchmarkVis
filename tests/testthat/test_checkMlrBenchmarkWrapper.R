@@ -1,9 +1,32 @@
-# Check if wrapped benchmak object equals example.rds object
-test_that("Wrapper of mlr benchmark objects produces correct output", {
-  # Load mlr benchmark result object and convert it
-  data("mlr.benchmark")
-  df = useMlrBenchmarkWrapper(mlr.benchmark)
-  # Load benchmarkVis specific df
-  data("ml.example")
-  identical(df, ml.example)
+library(mlr)
+
+context("Mlr Benchmark Wrapper")
+
+# Check if wrapped mlr benchmak object equals mlr.benchmark.example
+test_that("MlrBenchmarkWrapper", {
+  set.seed(2017)
+  # Create mlr benchmark
+  lrns = list(
+    makeLearner("classif.lda", id = "lda"),
+    makeLearner("classif.rpart", id = "rpart"),
+    makeLearner("classif.randomForest", id = "randomForest")
+  )
+  ring.task = convertMLBenchObjToTask("mlbench.ringnorm", n = 600)
+  wave.task = convertMLBenchObjToTask("mlbench.waveform", n = 600)
+  tasks = list(iris.task, sonar.task, pid.task, ring.task, wave.task)
+  rdesc = makeResampleDesc("CV", iters = 10)
+  meas = list(mmce, ber, timetrain)
+  bmr = benchmark(lrns, tasks, rdesc, meas, show.info = FALSE)
+  df = useMlrBenchmarkWrapper(bmr)
+  # Check if columns are in dataframe
+  expect_true("timetrain.test.mean" %in% colnames(df) &&
+      is.numeric(df$timetrain.test.mean))
+  expect_true("replication.timetrain" %in% colnames(df) &&
+      is.vector(df$replication.timetrain))
+  # Remove checked columns (can not compare execution time)
+  df = subset(df, select = -c(timetrain.test.mean, replication.timetrain))
+  df2 = subset(mlr.benchmark.example,
+    select = -c(timetrain.test.mean, replication.timetrain))
+  # Identical?
+  expect_identical(df, df2)
 })

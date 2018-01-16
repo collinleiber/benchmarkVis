@@ -1,23 +1,34 @@
-#' mlr benchmark result
+#' mlr benchmark input
 #'
-#' Contains the mlr benchmark result (\code{mlr.benchmark})
-#' This file an example of a mlr benchmark result export.
-#' It can be converted to a dataframe userable within the benchmarkVis application through the mlrBenchmarkWrapper.
-#' The file can be loaded with "data("mlrBenchmark")" and will then be accessible through "mlr.bmr".
-#' Afterwards it should be inserted into the makeMlrBenchmarkWrapper() method.
-#' @name mlr.benchmark
+#' Contains the wrapped mlr benchmark result (\code{mlr.benchmark.example}).
+#' It is a basic Version of a useable benchmark result dataframe.
+#' It was converted to a dataframe userable within the benchmarkVis application through the mlrBenchmarkWrapper.
+#' The file is accessible through "mlr.benchmark.example".
+#' @name mlr.benchmark.example
 #' @docType data
-#' @references See \url{data/mlr.benchmark.RData}
+#' @references See \url{data/mlr.benchmark.example.RData}
 #' @keywords data
 NULL
 
-#' Example input dataframe
+#' microbenchmark input
 #'
-#' Contains the dataframe (\code{ml.example}).
-#' This file is a basic Version of a useable benchmark result dataframe.
-#' It can be loaded with "data("mlExample")" and will then be accessible through "ml.df".
+#' Contains the wrapped microbenchmark result (\code{microbenchmark.example}).
+#' It is a basic Version of a useable benchmark result dataframe.
+#' It was converted to a dataframe userable within the benchmarkVis application through the microbenchmarkWrapper.
+#' The file is accessible through "microbenchmark.example".
+#' @name microbenchmark.example
+#' @docType data
+#' @references See \url{data/microbenchmark.example.RData}
+#' @keywords data
+NULL
+
+#' Example CSV file
+#'
+#' Contains the same dataframe as (\code{mlr.benchmark.example}).
+#' This file is an example of how a useable csv file should be structered.
+#' It can be loaded into the benchmarkVis application through the csvImport method.
 #' @name ml.example
 #' @docType data
-#' @references See \url{data/ml.example.RData}
+#' @references See \url{data/ml.example.csv}
 #' @keywords data
 NULL
