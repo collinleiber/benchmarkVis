@@ -1,12 +1,14 @@
 language: r
+sudo: false
+dist: trusty
 cache: packages
-    
+
 warnings_are_errors: true
 
 r_github_packages:
   - jimhester/lintr
   - mlr-org/mlr
-        
+
 notifications:
   email:
     recipients:
