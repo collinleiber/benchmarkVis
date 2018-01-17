@@ -2,7 +2,7 @@ Package: benchmarkVis
 Title: Benchmark result visualisation
 Version: 0.0.0.1
 Authors@R: c(
-	person("Collin", "Leiber", email = "collin.leiber@campus.lmu.de", role = c("aut", "cre")),
+	person("Collin", "Leiber", email = "c.leiber@campus.lmu.de", role = c("aut", "cre")),
 	person("Alona", "Sydorova", email = "alona.sydorova@campus.lmu.de", role = "aut"),
 	person("Kunlan", "Li", email = "li.kunlan@campus.lmu.de", role = "aut"))
 Description: Implementation of an intuitive Shiny application to easily visualize benachmark results

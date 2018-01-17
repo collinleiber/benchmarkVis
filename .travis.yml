@@ -12,7 +12,7 @@ r_github_packages:
 notifications:
   email:
     recipients:
-      - collin.leiber@campus.lmu.de
+      - c.leiber@campus.lmu.de
       - alona.sydorova@campus.lmu.de
       - li.kunlan@campus.lmu.de
 on_success: change
