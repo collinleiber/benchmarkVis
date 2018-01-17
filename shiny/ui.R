@@ -3,7 +3,7 @@
 # run the application by clicking 'Run App' above.
 #
 # Find out more about building applications with Shiny here:
-# 
+#
 #    http://shiny.rstudio.com/
 #
 
@@ -29,26 +29,39 @@ dashboardPage(
                         multiple = TRUE,
                         accept = c("text/csv",
                                    "text/comma-separated-values,text/plain",
-                                   ".csv"))
-      ),
-      
-      tabItem(tabName = "filter",
-              h3("Choose the information from your results you want to visualize"),
+                                   ".csv")),
+
+              #column(width = 4,
+              #       box(
+              #         title = "Your benchmark results", width = NULL, status = "primary",
+              #         div(style = 'overflow-x: scroll', tableOutput("contents"))
+              #       )
+              #),
+              h4("Select the right columns:"),
+              #actionButton("do", "Click Me"),
+              uiOutput("data.columns"),
+
+              actionButton("Submit", "Submit", icon = icon("check")),
               tableOutput("contents")
       ),
-      
+
+      tabItem(tabName = "filter",
+              h3("Choose the information from your results you want to visualize"),
+              DT::dataTableOutput("filter")
+      ),
+
       tabItem(tabName = "table",
               h3("Here you can aggregate and play with a table"),
               DT::dataTableOutput("myDataTable")
       ),
-      
+
       tabItem(tabName = "plots",
               h3("Your benchmark results visualized"),
               plotlyOutput("plot"),
               verbatimTextOutput("event")
       )
-      
+
     )
-    
+
   )
 )
