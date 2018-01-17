@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Create a dataframe useable within the benchmarkVis application out of an microbenchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe 
+#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
 #'
 #' @param benchmark a microbenchmark object
 #' @return a dataframe with the benchmarkVis specific structure
