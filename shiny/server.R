@@ -41,6 +41,18 @@ server <- function(input, output) {
   )
 
 
+  output$table.aggregation =renderUI({
+    req(data()) #only execute the rest, if dataframe is available
+    req(input$Submit) #only show the content if user has submitted
+    data = data()
+    aggregationfunction_set <- list("mean", "median", "mean_rank")
+    list(
+      selectInput('gcolumns', 'GroupBy Columns', colnames(data), selected = FALSE,multiple = TRUE),
+      selectInput('aggrf', 'Aggregation Function',aggregationfunction_set, selected = FALSE,multiple = TRUE),
+      selectInput('aggrcol', 'Aggregated Column', colnames(data), selected = FALSE,multiple = TRUE)
+    )
+  }
+  )
   output$myDataTable <- DT::renderDataTable(
     {req(data()) #only execute the rest, if dataframe is available
       req(input$Submit) #only show the content if user has submitted
