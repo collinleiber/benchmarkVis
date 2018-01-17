@@ -19,7 +19,7 @@ csvImport = function(input.csv) {
     column.name = names(df)[ncol(df) - (i - 1)]
     df[[column.name]] = lapply(df[, ncol(df) - (i - 1)], stringToList)
   }
-  # Return created dataframe 
+  # Return created dataframe
   return(df)
 }
 
