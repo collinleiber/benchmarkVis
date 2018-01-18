@@ -6,6 +6,7 @@
 #'
 #' @param input.csv path to the input csv file
 #' @return a dataframe with the benchmarkVis specific structure
+#' @importFrom utils read.csv write.csv
 #' @export
 csvImport = function(input.csv) {
   # Load csv file

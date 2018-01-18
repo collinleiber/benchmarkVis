@@ -16,6 +16,7 @@ BugReports: https://github.com/collinleiber/benchmarkVis/issues
 Imports: 
 	checkmate (>= 1.8.2),
 	plotly,
+	ggplot2,
 	DT
 Suggests: 
 	testthat,
@@ -25,4 +26,5 @@ Suggests:
 	rpart,
 	randomForest,
 	mlbench,
-	shiny
+	shiny,
+	rbenchmark
