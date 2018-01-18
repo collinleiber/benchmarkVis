@@ -33,7 +33,7 @@ useMicrobenchmarkWrapper = function(benchmark) {
   # Add lists to the dataframe (not possible within constructor)
   df$problem.parameter = repList(list(), nrow(summary))
   df$algorithm.parameter = repList(list(unit = attr(summary, "unit")), nrow(summary))
-  df$replication.parameter = repList(list(times = summary$neval[[1]]), nrow(summary))
+  df$replication.parameter = repList(list(iters = summary$neval[[1]]), nrow(summary))
   # Change order
   df = df[, c(1, 10, 2, 11, 3, 12, 4:9)]
   # Get the replication values out of the benchmark dataframe

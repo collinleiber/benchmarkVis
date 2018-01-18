@@ -1,7 +1,7 @@
 context("CSV Handler")
 
 # Check if exporting and importing a csv file works properly
-test_that("CSV export and import", {
+test_that("CSV export and import Test", {
   # Export and import csv
   csvExport(mlr.benchmark.example, "test.csv")
   df = csvImport("test.csv")

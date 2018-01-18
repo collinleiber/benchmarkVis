@@ -14,13 +14,15 @@ RoxygenNote: 6.0.1
 URL: https://github.com/collinleiber/benchmarkVis
 BugReports: https://github.com/collinleiber/benchmarkVis/issues
 Imports: 
-	shiny
+	checkmate (>= 1.8.2),
+	plotly,
+	DT
 Suggests: 
 	testthat,
 	lintr (>= 1.0.0.9001),
-	checkmate (>= 1.8.2),
 	mlr(>= 2.12),
 	microbenchmark,
 	rpart,
 	randomForest,
-	mlbench
+	mlbench,
+	shiny

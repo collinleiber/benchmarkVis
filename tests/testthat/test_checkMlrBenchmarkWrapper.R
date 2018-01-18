@@ -3,7 +3,7 @@ library(mlr)
 context("Mlr Benchmark Wrapper")
 
 # Check if wrapped mlr benchmak object equals mlr.benchmark.example
-test_that("MlrBenchmarkWrapper", {
+test_that("MlrBenchmarkWrapper Test", {
   set.seed(2017)
   # Create mlr benchmark
   lrns = list(

@@ -3,7 +3,7 @@ library(microbenchmark)
 context("Microbenchmark Wrapper")
 
 # Check if wrapped microbenchmark object equals microbenchmark.example
-test_that("MicrobenchmarkWrapper", {
+test_that("MicrobenchmarkWrapper Test", {
   set.seed(2017)
   # Create microbenchmark
   x = runif(100)
