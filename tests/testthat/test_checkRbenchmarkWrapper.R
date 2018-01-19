@@ -23,13 +23,19 @@ test_that("RbenchmarkWrapper Test", {
   # Check if columns are in dataframe
   expect_true("elapsed" %in% colnames(df) &&
       is.numeric(df$elapsed))
+  expect_true("relative" %in% colnames(df) &&
+      is.numeric(df$relative))
   expect_true("user.self" %in% colnames(df) &&
       is.numeric(df$user.self))
   expect_true("sys.self" %in% colnames(df) &&
       is.numeric(df$sys.self))
+  expect_true("user.child" %in% colnames(df) &&
+      is.numeric(df$user.child))
+  expect_true("sys.child" %in% colnames(df) &&
+      is.numeric(df$sys.child))
   # Remove checked columns (can not compare execution time)
-  df = subset(df, select = -c(elapsed, user.self, sys.self))
-  df2 = subset(rbenchmark.example, select = -c(elapsed, user.self, sys.self))
+  df = subset(df, select = -c(elapsed, relative, user.self, sys.self, user.child, sys.child))
+  df2 = subset(rbenchmark.example, select = -c(elapsed, relative, user.self, sys.self, user.child, sys.child))
   # Identical?
   expect_identical(df, df2)
 })

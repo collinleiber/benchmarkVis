@@ -2,8 +2,8 @@ context("Microbenchmark Wrapper")
 
 #  ===================== Basic Setup =====================
 set.seed(2017)
-# Create microbenchmark
 x = runif(100)
+# Create microbenchmark
 benchmark = microbenchmark::microbenchmark(
   shell_sort = sort(x, method = "shell"),
   quick_sort = sort(x, method = "quick"),

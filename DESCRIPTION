@@ -27,4 +27,5 @@ Suggests:
 	randomForest,
 	mlbench,
 	shiny,
-	rbenchmark
+	rbenchmark,
+	rex
