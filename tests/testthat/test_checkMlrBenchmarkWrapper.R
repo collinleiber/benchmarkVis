@@ -1,20 +1,18 @@
-library(mlr)
-
 context("Mlr Benchmark Wrapper")
 
 #  ===================== Basic Setup =====================
 set.seed(2017)
 # Create mlr benchmark
 lrns = list(
-  makeLearner("classif.lda", id = "lda"),
-  makeLearner("classif.rpart", id = "rpart"),
-  makeLearner("classif.randomForest", id = "randomForest")
+  mlr::makeLearner("classif.lda", id = "lda"),
+  mlr::makeLearner("classif.rpart", id = "rpart"),
+  mlr::makeLearner("classif.randomForest", id = "randomForest")
 )
-ring.task = convertMLBenchObjToTask("mlbench.ringnorm", n = 600)
-wave.task = convertMLBenchObjToTask("mlbench.waveform", n = 600)
-tasks = list(iris.task, sonar.task, pid.task, ring.task, wave.task)
-rdesc = makeResampleDesc("CV", iters = 10)
-meas = list(mmce, ber, timetrain)
+ring.task = mlr::convertMLBenchObjToTask("mlbench.ringnorm", n = 600)
+wave.task = mlr::convertMLBenchObjToTask("mlbench.waveform", n = 600)
+tasks = list(mlr::iris.task, mlr::sonar.task, mlr::pid.task, ring.task, wave.task)
+rdesc = mlr::makeResampleDesc("CV", iters = 10)
+meas = list(mlr::mmce, mlr::ber, mlr::timetrain)
 bmr = mlr::benchmark(lrns, tasks, rdesc, meas, show.info = FALSE)
 df = useMlrBenchmarkWrapper(bmr)
 #  =======================================================

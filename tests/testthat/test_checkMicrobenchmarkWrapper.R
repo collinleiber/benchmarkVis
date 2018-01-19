@@ -1,12 +1,10 @@
-library(microbenchmark)
-
 context("Microbenchmark Wrapper")
 
 #  ===================== Basic Setup =====================
 set.seed(2017)
 # Create microbenchmark
 x = runif(100)
-benchmark = microbenchmark(
+benchmark = microbenchmark::microbenchmark(
   shell_sort = sort(x, method = "shell"),
   quick_sort = sort(x, method = "quick"),
   radix_sort = sort(x, method = "radix"),

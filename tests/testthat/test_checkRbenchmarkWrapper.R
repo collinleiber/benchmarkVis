@@ -1,14 +1,12 @@
-library(rbenchmark)
-
 context("Rbenchmark Wrapper")
 
 #  ===================== Basic Setup =====================
+set.seed(2017)
 # Create rbenchmark
-x = runif(1000)
-bmr = rbenchmark::benchmark(
-  shell_sort = sort(x, method = "shell"),
-  quick_sort = sort(x, method = "quick"),
-  radix_sort = sort(x, method = "radix"),
+benchmark = rbenchmark::benchmark(
+  shell_sort = sort(runif(1000), method = "shell"),
+  quick_sort = sort(runif(1000), method = "quick"),
+  radix_sort = sort(runif(1000), method = "radix"),
   columns = c(
     "test", "replications", "elapsed", "relative", "user.self", "sys.self",
     "user.child", "sys.child"),
@@ -17,7 +15,7 @@ bmr = rbenchmark::benchmark(
   environment = parent.frame(),
   relative = "elapsed"
 )
-df = useRbenchmarkWrapper(bmr)
+df = useRbenchmarkWrapper(benchmark)
 #  =======================================================
 
 # Check if wrapped rbenchmak object equals rbenchmark.example
