@@ -1,23 +1,27 @@
+library(rbenchmark)
+
 context("Rbenchmark Wrapper")
+
+#  ===================== Basic Setup =====================
+# Create rbenchmark
+x = runif(1000)
+bmr = rbenchmark::benchmark(
+  shell_sort = sort(x, method = "shell"),
+  quick_sort = sort(x, method = "quick"),
+  radix_sort = sort(x, method = "radix"),
+  columns = c(
+    "test", "replications", "elapsed", "relative", "user.self", "sys.self",
+    "user.child", "sys.child"),
+  order = "test",
+  replications = c(100, 20),
+  environment = parent.frame(),
+  relative = "elapsed"
+)
+df = useRbenchmarkWrapper(bmr)
+#  =======================================================
 
 # Check if wrapped rbenchmak object equals rbenchmark.example
 test_that("RbenchmarkWrapper Test", {
-  set.seed(2017)
-  # Create microbenchmark
-  x = runif(1000)
-  benchmark = rbenchmark::benchmark(
-    shell_sort = sort(x, method = "shell"),
-    quick_sort = sort(x, method = "quick"),
-    radix_sort = sort(x, method = "radix"),
-    columns = c(
-      "test", "replications", "elapsed", "relative", "user.self", "sys.self",
-      "user.child", "sys.child"),
-    order = "test",
-    replications = c(100, 20),
-    environment = parent.frame(),
-    relative = "elapsed"
-  )
-  df = useRbenchmarkWrapper(benchmark)
   # Check if columns are in dataframe
   expect_true("elapsed" %in% colnames(df) &&
       is.numeric(df$elapsed))
@@ -34,22 +38,5 @@ test_that("RbenchmarkWrapper Test", {
 
 # Check dataframe structure
 test_that("RbenchmarkWrapper Structure", {
-  set.seed(2017)
-  # Create microbenchmark
-  x = runif(1000)
-  benchmark = rbenchmark::benchmark(
-    shell_sort = sort(x, method = "shell"),
-    quick_sort = sort(x, method = "quick"),
-    radix_sort = sort(x, method = "radix"),
-    columns = c(
-      "test", "replications", "elapsed", "relative", "user.self", "sys.self",
-      "user.child", "sys.child"),
-    order = "test",
-    replications = c(100, 20),
-    environment = parent.frame(),
-    relative = "elapsed"
-  )
-  df = useRbenchmarkWrapper(benchmark)
-  # Check structure
   expect_true(checkStructure(df))
 })
