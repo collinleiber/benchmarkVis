@@ -61,6 +61,7 @@ dashboardPage(
 
       tabItem(tabName = "plots",
               h3("Your benchmark results visualized"),
+              actionButton("Rankplot","Rankplot",icon = icon("check")),
               plotlyOutput("plot"),
               verbatimTextOutput("event")
       )
