@@ -1,20 +1,19 @@
 library(DT)
 library(plotly)
-library(data.table)
 library(ggplot2)
-
 
 
 server <- function(input, output) {
 
   mvalues <- reactiveValues(matrix = NULL)
+  gdata <- reactiveValues(dt = NULL, aggcol = NULL, plot = NULL)
 
   data = reactive({
     req(input$file1)
     read.csv(input$file1$datapath)
   })
 
-  #definition of aggregation function
+  ##definition of aggregation function
   do_agg <- function(fun_str) {
     groupby <- isolate((input$gcolumns))
     aggfun <- isolate((input$aggrf))
@@ -37,17 +36,18 @@ server <- function(input, output) {
         #handle err
       }
 
-      #rename the aggregated columns
+      ##rename the aggregated columns
       newtable <- aggregate(x = tmp[c(aggcol)],
                              by = tmp[c(groupby)],
                              FUN = func)
       newtable = newtable[, aggcol, drop = FALSE]
       newcolsname = lapply(aggcol,
         FUN = function(colname) {
-          newname = paste(fun_str,"(", colname, ")", sep  = "")
+          newname = paste(fun_str,"_", colname, "", sep  = "")
         }
       )
-      names(newtable)[names(newtable) %in% aggcol] = newcolsname
+      gdata$aggcol = newcolsname
+      colnames(newtable) <- newcolsname
       newtable
     } else {
       #err msg
@@ -58,12 +58,13 @@ server <- function(input, output) {
     }
 
   }
-#input aggregation function, then realize the aggregation
+##get aggregation function, then realize the aggregation
   get_data <- function() {
     input$Aggregation
     result = (data())
     groupby <- isolate((input$gcolumns))
     aggfun <- isolate((input$aggrf))
+    aggcol <- isolate((input$aggrcol))
     result = result[, groupby, drop = FALSE]
     if (is.element("mean", aggfun)) {
       newtable = do_agg("mean")
@@ -77,10 +78,11 @@ server <- function(input, output) {
       newtable = do_agg("median")
       result = cbind(result, newtable)
     }
+    gdata$dt <- result
     result
   }
 
-  #only nummeric columns can be aggregated
+  ##only nummeric columns can be aggregated
   get_num_columns_name <- function(data) {
     colnames <- list()
     for (col_name in names(data))
@@ -166,6 +168,25 @@ server <- function(input, output) {
         req(input$Submit) #only show the content if user has submitted
         data = data()}
   })
+  observe({
+    if (input$Rankplot == 0)
+      return()
+    aggcol <- gdata$aggcol
+    data <- gdata$dt
+    if (length(aggcol)) {
+      first_agg_col = aggcol[[1]]
+      order.scores<-order(data[[first_agg_col]])
+      data$rank <- NA
+      data$rank[order.scores] <- 1:nrow(data)
+      problem = input$dc
+      p = ggplot(data, aes_string("rank", problem, fill = input$lc))+
+          geom_tile(position = "dodge")+
+          labs(title= "Rank Plot",
+               x= "Rank",
+               y= "Task.id")
+      gdata$plot <- p
+    }
+  })
 
   output$myDataTable <- DT::renderDataTable(
     #{req(data()) #only execute the rest, if dataframe is available
@@ -187,7 +208,13 @@ server <- function(input, output) {
 
   output$plot <- renderPlotly({
     req(input$Submit) #only show the content if user has submitted
-    plot_ly(mtcars, x = ~mpg, y = ~wt)
+    req(input$Aggregation)#only show the content if user has aggregated
+    if (is.null(gdata$dt)){
+      return()
+    } else {
+      gdata$plot
+    }
+    #plot_ly(mtcars, x = ~mpg, y = ~wt)
   })
 
   output$event <- renderPrint({
