@@ -58,7 +58,7 @@ dashboardPage(
               actionButton("Aggregation", "Aggregation", icon = icon("check")),
               actionButton("Reset", "Reset", icon = icon("check")),
 
-              DT::dataTableOutput("myDataTable")
+              DT::dataTableOutput("DataTable")
       ),
 
       tabItem(tabName = "plots_box",

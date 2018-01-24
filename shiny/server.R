@@ -1,8 +1,8 @@
 server <- function(input, output) {
 
   mvalues <- reactiveValues(matrix = NULL)
-  #neu
   gdata <- reactiveValues(dt = NULL, aggcol = NULL, plot = NULL)
+
   data <- reactive({
     req(input$file1)
     print(input$file1)
@@ -14,36 +14,31 @@ server <- function(input, output) {
     }
   })
 
+  table <- reactiveValues(data = NULL)
+
+  observeEvent(input$Submit,{
+    table$data <-
+    {req(data())
+      data = data()}
+  })
+
   observe({
     if (input$Aggregation == 0)
       return()
-    mvalues$matrix <-
-    {req(data()) #only execute the rest, if dataframe is available
-      req(input$Submit) #only show the content if user has submitted
-      data = get_data()}
+    mvalues$matrix <- table$data
   })
   observe({
     if (input$Reset == 0)
       return()
-    mvalues$matrix <-
+    mvalues$matrix <- table$data
+  })
+  observeEvent(input$Submit,{
       mvalues$matrix <-
       {req(data()) #only execute the rest, if dataframe is available
         req(input$Submit) #only show the content if user has submitted
         data = data()}
   })
-  observe({
-    #?next two lines
-    #if (input$Submit == 0)
-    #  return()
-    mvalues$matrix <-
-      mvalues$matrix <-
-      {req(data()) #only execute the rest, if dataframe is available
-        req(input$Submit) #only show the content if user has submitted
-        data = data()}
-  })
-  observe({
-    #if (input$Rankplot == 0)
-    #  return()
+  observeEvent(input$Submit,{
     aggcol <- gdata$aggcol
     data <- gdata$dt
     if (length(aggcol)) {
@@ -144,12 +139,8 @@ server <- function(input, output) {
     colnames
   }
 
-
-  #data = readData()
   output$contents <- renderTable({
-    req(data()) #only execute the rest, if dataframe is available
-    req(input$Submit) #only show the content if user has submitted
-    data()
+    table$data
   })
 
 
@@ -213,12 +204,7 @@ server <- function(input, output) {
   }
   )
 
-
-
-  output$myDataTable <- DT::renderDataTable(
-    #{req(data()) #only execute the rest, if dataframe is available
-    #  req(input$Submit) #only show the content if user has submitted
-    #  data = get_data()},
+  output$DataTable <- DT::renderDataTable(
     mvalues$matrix,
     filter = 'top',
     extensions = c('Buttons', 'ColReorder', 'FixedColumns'),
@@ -234,28 +220,20 @@ server <- function(input, output) {
   )
 
   output$plot_box <- renderPlotly({
-    req(data()) #only execute the rest, if dataframe is available
-    data = data()
-    req(input$Submit) #only show the content if user has submitted
     req(input$box.measure)
-
-    createBoxPlot(data, input$box.measure)
+    createBoxPlot(table$data, input$box.measure)
   })
 
   output$plot_rank <- renderPlotly({
-    req(data()) #only execute the rest, if dataframe is available
-    req(input$Submit) #only show the content if user has submitted
-    data = data()
+
+    gdata$plot
 
   })
 
   output$plot_repl <- renderPlotly({
-    req(data()) #only execute the rest, if dataframe is available
-    req(input$Submit) #only show the content if user has submitted
     req(input$replication)
     req(input$replication.measure)
-    data = data()
-    createReplicationLinePlot(data, input$replication.measure)
+    createReplicationLinePlot(table$data, input$replication.measure)
   })
 
 }
