@@ -1,8 +1,8 @@
 #' mlr benchmark input
 #'
 #' Contains the wrapped mlr benchmark result (\code{mlr.benchmark.example}).
-#' It is a basic Version of a useable benchmark result dataframe.
-#' It was converted to a dataframe userable within the benchmarkVis application through the mlrBenchmarkWrapper.
+#' It is a basic Version of a useable mlr benchmark result dataframe.
+#' It was converted to a dataframe useable within the benchmarkVis application through the mlrBenchmarkWrapper.
 #' The file is accessible through "mlr.benchmark.example".
 #' @name mlr.benchmark.example
 #' @docType data
@@ -10,11 +10,23 @@
 #' @keywords data
 NULL
 
+#' mlr tuning input
+#'
+#' Contains the wrapped mlr tuning result (\code{mlr.tuning.example}).
+#' It is a basic Version of a useable mlr tuning result dataframe.
+#' It was converted to a dataframe useable within the benchmarkVis application through the mlrTuningWrapper.
+#' The file is accessible through "mlr.tuning.example".
+#' @name mlr.tuning.example
+#' @docType data
+#' @references See \url{data/mlr.tuning.example.RData}
+#' @keywords data
+NULL
+
 #' microbenchmark input
 #'
 #' Contains the wrapped microbenchmark result (\code{microbenchmark.example}).
 #' It is a basic Version of a useable benchmark result dataframe.
-#' It was converted to a dataframe userable within the benchmarkVis application through the microbenchmarkWrapper.
+#' It was converted to a dataframe useable within the benchmarkVis application through the microbenchmarkWrapper.
 #' The file is accessible through "microbenchmark.example".
 #' @name microbenchmark.example
 #' @docType data
@@ -26,7 +38,7 @@ NULL
 #'
 #' Contains the wrapped rbenchmark result (\code{rbenchmark.example}).
 #' It is a basic Version of a useable benchmark result dataframe.
-#' It was converted to a dataframe userable within the benchmarkVis application through the rbenchmarkWrapper.
+#' It was converted to a dataframe useable within the benchmarkVis application through the rbenchmarkWrapper.
 #' The file is accessible through "rbenchmark.example".
 #' @name rbenchmark.example
 #' @docType data
