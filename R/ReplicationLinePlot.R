@@ -16,7 +16,7 @@ createReplicationLinePlot = function(df, replication.measure) {
   max.iterations = max(sapply(df$replication.parameter, function(x) {
     return(x$iters)
   }))
-  # Add 0 to fill problems with less iterations
+  # Add NaN to fill problems with less iterations
   replications = lapply(df[[replication.measure]], function(x) {
     return(c(x, rep(NaN, max.iterations - length(x))))
   })

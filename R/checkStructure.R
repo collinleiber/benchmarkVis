@@ -10,6 +10,8 @@
 #' @examples
 #' checkStructure(microbenchmark.example)
 checkStructure = function(df) {
+  # Check column count (should be > 6)
+  checkmate::assert_data_frame(df, any.missing = TRUE, min.rows = 1, min.cols = 7)
   # Check basic structure
   checkmate::assert_true("problem" %in% colnames(df) &&
       is.factor(df$problem) && which(colnames(df) == "problem") == 1)
@@ -23,6 +25,9 @@ checkStructure = function(df) {
       is.factor(df$replication) && which(colnames(df) == "replication") == 5)
   checkmate::assert_true("replication.parameter" %in% colnames(df) &&
       is.list(df$replication.parameter) && which(colnames(df) == "replication.parameter") == 6)
+  # Check measure count (must be >1)
+  checkmate::assert_true(getMeasureCount(df) > 0)
+  # Check measures and replication measures
   for (x in colnames(df)) {
     if (startsWith(x, "replication.") && x != "replication.parameter") {
       # Should be a replication measure vector
@@ -36,7 +41,7 @@ checkStructure = function(df) {
   # Check for replication iters parameter
   for (i in nrow(df)) {
     # Every replication != null needs iters parameter
-    if (!is.null(df$replication[[i]])) {
+    if (df$replication[[i]] != "unknown") {
       checkmate::assert_true(
         "iters" %in% names(df$replication.parameter[[i]]) &&
           is.numeric(df$replication.parameter[[i]]$iters)
