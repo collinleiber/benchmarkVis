@@ -13,6 +13,6 @@
 createBoxPlot = function(df, measure) {
   checkmate::assert_data_frame(df)
 
-  p = plotly::plot_ly(df, x = ~algorithm, y = ~df[,measure], color = ~algorithm, type = "box")
+  p = plotly::plot_ly(df, x = ~algorithm, y = ~df[, measure], color = ~algorithm, type = "box")
   return(p)
 }
