@@ -18,31 +18,33 @@ dashboardPage(
       menuItem("Import", tabName = "import", icon = icon("file-excel-o")),
       menuItem("Filter", tabName = "filter", icon = icon("cog")), # http://fontawesome.io/icons/ hier kann man icons finden
       menuItem("DT", tabName = "table", icon = icon("table")),
-      menuItem("Plots", tabName = "plots", icon = icon("line-chart"))
+      menuItem("Box Plot", tabName = "plots_box", icon = icon("line-chart")),
+      menuItem("Rank Plot", tabName = "plots_rank", icon = icon("line-chart")),
+      menuItem("Replication Plot", tabName = "plots_repl", icon = icon("line-chart"))
+
     )
   ),
   dashboardBody(
     tabItems(
       tabItem(tabName = "import",
               h3("Import the file with benchmark results"),
-              fileInput("file1", "Choose CSV File",
-                        multiple = TRUE,
+              fileInput("file1", "Choose File (CSV or RData are supported by now)",
+                        multiple = FALSE,
                         accept = c("text/csv",
                                    "text/comma-separated-values,text/plain",
-                                   ".csv")),
-
-              #column(width = 4,
-              #       box(
-              #         title = "Your benchmark results", width = NULL, status = "primary",
-              #         div(style = 'overflow-x: scroll', tableOutput("contents"))
-              #       )
-              #),
+                                   ".csv",
+                                   "application/RData",
+                                   ".RData")),
               h4("Select the right columns:"),
-              #actionButton("do", "Click Me"),
               uiOutput("data.columns"),
-
+              checkboxInput("replication", "replication", FALSE),
+              conditionalPanel(
+                condition = "input.replication == true",
+                uiOutput("data.replication")
+              ),
               actionButton("Submit", "Submit", icon = icon("check")),
               tableOutput("contents")
+
       ),
 
       tabItem(tabName = "filter",
@@ -59,12 +61,22 @@ dashboardPage(
               DT::dataTableOutput("myDataTable")
       ),
 
-      tabItem(tabName = "plots",
-              h3("Your benchmark results visualized"),
-              actionButton("Rankplot","Rankplot",icon = icon("check")),
-              plotlyOutput("plot"),
-              verbatimTextOutput("event")
+      tabItem(tabName = "plots_box",
+              h3("Box plot for your data"),
+              uiOutput("boxplot.measure"),
+              plotlyOutput("plot_box")
+      ),
+      tabItem(tabName = "plots_rank",
+              h3("Rank plot for your data"),
+              plotlyOutput("plot_rank")
+      ),
+      tabItem(tabName = "plots_repl",
+              h3("Replication line plot for your data"),
+              uiOutput("replication.measure"),
+              plotlyOutput("plot_repl")
       )
+
+
 
     )
 
