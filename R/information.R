@@ -6,9 +6,9 @@
 #' @return vector containing all possbile plots
 #' @export
 listPlots = function() {
-  plots = c("boxPlot",
-    "replicationLinePlot")
-  return(plots)
+  methods = lsf.str("package:benchmarkVis")
+  condition = sapply(methods, function(x) {startsWith(x, "create") && endsWith(x, "Plot")})
+  return(methods[condition])
 }
 
 #' @title Get list of all possible wrappers
@@ -19,10 +19,7 @@ listPlots = function() {
 #' @return vector containing all possbile wrappers
 #' @export
 listWrappers = function() {
-  wrapper = c("csvHandler",
-    "microbenchmarkWrapper",
-    "mlrBenchmarkWrapper",
-    "mlrTuningWrapper",
-    "rbenchmarkWrapper")
-  return(wrapper)
+  methods = lsf.str("package:benchmarkVis")
+  condition = sapply(methods, function(x) {startsWith(x, "use") && endsWith(x, "Wrapper")})
+  return(methods[condition])
 }

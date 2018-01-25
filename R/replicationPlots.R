@@ -11,6 +11,8 @@
 #' @examples
 #' createReplicationLinePlot(microbenchmark.example, "replication.values")
 createReplicationLinePlot = function(df, replication.measure) {
+  checkmate::assert_data_frame(df)
+  checkmate::assert_string(replication.measure)
   checkmate::assert_true(startsWith(replication.measure, "replication."))
   # Get maximum amount of replications
   max.iterations = max(sapply(df$replication.parameter, function(x) {
@@ -22,15 +24,15 @@ createReplicationLinePlot = function(df, replication.measure) {
   })
   # Create new plotly compatible dataframe
   new.df = data.frame(
-    x = rep(1:max.iterations, nrow(df)),
-    y = unlist(replications),
+    iteration = rep(1:max.iterations, nrow(df)),
+    measure = unlist(replications),
     problem = rep(df$problem, rep(max.iterations, nrow(df))),
     algorithm = rep(df$algorithm, rep(max.iterations, nrow(df)))
   )
   # Create plot
   p = ggplot2::ggplot(data = new.df, ggplot2::aes(
-    x = x,
-    y = y,
+    x = iteration,
+    y = measure,
     group = interaction(problem, algorithm),
     colour = algorithm
   )) + ggplot2::geom_point() + ggplot2::geom_line()

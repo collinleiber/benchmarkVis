@@ -3,6 +3,8 @@
 export(checkStructure)
 export(createBoxPlot)
 export(createReplicationLinePlot)
+export(createTuningIterationPlot)
+export(createTuningParameterPlot)
 export(csvExport)
 export(csvImport)
 export(listPlots)
