@@ -7,7 +7,7 @@
 \description{
 Contains the wrapped microbenchmark result (\code{microbenchmark.example}).
 It is a basic Version of a useable benchmark result dataframe.
-It was converted to a dataframe userable within the benchmarkVis application through the microbenchmarkWrapper.
+It was converted to a dataframe useable within the benchmarkVis application through the microbenchmarkWrapper.
 The file is accessible through "microbenchmark.example".
 }
 \references{
