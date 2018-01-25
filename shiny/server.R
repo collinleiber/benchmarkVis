@@ -234,7 +234,7 @@ server <- function(input, output) {
 
   output$plot_box <- renderPlotly({
     req(input$box.measure)
-    createBoxPlot(table$data, input$box.measurem)
+    createBoxPlot(table$data, input$box.measure)
   })
 
   output$plot_rank <- renderPlotly({
