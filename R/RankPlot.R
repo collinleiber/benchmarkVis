@@ -8,6 +8,7 @@
 #' @param measure measure for Ranking
 #' @return a rank plot
 #' @export
+#' @import ggplot2
 #' @examples
 #' createRankPlot(mlr.benchmark.example, 'mmce.test.mean')
 createRankPlot = function(df, measure, problem, algorithm) {
