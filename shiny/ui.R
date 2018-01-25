@@ -63,11 +63,15 @@ dashboardPage(
 
       tabItem(tabName = "plots_box",
               h3("Box plot for your data"),
+
               uiOutput("boxplot.measure"),
               plotlyOutput("plot_box")
       ),
       tabItem(tabName = "plots_rank",
-              h3("Rank plot for your data"),
+              h3("Rank plot for your  data"),
+              actionButton("rps", "Rank plot for submited Data", icon = icon("check")),
+              actionButton("rpa", "Rank plot for aggregated Data", icon = icon("check")),
+              uiOutput("rankplot.measure"),
               plotlyOutput("plot_rank")
       ),
       tabItem(tabName = "plots_repl",

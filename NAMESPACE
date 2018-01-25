@@ -2,6 +2,7 @@
 
 export(checkStructure)
 export(createBoxPlot)
+export(createRankPlot)
 export(createReplicationLinePlot)
 export(csvExport)
 export(csvImport)

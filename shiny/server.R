@@ -1,7 +1,8 @@
+library(DT)
 server <- function(input, output) {
 
   mvalues <- reactiveValues(matrix = NULL)
-  gdata <- reactiveValues(dt = NULL, aggcol = NULL, plot = NULL)
+  gdata <- reactiveValues(dt = NULL, aggcol = NULL, problem = NULL, algo = NULL)
 
   data <- reactive({
     req(input$file1)
@@ -22,15 +23,23 @@ server <- function(input, output) {
       data = data()}
   })
 
-  observe({
-    if (input$Aggregation == 0)
-      return()
-    mvalues$matrix <- table$data
+  observeEvent(input$Aggregation,{
+    mvalues$matrix <-
+    {req(data())
+      data =get_data()}
   })
-  observe({
-    if (input$Reset == 0)
-      return()
-    mvalues$matrix <- table$data
+  observeEvent(input$Reset,{
+    mvalues$matrix <-
+      table$data
+  })
+  observeEvent(input$rps,{
+    gdata$dt <- table$data
+    gdata$aggcol <- input$measures
+    gdata$problem <- input$problem
+    gdata$algo <- input$algorithm
+  })
+  observeEvent(input$rpa,{
+    gdata$dt <- gdata$dt
   })
   observeEvent(input$Submit,{
       mvalues$matrix <-
@@ -38,30 +47,14 @@ server <- function(input, output) {
         req(input$Submit) #only show the content if user has submitted
         data = data()}
   })
-  observeEvent(input$Submit,{
-    aggcol <- gdata$aggcol
-    data <- gdata$dt
-    if (length(aggcol)) {
-      first_agg_col = aggcol[[1]]
-      order.scores<-order(data[[first_agg_col]])
-      data$rank <- NA
-      data$rank[order.scores] <- 1:nrow(data)
-      problem = input$dc
-      p = ggplot(data, aes_string("rank", problem, fill = input$lc))+
-        geom_tile(position = "dodge")+
-        labs(title= "Rank Plot",
-             x= "Rank",
-             y= "Task.id")
-      gdata$plot <- p
-    }
-  })
+
 
 
   #definition of aggregation function
   do_agg <- function(fun_str) {
-    groupby <- isolate((input$gcolumns))
-    aggfun <- isolate((input$aggrf))
-    aggcol <- isolate((input$aggrcol))
+     groupby <- isolate((input$gcolumns))
+     aggfun <- isolate((input$aggrf))
+     aggcol <- isolate((input$aggrcol))
     tmp = data()
     tag = TRUE
     check_data_type <- function(type){
@@ -79,50 +72,64 @@ server <- function(input, output) {
       } else {
         #handle err
       }
+    }else {
+    #   #err msg
+      warning("invaild type to aggregate")
+       showNotification("invaild type to aggregate", type = "error")
+       #validate(need(!tag, "invaild type to aggregate."))
+       tmp
+     }
+       newtable <- aggregate(x = tmp[c(aggcol)],
+                             by = tmp[c(groupby)],
+                             FUN = func)
+       return(newtable)
+    }
 
       #rename the aggregated columns
-      newtable <- aggregate(x = tmp[c(aggcol)],
-                            by = tmp[c(groupby)],
-                            FUN = func)
+    get_newname <- function(fun_str){
+       groupby <- isolate((input$gcolumns))
+       aggfun <- isolate((input$aggrf))
+       aggcol <- isolate((input$aggrcol))
+      newtable = do_agg(fun_str)
       newtable = newtable[, aggcol, drop = FALSE]
       newcolsname = lapply(aggcol,
                            FUN = function(colname) {
-                             newname = paste(fun_str,"_", colname, "", sep  = "")
+                            newname = paste(fun_str,"_", colname, "", sep  = "")
                            }
       )
       gdata$aggcol = newcolsname
       colnames(newtable) <- newcolsname
-      newtable
-    } else {
-      #err msg
-      warning("invaild type to aggregate")
-      showNotification("invaild type to aggregate", type = "error")
-      #validate(need(!tag, "invaild type to aggregate."))
-      tmp
-    }
+      return(newtable)
 
   }
   ##get aggregation function, then realize the aggregation
   get_data <- function() {
     input$Aggregation
-    result = (data())
+    # result = (data())
     groupby <- isolate((input$gcolumns))
     aggfun <- isolate((input$aggrf))
     aggcol <- isolate((input$aggrcol))
-    result = result[, groupby, drop = FALSE]
+    result = do_agg("mean")
+    result=result[,groupby, drop = FALSE]
+    #result = result[, groupby, drop = FALSE]
     if (is.element("mean", aggfun)) {
-      newtable = do_agg("mean")
+      newtable <- get_newname("mean")
       result = cbind(result, newtable)
     }
+
     if (is.element("standard deviation", aggfun)) {
-      newtable = do_agg("standard deviation")
+      newtable <- get_newname("standard deviation")
       result = cbind(result, newtable)
     }
     if (is.element("median", aggfun)) {
-      newtable = do_agg("median")
+      newtable <- get_newname("median")
       result = cbind(result, newtable)
     }
     gdata$dt <- result
+    if (length(aggcol) >= 2) {
+      gdata$problem <- aggcol[1]
+      gdata$algo <- aggcol[2]
+    }
     result
   }
 
@@ -169,6 +176,12 @@ server <- function(input, output) {
     req(data()) #only execute the rest, if dataframe is available
     data = data() #dataframe needs do be assigned reactively
     column(6, selectInput('box.measure', 'performance measure to compare on', input$measures, multiple = FALSE))
+  })
+
+  output$rankplot.measure = renderUI({
+    req(data()) #only execute the rest, if dataframe is available
+    data = data() #dataframe needs do be assigned reactively
+    column(6, selectInput('rank.measure', 'performance measure to rank', gdata$aggcol, multiple = FALSE))
   })
 
   output$replication.measure = renderUI({
@@ -221,12 +234,13 @@ server <- function(input, output) {
 
   output$plot_box <- renderPlotly({
     req(input$box.measure)
-    createBoxPlot(table$data, input$box.measure)
+    createBoxPlot(table$data, input$box.measurem)
   })
 
   output$plot_rank <- renderPlotly({
 
-    gdata$plot
+    req(input$rank.measure)
+    createRankPlot(gdata$dt, input$rank.measure, gdata$problem, gdata$algo)
 
   })
 
@@ -234,6 +248,6 @@ server <- function(input, output) {
     req(input$replication)
     req(input$replication.measure)
     createReplicationLinePlot(table$data, input$replication.measure)
-  })
-
+   })
 }
+
