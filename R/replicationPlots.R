@@ -37,5 +37,7 @@ createReplicationLinePlot = function(df, replication.measure) {
     colour = algorithm
   )) + ggplot2::geom_point() + ggplot2::geom_line()
   # Convert plot to plotly
-  return(plotly::ggplotly(p))
+  p = plotly::ggplotly(p)
+  p = plotly::layout(p, yaxis = list(title = replication.measure))
+  return(p)
 }
