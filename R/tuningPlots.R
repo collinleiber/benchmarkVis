@@ -4,7 +4,7 @@
 #' Create a plotly scatter plot out of a benchmarkVis compatible dataframe.
 #' The created scatter plot shows the change within the specified measure for a change of the specified parameter
 #'
-#' @param df campatible dataframe
+#' @param df compatible dataframe
 #' @param parameter the parameter you want to examine
 #' @param measure the column name containing the results of a measure
 #' @return a plotly scatter plot
@@ -36,7 +36,7 @@ createTuningParameterPlot = function(df, parameter, measure) {
 #' Create a plotly line plot out of a benchmarkVis compatible dataframe.
 #' The created line plot shows the change within the specified measure for each iteration
 #'
-#' @param df campatible dataframe
+#' @param df compatible dataframe
 #' @param measure the column name containing the results of a measure
 #' @return a plotly line plot
 #' @export
