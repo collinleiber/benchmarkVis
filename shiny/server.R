@@ -1,6 +1,6 @@
 library(DT)
 server <- function(input, output) {
-
+  options(shiny.maxRequestSize = 35*1024^2) # set maximal size for file input
   mvalues <- reactiveValues(matrix = NULL)
   gdata <- reactiveValues(dt = NULL, aggcol = NULL, plot = NULL)
   table <- reactiveValues(data = NULL)
@@ -117,7 +117,6 @@ server <- function(input, output) {
     aggcol <- isolate((input$aggrcol))
      result = do_agg("mean")
     result=result[,groupby, drop = FALSE]
-    #result = result[, groupby, drop = FALSE]
     if (is.element("mean", aggfun)) {
       newtable <- get_newname("mean")
       result = cbind(result, newtable)
@@ -268,13 +267,13 @@ server <- function(input, output) {
 
   output$plot_rank_submitted <- renderPlotly({
     req(input$rank.measure)
-    createRankPlot(table$data, input$rp.measure.submitted, input$problem, input$algorithm)
+    createRankPlot(table$data, input$rp.measure.submitted)
 
   })
 
   output$plot_rank_aggr <- renderPlotly({
     req(input$rank.measure)
-    createRankPlot(gdata$dt, input$rank.measure, gdata$problem, gdata$algo)
+    createRankPlot(gdata$dt, input$rank.measure)
 
   })
 
@@ -285,7 +284,7 @@ server <- function(input, output) {
   })
 
   output$plot_tun <- renderPlotly({
-    createTuningParameterPlot(table$data, input$tun.param, input$tun.measure)
+    createTuningIterationPlot(table$data, input$tun.measure)
   })
 
 

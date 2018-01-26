@@ -54,7 +54,6 @@ dashboardPage(
 
               DT::dataTableOutput("DataTable")
       ),
-
       tabItem(tabName = "plots_box",
               h3("Box plot for your data"),
               uiOutput("boxplot.measure"),
@@ -82,7 +81,6 @@ dashboardPage(
       ),
       tabItem(tabName = "plots_tun",
               h3("Tuning iteration line plot for your data"),
-              uiOutput("tuning.parameter"),
               uiOutput("tuning.measure"),
               plotlyOutput("plot_tun")
       )

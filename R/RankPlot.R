@@ -11,14 +11,17 @@
 #' @import ggplot2
 #' @examples
 #' createRankPlot(mlr.benchmark.example, 'mmce.test.mean')
-createRankPlot = function(df, measure, problem, algorithm) {
+createRankPlot = function(df, measure) {
   checkmate::assert_data_frame(df)
-  if (length(df[, measure])) {
-    order.scores = order(df[, measure])
-    df$rank = NA
-    df$rank[order.scores] = seq_len(nrow(df))
-    df$rank = as.factor(df$rank)
-    p =  ggplot2::ggplot(df, ggplot2::aes(x = df$rank, problem, fill = algorithm)) +
+  
+  if (length(df[, measure])) {    
+    order.scores = order(df$problem,df[, measure])    
+    #order.scores = order.scores%%3
+    rank = NA
+    rank[order.scores] = seq_len(nrow(df))
+    rank = as.factor(rank)
+    print(rank)
+    p =  ggplot2::ggplot(df, ggplot2::aes(x = rank, problem, fill = algorithm)) +
       ggplot2::geom_tile(position = "dodge") +
       ggplot2::labs(title = "Rank Plot",
         x = "Rank",
