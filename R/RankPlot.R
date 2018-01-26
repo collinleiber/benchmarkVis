@@ -13,19 +13,18 @@
 #' createRankPlot(mlr.benchmark.example, 'mmce.test.mean')
 createRankPlot = function(df, measure) {
   checkmate::assert_data_frame(df)
-  
-  if (length(df[, measure])) {    
-    order.scores = order(df$problem,df[, measure])    
+  if (length(df[, measure])) {
+    order.scores = order(df$problem, df[, measure])
     #order.scores = order.scores%%3
     rank = NA
     rank[order.scores] = seq_len(nrow(df))
     rank = as.factor(rank)
     print(rank)
-    p =  ggplot2::ggplot(df, ggplot2::aes(x = rank, problem, fill = algorithm)) +
+    p =  ggplot2::ggplot(df, ggplot2::aes(x = rank, df$problem, fill = df$algorithm)) +
       ggplot2::geom_tile(position = "dodge") +
       ggplot2::labs(title = "Rank Plot",
-        x = "Rank",
-        y = "Task.id")
+                    x = "Rank",
+                    y = "Task.id")
     #  return(p)
     return(p)
   }
