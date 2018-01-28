@@ -4,7 +4,7 @@
 \alias{createRankPlot}
 \title{Create a rank plot}
 \usage{
-createRankPlot(df, measure, problem, algorithm)
+createRankPlot(df, measure)
 }
 \arguments{
 \item{df}{compatible dataframe}

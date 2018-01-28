@@ -29,9 +29,9 @@ server <- function(input, output) {
     aggfun <- isolate((input$aggrf))
     aggcol <- isolate((input$aggrcol))
     df = data()
-    gdata$dt <- get_result(groupby, aggfun, aggcol, df)
+    gdata$dt <- get.result(groupby, aggfun, aggcol, df)
     result <- gdata$dt
-    gdata$aggcol = get_new_name(aggfun, aggcol)
+    gdata$aggcol = get.new.name(aggfun, aggcol)
     result
   }
 
@@ -156,7 +156,7 @@ server <- function(input, output) {
     list(
       selectInput('gcolumns', 'GroupBy Columns', colnames(data), selected = FALSE, multiple = TRUE),
       selectInput('aggrf', 'Aggregation Function',aggregationfunction_set, selected = FALSE, multiple = TRUE),
-      selectInput('aggrcol', 'Aggregated Column', get_num_columns_name(data), selected = FALSE, multiple = TRUE)
+      selectInput('aggrcol', 'Aggregated Column', get.num.columns.name(data), selected = FALSE, multiple = TRUE)
     )
   }
   )

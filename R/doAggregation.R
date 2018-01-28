@@ -8,15 +8,15 @@
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-get_agg_result <- function(fun_str, groupby, aggcol, df){
-  newtable = do_agg(fun_str, groupby, aggcol, df)
+get.agg.result <- function(fun_str, groupby, aggcol, df){
+  newtable = do.agg(fun_str, groupby, aggcol, df)
   newtable = newtable[, aggcol, drop = FALSE]
   newcolsname = lapply(aggcol,
                        FUN = function(colname) {
-                         newname = paste(fun_str,"_", colname, "", sep  = "")
+                         newname = paste(fun_str, "_", colname, "", sep  = "")
                        }
   )
-  colnames(newtable) <- newcolsname
+  colnames(newtable) = newcolsname
   return(newtable)
 
 }
@@ -33,14 +33,14 @@ get_agg_result <- function(fun_str, groupby, aggcol, df){
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-do_agg <- function(fun_str, groupby, aggcol, df) {
+do.agg <- function(fun_str, groupby, aggcol, df) {
   tmp = df
   tag = TRUE
-  check_data_type <- function(type){
-    tag <<- tag && type == "numeric"
+  check.data.type <- function(type){
+    tag == tag && type == "numeric"
   }
   types = lapply(tmp[, aggcol], class)
-  lapply(types, check_data_type)
+  lapply(types, check.data.type)
   if (tag) {
     if (fun_str == "sd") {
       func = stats::sd
@@ -51,7 +51,7 @@ do_agg <- function(fun_str, groupby, aggcol, df) {
     } else {
       #handle err
     }
-    newtable <- aggregate(x = tmp[c(aggcol)],
+    newtable = aggregate(x = tmp[c(aggcol)],
                           by = tmp[c(groupby)],
                           FUN = func)
     return(newtable)
@@ -72,13 +72,13 @@ do_agg <- function(fun_str, groupby, aggcol, df) {
 #'
 #' @param data a dataframe
 #' @return list of the nummeric column names
-get_num_columns_name <- function(data) {
-  colnames <- list()
+get.num.columns.name = function(data) {
+  colnames = list()
   for (col_name in names(data))
   {
-    if (is.numeric(data[,col_name]))
+    if (is.numeric(data[, col_name]))
     {
-      colnames<-c(colnames, col_name)
+      colnames = c(colnames, col_name)
     }
   }
   colnames
@@ -95,56 +95,56 @@ get_num_columns_name <- function(data) {
 #' @return a dataframe
 #' @export
 #' @examples
-#' get_result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("mmce.test.mean", "ber.test.mean"), df= mlr.benchmark.example)
-get_result <- function(groupby, aggfun, aggcol, df) {
+#' get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("mmce.test.mean", "ber.test.mean"), df= mlr.benchmark.example)
+get.result <- function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
-  result = do_agg("mean", groupby, aggcol, df)
-  result = result[,groupby, drop = FALSE]
+  result = do.agg("mean", groupby, aggcol, df)
+  result = result[, groupby, drop = FALSE]
   if (is.element("mean", aggfun)) {
-    newtable <- get_agg_result("mean", groupby, aggcol, df)
+    newtable = get.agg.result("mean", groupby, aggcol, df)
     result = cbind(result, newtable)
   }
   if (is.element("standard deviation", aggfun)) {
-    newtable <- get_agg_result("sd", groupby, aggcol, df)
+    newtable = get.agg.result("sd", groupby, aggcol, df)
     result = cbind(result, newtable)
   }
   if (is.element("median", aggfun)) {
-    newtable <- get_agg_result("median", groupby, aggcol, df)
+    newtable = get.agg.result("median", groupby, aggcol, df)
     result = cbind(result, newtable)
   }
   return(result)
 }
 
-get_new_name <- function(aggfun, aggcol)
+get.new.name <- function(aggfun, aggcol)
 {
-  newcolsname <- list()
+  newcolsname = list()
   if (is.element("mean", aggfun)) {
-    tmp_name = lapply(
+    tmp.name = lapply(
       aggcol,
       FUN = function(colname) {
         newname = paste("mean", "_", colname, "", sep  = "")
       }
     )
-    newcolsname = append(newcolsname, unlist(tmp_name))
+    newcolsname = append(newcolsname, unlist(tmp.name))
   }
   if (is.element("median", aggfun)) {
-    tmp_name = lapply(
+    tmp.name = lapply(
       aggcol,
       FUN = function(colname) {
         newname = paste("median", "_", colname, "", sep  = "")
       }
     )
-    newcolsname = append(newcolsname, tmp_name)
+    newcolsname = append(newcolsname, tmp.name)
   }
   if (is.element("standard deviation", aggfun)) {
-    tmp_name = lapply(
+    tmp.name = lapply(
       aggcol,
       FUN = function(colname) {
         newname = paste("sd", "_", colname, "", sep  = "")
       }
     )
-    newcolsname = append(newcolsname, tmp_name)
+    newcolsname = append(newcolsname, tmp.name)
   }
-  newcolsname = c(do.call("cbind",newcolsname))
+  newcolsname = c(do.call("cbind", newcolsname))
   return(newcolsname)
 }

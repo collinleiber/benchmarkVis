@@ -16,7 +16,7 @@ createRankPlot = function(df, measure) {
   checkmate::assert_data_frame(df)
   if (length(df[, measure])) {
 
-    abcd = df %>% group_by(df$problem) %>% mutate(rank = order(eval(parse(text=sprintf('%s',measure)))))
+    abcd = df %>% group_by(df$problem) %>% mutate(rank = order(eval(parse(text = sprintf("%s", measure)))))
 
     order.scores = order(df$problem, df[, measure])
     rank = NA
