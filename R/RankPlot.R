@@ -8,15 +8,15 @@
 #' @param measure measure for Ranking
 #' @return a rank plot
 #' @export
-#' @import ggplot2
-#' @import dplyr
 #' @examples
 #' createRankPlot(mlr.benchmark.example, 'mmce.test.mean')
 createRankPlot = function(df, measure) {
   checkmate::assert_data_frame(df)
   if (length(df[, measure])) {
 
-    abcd = df %>% group_by(df$problem) %>% mutate(rank = order(eval(parse(text = sprintf("%s", measure)))))
+    `%>%` = magrittr::`%>%`
+
+    abcd = df %>% dplyr::group_by(df$problem) %>% dplyr::mutate(rank = order(eval(parse(text = sprintf("%s", measure)))))
 
     order.scores = order(df$problem, df[, measure])
     rank = NA

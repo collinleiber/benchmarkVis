@@ -4,7 +4,7 @@
 \alias{do.agg}
 \title{do aggregation result}
 \usage{
-\method{do}{agg}(fun_str, groupby, aggcol, df)
+do.agg(fun_str, groupby, aggcol, df)
 }
 \arguments{
 \item{fun_str}{the string of the aggregate functions}

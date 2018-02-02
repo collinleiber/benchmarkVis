@@ -16,6 +16,7 @@ BugReports: https://github.com/collinleiber/benchmarkVis/issues
 Imports: 
 	checkmate (>= 1.8.2),
 	plotly,
+	data.table,
 	ggplot2
 Suggests: 
 	testthat,
@@ -30,6 +31,7 @@ Suggests:
 	rbenchmark,
 	rex,
 	DT,
-	data.table,
 	ParamHelpers (>= 1.10),
-	kernlab
+	kernlab,
+	magrittr,
+	dplyr

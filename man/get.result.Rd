@@ -9,6 +9,8 @@ get.result(groupby, aggfun, aggcol, df)
 \arguments{
 \item{groupby}{the list of columns name that will be grouped}
 
+\item{aggfun}{the function to aggregate with}
+
 \item{aggcol}{the list of columns name that will be aggregated}
 
 \item{df}{the input dataframe}

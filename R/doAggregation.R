@@ -8,7 +8,7 @@
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-get.agg.result <- function(fun_str, groupby, aggcol, df){
+get.agg.result = function(fun_str, groupby, aggcol, df){
   newtable = do.agg(fun_str, groupby, aggcol, df)
   newtable = newtable[, aggcol, drop = FALSE]
   newcolsname = lapply(aggcol,
@@ -33,10 +33,10 @@ get.agg.result <- function(fun_str, groupby, aggcol, df){
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-do.agg <- function(fun_str, groupby, aggcol, df) {
+do.agg = function(fun_str, groupby, aggcol, df) {
   tmp = df
   tag = TRUE
-  check.data.type <- function(type){
+  check.data.type = function(type){
     tag == tag && type == "numeric"
   }
   types = lapply(tmp[, aggcol], class)
@@ -91,12 +91,13 @@ get.num.columns.name = function(data) {
 #' the groupby columns must include problem and algorithm
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
+#' @param aggfun the function to aggregate with
 #' @param df the input dataframe
 #' @return a dataframe
 #' @export
 #' @examples
 #' get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("mmce.test.mean", "ber.test.mean"), df= mlr.benchmark.example)
-get.result <- function(groupby, aggfun, aggcol, df) {
+get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
   result = do.agg("mean", groupby, aggcol, df)
   result = result[, groupby, drop = FALSE]
@@ -115,7 +116,7 @@ get.result <- function(groupby, aggfun, aggcol, df) {
   return(result)
 }
 
-get.new.name <- function(aggfun, aggcol)
+get.new.name = function(aggfun, aggcol)
 {
   newcolsname = list()
   if (is.element("mean", aggfun)) {
