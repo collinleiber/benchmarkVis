@@ -131,10 +131,7 @@ server <- function(input, output) {
       result = cbind(result, newtable)
     }
     gdata$dt <- result
-    if (length(aggcol) >= 2) {
-      gdata$problem <- aggcol[1]
-      gdata$algo <- aggcol[2]
-    }
+
     result
   }
 
@@ -266,15 +263,13 @@ server <- function(input, output) {
   })
 
   output$plot_rank_submitted <- renderPlotly({
-    req(input$rank.measure)
+    req(input$rp.measure.submitted)
     createRankPlot(table$data, input$rp.measure.submitted)
-
   })
 
   output$plot_rank_aggr <- renderPlotly({
     req(input$rank.measure)
     createRankPlot(gdata$dt, input$rank.measure)
-
   })
 
   output$plot_repl <- renderPlotly({
