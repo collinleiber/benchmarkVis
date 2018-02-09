@@ -7,7 +7,7 @@
 createTuningParameterPlot(df, parameter, measure)
 }
 \arguments{
-\item{df}{campatible dataframe}
+\item{df}{compatible dataframe}
 
 \item{parameter}{the parameter you want to examine}
 

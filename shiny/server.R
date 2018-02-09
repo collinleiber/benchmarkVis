@@ -21,8 +21,19 @@ server <- function(input, output) {
     else{
       return(NULL)
     }
-
   })
+
+  ##get aggregation function, then realize the aggregation
+  get_data <- function() {
+    groupby <- isolate((input$gcolumns))
+    aggfun <- isolate((input$aggrf))
+    aggcol <- isolate((input$aggrcol))
+    df = data()
+    gdata$dt <- get.result(groupby, aggfun, aggcol, df)
+    result <- gdata$dt
+    gdata$aggcol = get.new.name(aggfun, aggcol)
+    result
+  }
 
   output$fileUploaded <- reactive({
     return(!is.null(data()))
@@ -39,7 +50,7 @@ server <- function(input, output) {
   observeEvent(input$Aggregation,{
     mvalues$matrix <-
     {req(data())
-      data =get_data()}
+      data = get_data()}
   })
   observeEvent(input$Reset,{
     mvalues$matrix <-
@@ -55,98 +66,6 @@ server <- function(input, output) {
         req(input$Submit) #only show the content if user has submitted
         data = data()}
   })
-
-  #definition of aggregation function
-  do_agg <- function(fun_str) {
-    groupby <- isolate((input$gcolumns))
-    aggfun <- isolate((input$aggrf))
-    aggcol <- isolate((input$aggrcol))
-    tmp = data()
-    tag = TRUE
-    check_data_type <- function(type){
-      tag <<- tag && type == "numeric"
-    }
-    types = lapply(tmp[, aggcol], class)
-    lapply(types, check_data_type)
-    if (tag) {
-      if (fun_str == "standard deviation") {
-        func = stats::sd
-      } else if (fun_str == "mean") {
-        func = mean
-      } else if (fun_str == "median") {
-        func = median
-      } else {
-        #handle err
-      }
-    }else {
-    #   #err msg
-      warning("invaild type to aggregate")
-       showNotification("invaild type to aggregate", type = "error")
-       #validate(need(!tag, "invaild type to aggregate."))
-       tmp
-     }
-      newtable <- aggregate(x = tmp[c(aggcol)],
-                            by = tmp[c(groupby)],
-                            FUN = func)
-                            return(newtable)
-    }
-
-      #rename the aggregated columns
-    get_newname <- function(fun_str){
-      groupby <- isolate((input$gcolumns))
-      aggfun <- isolate((input$aggrf))
-      aggcol <- isolate((input$aggrcol))
-      newtable = do_agg(fun_str)
-      newtable = newtable[, aggcol, drop = FALSE]
-      newcolsname = lapply(aggcol,
-                           FUN = function(colname) {
-                             newname = paste(fun_str,"_", colname, "", sep  = "")
-                           }
-      )
-      gdata$aggcol = newcolsname
-      colnames(newtable) <- newcolsname
-      return(newtable)
-
-  }
-  ##get aggregation function, then realize the aggregation
-  get_data <- function() {
-    input$Aggregation
-    # result = (data())
-    groupby <- isolate((input$gcolumns))
-    aggfun <- isolate((input$aggrf))
-    aggcol <- isolate((input$aggrcol))
-     result = do_agg("mean")
-    result=result[,groupby, drop = FALSE]
-    if (is.element("mean", aggfun)) {
-      newtable <- get_newname("mean")
-      result = cbind(result, newtable)
-    }
-
-    if (is.element("standard deviation", aggfun)) {
-      newtable <- get_newname("standard deviation")
-      result = cbind(result, newtable)
-    }
-    if (is.element("median", aggfun)) {
-      newtable <- get_newname("median")
-      result = cbind(result, newtable)
-    }
-    gdata$dt <- result
-
-    result
-  }
-
-  #only nummeric columns can be aggregated
-  get_num_columns_name <- function(data) {
-    colnames <- list()
-    for (col_name in names(data))
-    {
-      if (is.numeric(data[,col_name]))
-      {
-        colnames<-c(colnames, col_name)
-      }
-    }
-    colnames
-  }
 
   output$data.type <- renderUI({
     data.types = c('csv','microbenchmark','mlr','mlr tuning','rbenchmark')
@@ -237,7 +156,7 @@ server <- function(input, output) {
     list(
       selectInput('gcolumns', 'GroupBy Columns', colnames(data), selected = FALSE, multiple = TRUE),
       selectInput('aggrf', 'Aggregation Function',aggregationfunction_set, selected = FALSE, multiple = TRUE),
-      selectInput('aggrcol', 'Aggregated Column', get_num_columns_name(data), selected = FALSE, multiple = TRUE)
+      selectInput('aggrcol', 'Aggregated Column', get.num.columns.name(data), selected = FALSE, multiple = TRUE)
     )
   }
   )
@@ -269,7 +188,8 @@ server <- function(input, output) {
 
   output$plot_rank_aggr <- renderPlotly({
     req(input$rank.measure)
-    createRankPlot(gdata$dt, input$rank.measure)
+    createRankPlot((gdata$dt), input$rank.measure)
+
   })
 
   output$plot_repl <- renderPlotly({

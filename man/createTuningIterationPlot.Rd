@@ -7,7 +7,7 @@
 createTuningIterationPlot(df, measure)
 }
 \arguments{
-\item{df}{campatible dataframe}
+\item{df}{compatible dataframe}
 
 \item{measure}{the column name containing the results of a measure}
 }
