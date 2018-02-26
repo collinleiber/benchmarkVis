@@ -10,11 +10,11 @@ useRbenchmarkWrapper(benchmark)
 \item{benchmark}{a rbenchmark object}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Create a dataframe useable within the benchmarkVis application out of an rbenchmark object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Create a data table useable with the benchmarkVis application out of an rbenchmark object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }
 \examples{
 library(rbenchmark)
@@ -28,5 +28,5 @@ benchmark = rbenchmark::benchmark(
  order = "elapsed",
  replications = c(100, 20)
 )
-df = useRbenchmarkWrapper(benchmark)
+dt = useRbenchmarkWrapper(benchmark)
 }

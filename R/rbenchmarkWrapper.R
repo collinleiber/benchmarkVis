@@ -1,11 +1,11 @@
 #' @title Insert rbenchmark object into benchmarkVis application
 #'
 #' @description
-#' Create a dataframe useable within the benchmarkVis application out of an rbenchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Create a data table useable with the benchmarkVis application out of an rbenchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param benchmark a rbenchmark object
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 #' @examples
 #' library(rbenchmark)
@@ -19,22 +19,20 @@
 #'  order = "elapsed",
 #'  replications = c(100, 20)
 #')
-#' df = useRbenchmarkWrapper(benchmark)
+#' dt = useRbenchmarkWrapper(benchmark)
 useRbenchmarkWrapper = function(benchmark) {
-  # Create dataframe
-  df = data.frame(
+  # Create data table
+  dt = data.table::data.table(
     problem = "unknown",
+    problem.parameter = repList(list(), nrow(benchmark)),
     algorithm = benchmark$test,
-    replication = "repitition"
+    algorithm.parameter = repList(list(), nrow(benchmark)),
+    replication = "repitition",
+    replication.parameter = lapply(benchmark$replications, function(x) {
+      list(iters = x)
+    }),
+    stringsAsFactors = TRUE
   )
-  # Add lists to the dataframe (not possible within constructor)
-  df$problem.parameter = repList(list(), nrow(benchmark))
-  df$algorithm.parameter = repList(list(), nrow(benchmark))
-  df$replication.parameter = lapply(benchmark$replications, function(x) {
-    list(iters = x)
-  })
-  # Change order
-  df = df[, c(1, 4, 2, 5, 3, 6)]
   # Check the possible measures
   measures = c("elapsed",
     "relative",
@@ -44,22 +42,24 @@ useRbenchmarkWrapper = function(benchmark) {
     "sys.child")
   for (x in measures) {
     if (x %in% colnames(benchmark)) {
-      df[[x]] = as.numeric(benchmark[[x]])
+      dt[[paste("measure", x, sep = ".")]] = as.numeric(benchmark[[x]])
     }
   }
-  # Return created dataframe
-  return(df)
+  # Check structure
+  checkmate::assert_true(checkStructure(dt))
+  # Return created data table
+  return(dt)
 }
 
 #' @title Insert rbenchmark RDS file into benchmarkVis application
 #'
 #' @description
 #' Load the specified file and pass it on the the useRbenchmarkWrapper function.
-#' Create a dataframe useable within the benchmarkVis application out of an rbenchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Create a data table useable within the benchmarkVis application out of an rbenchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param input.file Path to the input rbenchmark RDS file
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 useRbenchmarkFileWrapper = function(input.file) {
   benchmark = readRDS(input.file)

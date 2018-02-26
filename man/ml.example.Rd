@@ -5,8 +5,8 @@
 \alias{ml.example}
 \title{Example CSV file}
 \description{
-Contains the same dataframe as (\code{mlr.benchmark.example}).
-This file is an example of how a useable csv file should be structered.
+Contains the same data table as (\code{mlr.benchmark.example}).
+This file is an example of how a useable csv file should be structured.
 It can be loaded into the benchmarkVis application through the csvImport method.
 }
 \references{

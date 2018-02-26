@@ -4,10 +4,10 @@
 \alias{createTuningIterationPlot}
 \title{Create a tuning iteration line plot}
 \usage{
-createTuningIterationPlot(df, measure)
+createTuningIterationPlot(dt, measure)
 }
 \arguments{
-\item{df}{compatible dataframe}
+\item{dt}{compatible data table}
 
 \item{measure}{the column name containing the results of a measure}
 }
@@ -15,9 +15,9 @@ createTuningIterationPlot(df, measure)
 a plotly line plot
 }
 \description{
-Create a plotly line plot out of a benchmarkVis compatible dataframe.
+Create a plotly line plot out of a benchmarkVis compatible data table.
 The created line plot shows the change within the specified measure for each iteration
 }
 \examples{
-createTuningIterationPlot(mlr.tuning.example, "acc.test.mean")
+createTuningIterationPlot(mlr.tuning.example, "measure.acc.test.mean")
 }

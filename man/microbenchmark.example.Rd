@@ -6,8 +6,8 @@
 \title{microbenchmark input}
 \description{
 Contains the wrapped microbenchmark result (\code{microbenchmark.example}).
-It is a basic Version of a useable benchmark result dataframe.
-It was converted to a dataframe useable within the benchmarkVis application through the microbenchmarkWrapper.
+It is a basic Version of a useable benchmark result data table.
+It was converted to a data table useable within the benchmarkVis application through the microbenchmarkWrapper.
 The file is accessible through "microbenchmark.example".
 }
 \references{

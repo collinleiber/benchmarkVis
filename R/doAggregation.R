@@ -96,7 +96,7 @@ get.num.columns.name = function(data) {
 #' @return a dataframe
 #' @export
 #' @examples
-#' get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("mmce.test.mean", "ber.test.mean"), df= mlr.benchmark.example)
+#' get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
 get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
   result = do.agg("mean", groupby, aggcol, df)

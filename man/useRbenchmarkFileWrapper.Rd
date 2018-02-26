@@ -10,10 +10,10 @@ useRbenchmarkFileWrapper(input.file)
 \item{input.file}{Path to the input rbenchmark RDS file}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
 Load the specified file and pass it on the the useRbenchmarkWrapper function.
-Create a dataframe useable within the benchmarkVis application out of an rbenchmark object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Create a data table useable within the benchmarkVis application out of an rbenchmark object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }

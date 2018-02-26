@@ -5,7 +5,7 @@ test_that("Do aggregation for mlr benchmark", {
   agd = get.result(
     groupby = c("problem", "algorithm"),
     aggfun = "mean",
-    aggcol = c("mmce.test.mean", "ber.test.mean"),
+    aggcol = c("measure.mmce.test.mean", "measure.ber.test.mean"),
     df = mlr.benchmark.example
   )
   expect_true(is.data.frame(agd) && ncol(agd) == 4L)
@@ -15,8 +15,8 @@ test_that("Do aggregation for mlr benchmark", {
     c(
       "problem",
       "algorithm",
-      "mean_mmce.test.mean",
-      "mean_ber.test.mean"
+      "mean_measure.mmce.test.mean",
+      "mean_measure.ber.test.mean"
     )
   )
 })
@@ -26,7 +26,7 @@ test_that("Do aggregation for microbenchmark", {
   agd = get.result(
     groupby = c("problem", "algorithm"),
     aggfun = "mean",
-    aggcol = c("mean", "median"),
+    aggcol = c("measure.mean", "measure.median"),
     df = microbenchmark.example
   )
   expect_true(is.data.frame(agd) && ncol(agd) == 4L)
@@ -36,8 +36,8 @@ test_that("Do aggregation for microbenchmark", {
     c(
       "problem",
       "algorithm",
-      "mean_mean",
-      "mean_median"
+      "mean_measure.mean",
+      "mean_measure.median"
     )
   )
 })

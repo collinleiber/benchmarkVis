@@ -10,10 +10,10 @@ useMicrobenchmarkFileWrapper(input.file)
 \item{input.file}{Path to the input microbenchmark RDS file}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Load the specified file and pass it on the the useMicrobenchmarkWrapper function.
-Create a dataframe useable within the benchmarkVis application out of an microbenchmark object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Load the specified file and pass it on to the useMicrobenchmarkWrapper function.
+Create a data table useable with the benchmarkVis application out of an microbenchmark object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }
