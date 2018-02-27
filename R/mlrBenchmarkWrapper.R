@@ -1,18 +1,18 @@
 #' @title Insert mlr benchmark object into benchmarkVis application
 #'
 #' @description
-#' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Create a data table useable with the benchmarkVis application out of an mlr benchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param bmr a mlr benchmark result object
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 #' @examples
 #' library(mlr)
 #' lrns = list(makeLearner("classif.lda"), makeLearner("classif.rpart"))
 #' rdesc = makeResampleDesc("Holdout")
 #' bmr = benchmark(lrns, sonar.task, rdesc)
-#' df = useMlrBenchmarkWrapper(bmr)
+#' dt = useMlrBenchmarkWrapper(bmr)
 useMlrBenchmarkWrapper = function(bmr) {
   # General variables
   learner.count = length(bmr$learners)
@@ -37,19 +37,17 @@ useMlrBenchmarkWrapper = function(bmr) {
   replication = sapply(c(1:tasks.count), function(i) {
     bmr$results[[i]][[1]]$pred$instance$desc$id
   })
-  # Create dataframe
-  df = data.frame(
+  # Create data table
+  dt = data.table::data.table(
     problem = rep(names(bmr$result), rep(learner.count, tasks.count)),
+    problem.parameter = rep(problem.parameter, rep(learner.count, tasks.count)),
     algorithm = rep(names(bmr$learners), tasks.count),
-    replication = rep(replication, rep(learner.count, tasks.count))
+    algorithm.parameter = rep(algorithm.parameter, tasks.count),
+    replication = rep(replication, rep(learner.count, tasks.count)),
+    replication.parameter = rep(replication.parameter, rep(learner.count, tasks.count)),
+    stringsAsFactors = TRUE
   )
-  # Add lists
-  df$problem.parameter = rep(problem.parameter, rep(learner.count, tasks.count))
-  df$algorithm.parameter = rep(algorithm.parameter, tasks.count)
-  df$replication.parameter = rep(replication.parameter, rep(learner.count, tasks.count))
-  # Change order
-  df = df[, c(1, 4, 2, 5, 3, 6)]
-  # Add measures and replication results to dataframe
+  # Add measures and replication results to data table
   replication.results = list()
   for (measure.nr in seq(bmr$measures)) {
     measure.list = list()
@@ -62,28 +60,30 @@ useMlrBenchmarkWrapper = function(bmr) {
             1]]
       }
     }
-    # Save measures and replication results in dataframe
-    df[[names(bmr$results[[1]][[1]]$aggr)[[measure.nr]]]] = sapply(measure.list, as.numeric)
+    # Save measures and replication results in data table
+    dt[[paste("measure", names(bmr$results[[1]][[1]]$aggr)[[measure.nr]], sep = ".")]] = sapply(measure.list, as.numeric)
     replication.results[[measure.nr]] = replication.list
   }
-  # Add replication results here to get correct order in dataframe
+  # Add replication results here to get correct order in data table
   for (i in seq(replication.results)) {
-    df[[paste("replication", names(bmr$results[[1]][[1]]$measures.test)[[i +
+    dt[[paste("list", names(bmr$results[[1]][[1]]$measures.test)[[i +
         1]], sep = ".")]] = replication.results[[i]]
   }
-  # Return dataframe
-  return(df)
+  # Check structure
+  checkmate::assert_true(checkStructure(dt))
+  # Return data table
+  return(dt)
 }
 
 #' @title Insert mlr benchmark RDS file into benchmarkVis application
 #'
 #' @description
 #' Load the specified file and pass it on the the useMlrBenchmarkWrapper function.
-#' Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Create a data table useable with the benchmarkVis application out of an mlr benchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param input.file Path to the input mlr benchmark RDS file
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 useMlrBenchmarkFileWrapper = function(input.file) {
   bmr = readRDS(input.file)

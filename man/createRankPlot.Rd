@@ -4,10 +4,10 @@
 \alias{createRankPlot}
 \title{Create a rank plot}
 \usage{
-createRankPlot(df, measure)
+createRankPlot(dt, measure)
 }
 \arguments{
-\item{df}{compatible dataframe}
+\item{dt}{compatible data table}
 
 \item{measure}{measure for Ranking}
 }
@@ -15,9 +15,9 @@ createRankPlot(df, measure)
 a rank plot
 }
 \description{
-Create a plotly rank plot out of a benchmarkVis compatible dataframe.
+Create a plotly rank plot out of a benchmarkVis compatible data table.
 The created rank plot allows for Ranking of algorithms based on a given performance measure for different datasets
 }
 \examples{
-createRankPlot(mlr.benchmark.example, 'mmce.test.mean')
+createRankPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
 }

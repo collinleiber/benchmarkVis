@@ -1,8 +1,8 @@
 #' mlr benchmark input
 #'
 #' Contains the wrapped mlr benchmark result (\code{mlr.benchmark.example}).
-#' It is a basic Version of a useable mlr benchmark result dataframe.
-#' It was converted to a dataframe useable within the benchmarkVis application through the mlrBenchmarkWrapper.
+#' It is a basic Version of a useable mlr benchmark result data table.
+#' It was converted to a data table useable within the benchmarkVis application through the mlrBenchmarkWrapper.
 #' The file is accessible through "mlr.benchmark.example".
 #' @name mlr.benchmark.example
 #' @docType data
@@ -13,8 +13,8 @@ NULL
 #' mlr tuning input
 #'
 #' Contains the wrapped mlr tuning result (\code{mlr.tuning.example}).
-#' It is a basic Version of a useable mlr tuning result dataframe.
-#' It was converted to a dataframe useable within the benchmarkVis application through the mlrTuningWrapper.
+#' It is a basic Version of a useable mlr tuning result data table.
+#' It was converted to a data table useable within the benchmarkVis application through the mlrTuningWrapper.
 #' The file is accessible through "mlr.tuning.example".
 #' @name mlr.tuning.example
 #' @docType data
@@ -25,8 +25,8 @@ NULL
 #' microbenchmark input
 #'
 #' Contains the wrapped microbenchmark result (\code{microbenchmark.example}).
-#' It is a basic Version of a useable benchmark result dataframe.
-#' It was converted to a dataframe useable within the benchmarkVis application through the microbenchmarkWrapper.
+#' It is a basic Version of a useable benchmark result data table.
+#' It was converted to a data table useable within the benchmarkVis application through the microbenchmarkWrapper.
 #' The file is accessible through "microbenchmark.example".
 #' @name microbenchmark.example
 #' @docType data
@@ -37,8 +37,8 @@ NULL
 #' rbenchmark input
 #'
 #' Contains the wrapped rbenchmark result (\code{rbenchmark.example}).
-#' It is a basic Version of a useable benchmark result dataframe.
-#' It was converted to a dataframe useable within the benchmarkVis application through the rbenchmarkWrapper.
+#' It is a basic Version of a useable benchmark result data table.
+#' It was converted to a data table useable within the benchmarkVis application through the rbenchmarkWrapper.
 #' The file is accessible through "rbenchmark.example".
 #' @name rbenchmark.example
 #' @docType data
@@ -48,8 +48,8 @@ NULL
 
 #' Example CSV file
 #'
-#' Contains the same dataframe as (\code{mlr.benchmark.example}).
-#' This file is an example of how a useable csv file should be structered.
+#' Contains the same data table as (\code{mlr.benchmark.example}).
+#' This file is an example of how a useable csv file should be structured.
 #' It can be loaded into the benchmarkVis application through the csvImport method.
 #' @name ml.example
 #' @docType data

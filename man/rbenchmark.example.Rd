@@ -6,8 +6,8 @@
 \title{rbenchmark input}
 \description{
 Contains the wrapped rbenchmark result (\code{rbenchmark.example}).
-It is a basic Version of a useable benchmark result dataframe.
-It was converted to a dataframe useable within the benchmarkVis application through the rbenchmarkWrapper.
+It is a basic Version of a useable benchmark result data table.
+It was converted to a data table useable within the benchmarkVis application through the rbenchmarkWrapper.
 The file is accessible through "rbenchmark.example".
 }
 \references{

@@ -10,11 +10,11 @@ useMlrTuningWrapper(res)
 \item{res}{a mlr tuning result object}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Create a dataframe useable within the benchmarkVis application out of an mlr tuning object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Create a data table useable with the benchmarkVis application out of an mlr tuning object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }
 \examples{
 library(mlr)
@@ -26,5 +26,5 @@ ctrl = makeTuneControlRandom(maxit = 100L)
 rdesc = makeResampleDesc("CV", iters = 3L)
 res = tuneParams("classif.ksvm", task = iris.task, resampling = rdesc, par.set = num.ps, control = ctrl,
  measures = list(acc, setAggregation(acc, test.sd)), show.info = FALSE)
-df = useMlrTuningWrapper(res)
+dt = useMlrTuningWrapper(res)
 }

@@ -23,5 +23,5 @@ do aggregation and return a new data table.
 the groupby columns must include problem and algorithm
 }
 \examples{
-get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("mmce.test.mean", "ber.test.mean"), df= mlr.benchmark.example)
+get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
 }

@@ -6,8 +6,8 @@
 \title{mlr tuning input}
 \description{
 Contains the wrapped mlr tuning result (\code{mlr.tuning.example}).
-It is a basic Version of a useable mlr tuning result dataframe.
-It was converted to a dataframe useable within the benchmarkVis application through the mlrTuningWrapper.
+It is a basic Version of a useable mlr tuning result data table.
+It was converted to a data table useable within the benchmarkVis application through the mlrTuningWrapper.
 The file is accessible through "mlr.tuning.example".
 }
 \references{

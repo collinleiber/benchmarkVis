@@ -1,11 +1,11 @@
 #' @title Insert microbenchmark object into benchmarkVis application
 #'
 #' @description
-#' Create a dataframe useable within the benchmarkVis application out of an microbenchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Create a data table useable with the benchmarkVis application out of an microbenchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param benchmark a microbenchmark object
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 #' @examples
 #' library(microbenchmark)
@@ -14,47 +14,43 @@
 #' sqrt(x),
 #' x ^ 0.5
 #' )
-#' df = useMicrobenchmarkWrapper(benchmark)
+#' dt = useMicrobenchmarkWrapper(benchmark)
 useMicrobenchmarkWrapper = function(benchmark) {
   # Create summary object. Holds better accessible information
   summary = summary(benchmark)
-  # Create dataframe
-  df = data.frame(
+  # Create data table
+  dt = data.table::data.table(
     problem = "unknown",
+    problem.parameter = repList(list(), nrow(summary)),
     algorithm = summary$expr,
+    algorithm.parameter = repList(list(unit = attr(summary, "unit")), nrow(summary)),
     replication = "repitition",
-    min = summary$min,
-    lq = summary$lq,
-    mean = summary$mean,
-    median = summary$median,
-    uq = summary$uq,
-    max = summary$max
+    replication.parameter = repList(list(iters = summary$neval[[1]]), nrow(summary)),
+    measure.min = summary$min,
+    measure.lq = summary$lq,
+    measure.mean = summary$mean,
+    measure.median = summary$median,
+    measure.uq = summary$uq,
+    measure.max = summary$max,
+    # Get the replication values out of the benchmark result
+    list.values = lapply(seq(summary$expr), function(x) benchmark[benchmark$expr == benchmark$expr[x], ]$time),
+    stringsAsFactors = TRUE
   )
-  # Add lists to the dataframe (not possible within constructor)
-  df$problem.parameter = repList(list(), nrow(summary))
-  df$algorithm.parameter = repList(list(unit = attr(summary, "unit")), nrow(summary))
-  df$replication.parameter = repList(list(iters = summary$neval[[1]]), nrow(summary))
-  # Change order
-  df = df[, c(1, 10, 2, 11, 3, 12, 4:9)]
-  # Get the replication values out of the benchmark dataframe
-  replication.time = list()
-  for (i in seq(summary$expr)) {
-    replication.time[[i]] = benchmark[benchmark$expr == benchmark$expr[i], ]$time
-  }
-  df$replication.values = replication.time
-  # Return created dataframe
-  return(df)
+  # Check structure
+  checkmate::assert_true(checkStructure(dt))
+  # Return created data table
+  return(dt)
 }
 
 #' @title Insert mlr benchmark RDS file into benchmarkVis application
 #'
 #' @description
-#' Load the specified file and pass it on the the useMicrobenchmarkWrapper function.
-#' Create a dataframe useable within the benchmarkVis application out of an microbenchmark object.
-#' All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+#' Load the specified file and pass it on to the useMicrobenchmarkWrapper function.
+#' Create a data table useable with the benchmarkVis application out of an microbenchmark object.
+#' All important imformation will be exluded from the input object and transformed into a appropriate data table
 #'
 #' @param input.file Path to the input microbenchmark RDS file
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @export
 useMicrobenchmarkFileWrapper = function(input.file) {
   benchmark = readRDS(input.file)

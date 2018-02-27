@@ -1,55 +1,57 @@
-#' @title Import a csv file as a benchmarkVis data frame
+#' @title Import a csv file as a benchmarkVis data table
 #'
 #' @description
-#' Import a matching csv file as a benchmarkVis compatible data frame.
+#' Import a matching csv file as a benchmarkVis compatible data table
 #' Check the file "data/ml.benchmark.csv" to see an example of the correct file structure
 #'
 #' @param input.csv path to the input csv file
-#' @return a dataframe with the benchmarkVis specific structure
+#' @return a data table with the benchmarkVis specific structure
 #' @importFrom utils read.csv write.csv
 #' @export
 csvImport = function(input.csv) {
   # Load csv file
-  df = read.csv(input.csv)
+  dt = data.table::fread(input.csv, stringsAsFactors = TRUE, data.table = TRUE)
+  checkmate::assert_true(checkColumnNames(dt))
   # Parse the columns containing list strings back to lists
-  df$problem.parameter = lapply(df$problem.parameter, stringToList)
-  df$algorithm.parameter = lapply(df$algorithm.parameter, stringToList)
-  df$replication.parameter = lapply(df$replication.parameter, stringToList)
-  # Change replication list strings back to lists
-  for (i in 1:getReplicationMeasureCount(df)) {
-    column.name = names(df)[ncol(df) - (i - 1)]
-    df[[column.name]] = lapply(df[, ncol(df) - (i - 1)], stringToList)
+  dt$problem.parameter = lapply(dt$problem.parameter, stringToList)
+  dt$algorithm.parameter = lapply(dt$algorithm.parameter, stringToList)
+  dt$replication.parameter = lapply(dt$replication.parameter, stringToList)
+  # Change vector strings back to vectors
+  for (column.name in getLists(dt)) {
+    dt[[column.name]] = lapply(dt[[column.name]], stringToList)
   }
-  # Return created dataframe
-  return(df)
+  # Check structure
+  checkmate::assert_true(checkStructure(dt))
+  # Return created data table
+  return(dt)
 }
 
-#' @title Export a benchmarkVis data frame as csv file
+#' @title Export a benchmarkVis data table as csv file
 #'
 #' @description
-#' Export the specified benchmarkVis compatible data frame as an csv file. Lists will be converted into a String:
+#' Export the specified benchmarkVis compatible data table as an csv file. Lists will be converted into a String:
 #' "list(valA = abc, valB = xyz)"
 #'
-#' @param df the benchmarkVis data frame
+#' @param dt the benchmarkVis data table
 #' @param file.path path to save the file to
 #' @export
 #' @examples
 #' csvExport(mlr.benchmark.example, "test.csv")
-csvExport = function(df, file.path) {
-  # Create copy of the original dataframe
-  df.copy = cbind(df)
+csvExport = function(dt, file.path) {
+  checkmate::assert_true(checkStructure(dt))
+  # Create copy of the original data table
+  dt.copy = cbind(dt)
   # Parse the columns containing lists to string
-  df.copy$problem.parameter = sapply(df$problem.parameter, listToString)
-  df.copy$algorithm.parameter = sapply(df$algorithm.parameter, listToString)
-  df.copy$replication.parameter = sapply(df$replication.parameter, listToString)
-  # Change replication lists to string
-  for (i in 1:getReplicationMeasureCount(df)) {
-    column.name = names(df)[ncol(df) - (i - 1)]
-    df.copy[[column.name]] = sapply(df[[column.name]], function(x)
+  dt.copy$problem.parameter = sapply(dt$problem.parameter, listToString)
+  dt.copy$algorithm.parameter = sapply(dt$algorithm.parameter, listToString)
+  dt.copy$replication.parameter = sapply(dt$replication.parameter, listToString)
+  # Change vectors to string
+  for (column.name in getLists(dt)) {
+    dt.copy[[column.name]] = sapply(dt[[column.name]], function(x)
       paste("c(", toString(x), ")", sep = ""))
   }
   # Write to csv file
-  write.csv(df.copy, file = file.path, row.names = FALSE)
+  data.table::fwrite(dt.copy, file = file.path, row.names = FALSE)
 }
 
 # Little helper to convert list to string
@@ -62,8 +64,6 @@ listToString = function(x) {
   values = sapply(x, function(y)
     if (is.factor(y) || is.character(y)) {
       paste("'", as.character(y), "'", sep = "")
-    #} else if (is.integer(y)) {
-    #  paste(as.character(y), "L", sep = "")
     } else {
       as.character(y)
     })
