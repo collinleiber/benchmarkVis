@@ -105,8 +105,8 @@ parser.agg.input = function(aggfun)
 check.agg.valid = function(x)
 {
   #http://www.r-tutor.com/elementary-statistics/numerical-measures
-  aggfun_list = list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
-  tag = is.element(x, aggfun_list)
+  aggfun.list = list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
+  tag = is.element(x, aggfun.list)
   return(tag)
 }
 
