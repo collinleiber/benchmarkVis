@@ -4,10 +4,12 @@
 \alias{get.agg.result}
 \title{get aggregation result}
 \usage{
-get.agg.result(fun_str, groupby, aggcol, df)
+get.agg.result(fun, prefix_str, groupby, aggcol, df)
 }
 \arguments{
-\item{fun_str}{the string of the aggregate functions}
+\item{fun}{aggregate functions}
+
+\item{prefix_str}{the column name's prefix}
 
 \item{groupby}{the list of columns name that will be grouped}
 
