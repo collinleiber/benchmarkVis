@@ -86,10 +86,10 @@ get.num.columns.name = function(data) {
 #' @export
 #' @examples
 #' parser.agg.input("mean,standard deviation,median")
-parser.agg.input <- function(aggfun)
+parser.agg.input = function(aggfun)
 {
   aggfun = strsplit(aggfun, ",")
-  aggfun = unlist(aggfun, use.names=FALSE)
+  aggfun = unlist(aggfun, use.names = FALSE)
   return(aggfun)
 }
 
