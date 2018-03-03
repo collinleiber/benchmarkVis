@@ -105,7 +105,7 @@ parser.agg.input <- function(aggfun)
 check.agg.valid = function(x)
 {
   #http://www.r-tutor.com/elementary-statistics/numerical-measures
-  aggfun_list <- list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
+  aggfun_list = list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
   tag = is.element(x, aggfun_list)
   return(tag)
 }
@@ -127,7 +127,7 @@ get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
   result = do.agg("mean", groupby, aggcol, df)
   result = result[, groupby, drop = FALSE]
-  for(x in aggfun){
+  for( x in aggfun){
     tag = TRUE
     tag = check.agg.valid(x)
     if (tag) {
