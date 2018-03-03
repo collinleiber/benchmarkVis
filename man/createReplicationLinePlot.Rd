@@ -4,20 +4,20 @@
 \alias{createReplicationLinePlot}
 \title{Create a replication line plot}
 \usage{
-createReplicationLinePlot(df, replication.measure)
+createReplicationLinePlot(dt, list.measure)
 }
 \arguments{
-\item{df}{campatible dataframe}
+\item{dt}{campatible data table}
 
-\item{replication.measure}{the column name containing the replications of a specific measure}
+\item{list.measure}{the column name containing the replications of a specific measure}
 }
 \value{
 a plotly line plot
 }
 \description{
-Create a plotly line plot out of a benchmarkVis compatible dataframe.
+Create a plotly line plot out of a benchmarkVis compatible data table.
 The created line chart shows the change within the specified measure for each iteration of the replication
 }
 \examples{
-createReplicationLinePlot(microbenchmark.example, "replication.values")
+createReplicationLinePlot(microbenchmark.example, "list.values")
 }

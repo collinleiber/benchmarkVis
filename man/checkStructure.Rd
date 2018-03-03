@@ -2,18 +2,18 @@
 % Please edit documentation in R/checkStructure.R
 \name{checkStructure}
 \alias{checkStructure}
-\title{Check the structure of a benchmarkVis compatible dataframe}
+\title{Check the structure of a benchmarkVis compatible data table}
 \usage{
-checkStructure(df)
+checkStructure(dt)
 }
 \arguments{
-\item{df}{dataframe to check}
+\item{dt}{data table to check}
 }
 \value{
 True if test was successful
 }
 \description{
-Check if the structure of a dataframe satisfies the benchmarkVis requirements.
+Check if the structure of a data table satisfies the benchmarkVis requirements.
 If it does the method will return TRUE else an error will be thrown
 }
 \examples{

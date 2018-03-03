@@ -2,7 +2,7 @@
 % Please edit documentation in R/csvHandler.R
 \name{csvImport}
 \alias{csvImport}
-\title{Import a csv file as a benchmarkVis data frame}
+\title{Import a csv file as a benchmarkVis data table}
 \usage{
 csvImport(input.csv)
 }
@@ -10,9 +10,9 @@ csvImport(input.csv)
 \item{input.csv}{path to the input csv file}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Import a matching csv file as a benchmarkVis compatible data frame.
+Import a matching csv file as a benchmarkVis compatible data table
 Check the file "data/ml.benchmark.csv" to see an example of the correct file structure
 }

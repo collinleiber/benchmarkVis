@@ -1,76 +1,82 @@
-#' @title Check the structure of a benchmarkVis compatible dataframe
+#' @title Check the columns of a benchmarkVis compatible data table
 #'
 #' @description
-#' Check if the structure of a dataframe satisfies the benchmarkVis requirements.
+#' Check if data table just contains legit columns.
+#' Should be the six standard columns (problem, problem.parameter, algorithm, ...) + measures + lists
+#'
+#' @param dt data table to check
+#' @return True if test was successful
+#' @export
+#' @examples
+#' checkColumnNames(microbenchmark.example)
+checkColumnNames = function(dt) {
+  checkmate::assert_true(6 + getMeasuresCount(dt) + getListsCount(dt) == ncol(dt))
+  return(TRUE)
+}
+
+#' @title Check the structure of a benchmarkVis compatible data table
+#'
+#' @description
+#' Check if the structure of a data table satisfies the benchmarkVis requirements.
 #' If it does the method will return TRUE else an error will be thrown
 #'
-#' @param df dataframe to check
+#' @param dt data table to check
 #' @return True if test was successful
 #' @export
 #' @examples
 #' checkStructure(microbenchmark.example)
-checkStructure = function(df) {
+checkStructure = function(dt) {
   # Check column count (should be > 6)
-  checkmate::assert_data_frame(df,
+  checkmate::assert_data_table(dt,
     any.missing = TRUE,
     min.rows = 1,
     min.cols = 7)
+  # Check if data table contains not allowed columns
+ checkmate::assert_true(checkColumnNames(dt))
   # Check basic structure
   checkmate::assert_true(
-    "problem" %in% colnames(df) &&
-      is.factor(df$problem) &&
-      which(colnames(df) == "problem") == 1
+    "problem" %in% colnames(dt) &&
+      is.factor(dt$problem)
   )
   checkmate::assert_true(
-    "problem.parameter" %in% colnames(df) &&
-      is.list(df$problem.parameter) &&
-      which(colnames(df) == "problem.parameter") == 2
+    "problem.parameter" %in% colnames(dt) &&
+      is.list(dt$problem.parameter)
   )
   checkmate::assert_true(
-    "algorithm" %in% colnames(df) &&
-      is.factor(df$algorithm) &&
-      which(colnames(df) == "algorithm") == 3
+    "algorithm" %in% colnames(dt) &&
+      is.factor(dt$algorithm)
   )
   checkmate::assert_true(
-    "algorithm.parameter" %in% colnames(df) &&
-      is.list(df$algorithm.parameter) &&
-      which(colnames(df) == "algorithm.parameter") == 4
+    "algorithm.parameter" %in% colnames(dt) &&
+      is.list(dt$algorithm.parameter)
   )
   checkmate::assert_true(
-    "replication" %in% colnames(df) &&
-      is.factor(df$replication) &&
-      which(colnames(df) == "replication") == 5
+    "replication" %in% colnames(dt) &&
+      is.factor(dt$replication)
   )
   checkmate::assert_true(
-    "replication.parameter" %in% colnames(df) &&
-      is.list(df$replication.parameter) &&
-      which(colnames(df) == "replication.parameter") == 6
+    "replication.parameter" %in% colnames(dt) &&
+      is.list(dt$replication.parameter)
   )
-  # Check measure count (must be >1)
-  checkmate::assert_true(getMeasureCount(df) > 0)
-  # Check measures and replication measures
-  for (x in colnames(df)) {
-    if (startsWith(x, "replication.") && x != "replication.parameter") {
-      # Should be a replication measure vector
-      checkmate::assert_true(is.vector(df[[x]]) &&
-          which(colnames(df) == x) > 6 + getMeasureCount(df))
-    } else if (!startsWith(x, "replication") &&
-        !startsWith(x, "algorithm") && !startsWith(x, "problem")) {
+  # Check measure count + list count (must be >1)
+  checkmate::assert_true(getMeasuresCount(dt) + getListsCount(dt) > 0)
+  # Check measures and list measures
+  for (x in colnames(dt)) {
+    if (startsWith(x, "list.")) {
+      # Should be a list measure vector
+      checkmate::assert_true(is.vector(dt[[x]]))
+    } else if (startsWith(x, "measure.")) {
       # Should be a measure
-      checkmate::assert_true((is.numeric(df[[x]]) ||
-          is.factor(df[[x]])) &&
-          which(colnames(df) == x) > 6 &&
-          which(colnames(df) == x) <= 6 + getMeasureCount(df)
-      )
+      checkmate::assert_true(is.numeric(dt[[x]]))
     }
   }
   # Check for replication iters parameter
-  for (i in nrow(df)) {
+  for (i in nrow(dt)) {
     # Every replication != null needs iters parameter
-    if (df$replication[[i]] != "unknown") {
+    if (dt$replication[[i]] != "unknown") {
       checkmate::assert_true(
-        "iters" %in% names(df$replication.parameter[[i]]) &&
-          is.numeric(df$replication.parameter[[i]]$iters)
+        "iters" %in% names(dt$replication.parameter[[i]]) &&
+          is.numeric(dt$replication.parameter[[i]]$iters)
       )
     }
   }

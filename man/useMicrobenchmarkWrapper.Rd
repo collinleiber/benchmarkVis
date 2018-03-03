@@ -10,11 +10,11 @@ useMicrobenchmarkWrapper(benchmark)
 \item{benchmark}{a microbenchmark object}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Create a dataframe useable within the benchmarkVis application out of an microbenchmark object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Create a data table useable with the benchmarkVis application out of an microbenchmark object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }
 \examples{
 library(microbenchmark)
@@ -23,5 +23,5 @@ benchmark = microbenchmark(
 sqrt(x),
 x ^ 0.5
 )
-df = useMicrobenchmarkWrapper(benchmark)
+dt = useMicrobenchmarkWrapper(benchmark)
 }

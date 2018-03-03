@@ -1,46 +1,39 @@
 context("Rbenchmark Wrapper")
 
-#  ===================== Basic Setup =====================
-set.seed(2017)
-# Create rbenchmark
-benchmark = rbenchmark::benchmark(
-  shell_sort = sort(runif(1000), method = "shell"),
-  quick_sort = sort(runif(1000), method = "quick"),
-  radix_sort = sort(runif(1000), method = "radix"),
-  columns = c(
-    "test", "replications", "elapsed", "relative", "user.self", "sys.self",
-    "user.child", "sys.child"),
-  order = "test",
-  replications = c(100, 20),
-  environment = parent.frame(),
-  relative = "elapsed"
-)
-df = useRbenchmarkWrapper(benchmark)
-#  =======================================================
-
 # Check if wrapped rbenchmak object equals rbenchmark.example
 test_that("RbenchmarkWrapper Test", {
-  # Check if columns are in dataframe
-  expect_true("elapsed" %in% colnames(df) &&
-      is.numeric(df$elapsed))
-  expect_true("relative" %in% colnames(df) &&
-      is.numeric(df$relative))
-  expect_true("user.self" %in% colnames(df) &&
-      is.numeric(df$user.self))
-  expect_true("sys.self" %in% colnames(df) &&
-      is.numeric(df$sys.self))
-  expect_true("user.child" %in% colnames(df) &&
-      is.numeric(df$user.child))
-  expect_true("sys.child" %in% colnames(df) &&
-      is.numeric(df$sys.child))
+  set.seed(2017)
+  # Create rbenchmark
+  benchmark = rbenchmark::benchmark(
+    shell_sort = sort(runif(1000), method = "shell"),
+    quick_sort = sort(runif(1000), method = "quick"),
+    radix_sort = sort(runif(1000), method = "radix"),
+    columns = c(
+      "test", "replications", "elapsed", "relative", "user.self", "sys.self",
+      "user.child", "sys.child"),
+    order = "test",
+    replications = c(100, 20),
+    environment = parent.frame(),
+    relative = "elapsed"
+  )
+  dt = useRbenchmarkWrapper(benchmark)
+  # Check if columns are in data table
+  expect_true("measure.elapsed" %in% colnames(dt) &&
+      is.numeric(dt$measure.elapsed))
+  expect_true("measure.relative" %in% colnames(dt) &&
+      is.numeric(dt$measure.relative))
+  expect_true("measure.user.self" %in% colnames(dt) &&
+      is.numeric(dt$measure.user.self))
+  expect_true("measure.sys.self" %in% colnames(dt) &&
+      is.numeric(dt$measure.sys.self))
+  expect_true("measure.user.child" %in% colnames(dt) &&
+      is.numeric(dt$measure.user.child))
+  expect_true("measure.sys.child" %in% colnames(dt) &&
+      is.numeric(dt$measure.sys.child))
   # Remove checked columns (can not compare execution time)
-  df = subset(df, select = -c(elapsed, relative, user.self, sys.self, user.child, sys.child))
-  df2 = subset(rbenchmark.example, select = -c(elapsed, relative, user.self, sys.self, user.child, sys.child))
+  dt = subset(dt, select = -c(measure.elapsed, measure.relative, measure.user.self, measure.sys.self, measure.user.child, measure.sys.child))
+  dt2 = subset(rbenchmark.example,
+    select = -c(measure.elapsed, measure.relative, measure.user.self, measure.sys.self, measure.user.child, measure.sys.child))
   # Identical?
-  expect_identical(df, df2)
-})
-
-# Check dataframe structure
-test_that("RbenchmarkWrapper Structure", {
-  expect_true(checkStructure(df))
+  expect_identical(dt, dt2)
 })

@@ -10,16 +10,16 @@ useMlrBenchmarkWrapper(bmr)
 \item{bmr}{a mlr benchmark result object}
 }
 \value{
-a dataframe with the benchmarkVis specific structure
+a data table with the benchmarkVis specific structure
 }
 \description{
-Create a dataframe useable within the benchmarkVis application out of an mlr benchmark object.
-All important imformation will be exluded from the input object and transformed into a appropriate dataframe
+Create a data table useable with the benchmarkVis application out of an mlr benchmark object.
+All important imformation will be exluded from the input object and transformed into a appropriate data table
 }
 \examples{
 library(mlr)
 lrns = list(makeLearner("classif.lda"), makeLearner("classif.rpart"))
 rdesc = makeResampleDesc("Holdout")
 bmr = benchmark(lrns, sonar.task, rdesc)
-df = useMlrBenchmarkWrapper(bmr)
+dt = useMlrBenchmarkWrapper(bmr)
 }

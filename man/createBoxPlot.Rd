@@ -4,10 +4,10 @@
 \alias{createBoxPlot}
 \title{Create a box plot}
 \usage{
-createBoxPlot(df, measure)
+createBoxPlot(dt, measure)
 }
 \arguments{
-\item{df}{compatible dataframe}
+\item{dt}{compatible data table}
 
 \item{measure}{measure for comparison}
 }
@@ -15,9 +15,9 @@ createBoxPlot(df, measure)
 a box plot
 }
 \description{
-Create a plotly box plot out of a benchmarkVis compatible dataframe.
+Create a plotly box plot out of a benchmarkVis compatible data table.
 The created box plot allows for comparison of algorithms based on a given performance measure for different datasets
 }
 \examples{
-createBoxPlot(mlr.benchmark.example, 'mmce.test.mean')
+createBoxPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
 }

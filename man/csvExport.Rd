@@ -2,17 +2,17 @@
 % Please edit documentation in R/csvHandler.R
 \name{csvExport}
 \alias{csvExport}
-\title{Export a benchmarkVis data frame as csv file}
+\title{Export a benchmarkVis data table as csv file}
 \usage{
-csvExport(df, file.path)
+csvExport(dt, file.path)
 }
 \arguments{
-\item{df}{the benchmarkVis data frame}
+\item{dt}{the benchmarkVis data table}
 
 \item{file.path}{path to save the file to}
 }
 \description{
-Export the specified benchmarkVis compatible data frame as an csv file. Lists will be converted into a String:
+Export the specified benchmarkVis compatible data table as an csv file. Lists will be converted into a String:
 "list(valA = abc, valB = xyz)"
 }
 \examples{

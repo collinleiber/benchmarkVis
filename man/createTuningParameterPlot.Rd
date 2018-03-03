@@ -4,10 +4,10 @@
 \alias{createTuningParameterPlot}
 \title{Create a tuning parameter scatter plot}
 \usage{
-createTuningParameterPlot(df, parameter, measure)
+createTuningParameterPlot(dt, parameter, measure)
 }
 \arguments{
-\item{df}{compatible dataframe}
+\item{dt}{compatible data table}
 
 \item{parameter}{the parameter you want to examine}
 
@@ -17,9 +17,9 @@ createTuningParameterPlot(df, parameter, measure)
 a plotly scatter plot
 }
 \description{
-Create a plotly scatter plot out of a benchmarkVis compatible dataframe.
+Create a plotly scatter plot out of a benchmarkVis compatible data table
 The created scatter plot shows the change within the specified measure for a change of the specified parameter
 }
 \examples{
-createTuningParameterPlot(mlr.tuning.example, "C", "acc.test.mean")
+createTuningParameterPlot(mlr.tuning.example, "C", "measure.acc.test.mean")
 }
