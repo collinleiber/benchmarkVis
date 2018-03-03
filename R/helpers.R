@@ -49,7 +49,7 @@ getCumulativeValues = function(list, cumulative.function) {
   # Save states
   val = NA
   count = 0
-  new.list = c()
+  new.list = vector()
   for (i in seq(list)) {
     x = list[i]
     if (cumulative.function == "max") {

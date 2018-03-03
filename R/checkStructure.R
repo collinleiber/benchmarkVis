@@ -70,16 +70,6 @@ checkStructure = function(dt) {
       checkmate::assert_true(is.numeric(dt[[x]]))
     }
   }
-  # Check for replication iters parameter
-  for (i in nrow(dt)) {
-    # Every replication != null needs iters parameter
-    if (dt$replication[[i]] != "unknown") {
-      checkmate::assert_true(
-        "iters" %in% names(dt$replication.parameter[[i]]) &&
-          is.numeric(dt$replication.parameter[[i]]$iters)
-      )
-    }
-  }
   # All checks passed. Return true
   return(TRUE)
 }

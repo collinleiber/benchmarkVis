@@ -15,6 +15,7 @@
 #' @examples
 #' createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C")
 createIterationParameterPlot = function(dt, measure, parameter) {
+  # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
   checkmate::assert_string(measure)
@@ -62,6 +63,7 @@ createIterationParameterPlot = function(dt, measure, parameter) {
 #' @examples
 #' createIterationDualParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", "sigma")
 createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 = "iteration") {
+  # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
   checkmate::assert_string(parameter2)
@@ -119,7 +121,7 @@ createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 =
 
 #' @param dt compatible data table
 #' @param measure the column name containing the results of a measure
-#' @param cumulative.funtion the cumulative function to use for the measure values (default: "min")
+#' @param cumulative.function the cumulative function to use for the measure values (default: "min")
 #' @param show.histogram shows the histogram of the measure values in the background (default: TRZUE)
 #' @param parameter the algorithm parameter
 #' @return a plotly line plot
@@ -131,9 +133,13 @@ createIterationPlot = function(dt,
   cumulative.function = "min",
   show.histogram = TRUE,
   parameter = "None") {
+  # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
   checkmate::assert_string(parameter)
+  checkmate::assert_string(cumulative.function)
+  checkmate::assert_logical(show.histogram)
+  checkmate::assert_true(cumulative.function %in% c("id", "max", "min", "mean"))
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
   })) || parameter == "None")
