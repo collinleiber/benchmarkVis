@@ -33,5 +33,5 @@ output$plot_rank_submitted = renderPlotly({
 
 output$plot_rank_aggr = renderPlotly({
   req(input$rank.measure)
-  createRankPlot((gdata$dt), input$rank.measure)
+  createRankPlot(gdata$dt, input$rank.measure)
 })

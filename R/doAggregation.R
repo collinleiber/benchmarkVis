@@ -3,17 +3,18 @@
 #' @description
 #' do aggregation and return a new data table
 #'
-#' @param fun_str the string of the aggregate functions
+#' @param fun aggregate functions
+#' @param prefix_str the column name's prefix
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-get.agg.result = function(fun_str, groupby, aggcol, df){
-  newtable = do.agg(fun_str, groupby, aggcol, df)
+get.agg.result = function(fun, prefix_str, groupby, aggcol, df){
+  newtable = do.agg(fun, groupby, aggcol, df)
   newtable = newtable[, aggcol, drop = FALSE]
   newcolsname = lapply(aggcol,
                        FUN = function(colname) {
-                         newname = paste(fun_str, "_", colname, "", sep  = "")
+                         newname = paste(prefix_str, "_", colname, "", sep  = "")
                        }
   )
   colnames(newtable) = newcolsname
@@ -28,12 +29,12 @@ get.agg.result = function(fun_str, groupby, aggcol, df){
 #' the aggcol must include problem and algorithm.
 #' only nummeric columns can be aggregated.
 #'
-#' @param fun_str the string of the aggregate functions
+#' @param fun aggregate functions
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
 #' @return a dataframe
-do.agg = function(fun_str, groupby, aggcol, df) {
+do.agg = function(fun, groupby, aggcol, df) {
   tmp = df
   tag = TRUE
   check.data.type = function(type){
@@ -42,18 +43,9 @@ do.agg = function(fun_str, groupby, aggcol, df) {
   types = lapply(tmp[, aggcol], class)
   lapply(types, check.data.type)
   if (tag) {
-    if (fun_str == "sd") {
-      func = stats::sd
-    } else if (fun_str == "mean") {
-      func = mean
-    } else if (fun_str == "median") {
-      func = median
-    } else {
-      #handle err
-    }
     newtable = aggregate(x = tmp[c(aggcol)],
-                          by = tmp[c(groupby)],
-                          FUN = func)
+                         by = tmp[c(groupby)],
+                         FUN = fun)
     return(newtable)
   }else {
     #   #err msg
@@ -84,6 +76,40 @@ get.num.columns.name = function(data) {
   colnames
 }
 
+
+#' @title parse the text input of agg function.
+#'
+#' @description
+#' parse the text include agg function to a vector of function names.
+#' @param aggfun the text include agg function.
+#' @return a vector
+#' @export
+#' @examples
+#' parser.agg.input("mean,standard deviation,median")
+parser.agg.input = function(aggfun)
+{
+  aggfun = strsplit(aggfun, ",")
+  aggfun = unlist(aggfun, use.names = FALSE)
+  return(aggfun)
+}
+
+#' @title check the input is a valid aggragate function name
+#'
+#' @description
+#' check the input is a valid aggragate function name
+#' @param x the string of the aggragate function.
+#' @return bool
+#' @export
+#' @examples
+#' check.agg.valid("mean")
+check.agg.valid = function(x)
+{
+  #http://www.r-tutor.com/elementary-statistics/numerical-measures
+  aggfun.list = list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
+  tag = is.element(x, aggfun.list)
+  return(tag)
+}
+
 #' @title get aggregation result
 #'
 #' @description
@@ -101,51 +127,14 @@ get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
   result = do.agg("mean", groupby, aggcol, df)
   result = result[, groupby, drop = FALSE]
-  if (is.element("mean", aggfun)) {
-    newtable = get.agg.result("mean", groupby, aggcol, df)
-    result = cbind(result, newtable)
-  }
-  if (is.element("standard deviation", aggfun)) {
-    newtable = get.agg.result("sd", groupby, aggcol, df)
-    result = cbind(result, newtable)
-  }
-  if (is.element("median", aggfun)) {
-    newtable = get.agg.result("median", groupby, aggcol, df)
-    result = cbind(result, newtable)
+  for (x in aggfun){
+    tag = TRUE
+    tag = check.agg.valid(x)
+    if (tag) {
+      newtable = get.agg.result(eval(x), x, groupby, aggcol, df)
+      result = cbind(result, newtable)
+    }
   }
   return(result)
 }
 
-get.new.name = function(aggfun, aggcol)
-{
-  newcolsname = list()
-  if (is.element("mean", aggfun)) {
-    tmp.name = lapply(
-      aggcol,
-      FUN = function(colname) {
-        newname = paste("mean", "_", colname, "", sep  = "")
-      }
-    )
-    newcolsname = append(newcolsname, unlist(tmp.name))
-  }
-  if (is.element("median", aggfun)) {
-    tmp.name = lapply(
-      aggcol,
-      FUN = function(colname) {
-        newname = paste("median", "_", colname, "", sep  = "")
-      }
-    )
-    newcolsname = append(newcolsname, tmp.name)
-  }
-  if (is.element("standard deviation", aggfun)) {
-    tmp.name = lapply(
-      aggcol,
-      FUN = function(colname) {
-        newname = paste("sd", "_", colname, "", sep  = "")
-      }
-    )
-    newcolsname = append(newcolsname, tmp.name)
-  }
-  newcolsname = c(do.call("cbind", newcolsname))
-  return(newcolsname)
-}
