@@ -4,10 +4,10 @@
 \alias{do.agg}
 \title{do aggregation result}
 \usage{
-do.agg(fun_str, groupby, aggcol, df)
+do.agg(fun, groupby, aggcol, df)
 }
 \arguments{
-\item{fun_str}{the string of the aggregate functions}
+\item{fun}{aggregate functions}
 
 \item{groupby}{the list of columns name that will be grouped}
 
