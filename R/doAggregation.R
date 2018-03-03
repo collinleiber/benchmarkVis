@@ -127,7 +127,7 @@ get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
   result = do.agg("mean", groupby, aggcol, df)
   result = result[, groupby, drop = FALSE]
-  for( x in aggfun){
+  for (x in aggfun){
     tag = TRUE
     tag = check.agg.valid(x)
     if (tag) {
