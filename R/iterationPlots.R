@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This plot is just usable if the algorithm.parameter column contains an iteration value.
-#' Create a plotly scatter to plot out of a benchmarkVis compatible data table.
+#' Create a plotly scatter plot out of a benchmarkVis compatible data table.
 #' The created scatter plot shows the connection between the specified measure and algorithm parameter.
 #' x-Axis: the algorithm parameter.
 #' y-Axis: the measure.
@@ -48,7 +48,7 @@ createIterationParameterPlot = function(dt, measure, parameter) {
 #'
 #' @description
 #' This plot is just usable if the algorithm.parameter column contains an iteration value.
-#' Create a plotly scatter to plot out of a benchmarkVis compatible data table.
+#' Create a plotly scatter plot out of a benchmarkVis compatible data table.
 #' The created scatter plot shows the connection between the specified measure and two different algorithm parameters.
 #' x-Axis: the second parameter - default is iteration.
 #' y-Axis: the first parameter.

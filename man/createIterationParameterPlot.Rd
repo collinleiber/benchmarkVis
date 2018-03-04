@@ -18,7 +18,7 @@ a plotly scatter plot
 }
 \description{
 This plot is just usable if the algorithm.parameter column contains an iteration value.
-Create a plotly scatter to plot out of a benchmarkVis compatible data table.
+Create a plotly scatter plot out of a benchmarkVis compatible data table.
 The created scatter plot shows the connection between the specified measure and algorithm parameter.
 x-Axis: the algorithm parameter.
 y-Axis: the measure.
