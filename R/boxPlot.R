@@ -25,7 +25,7 @@ createBoxPlot = function(dt, measure, violin = FALSE, facetting_problem = FALSE)
   measure.short = strsplit(measure, "measure.")[[1]][2]
   if (violin) geometry = ggplot2::geom_violin()
   else geometry = ggplot2::geom_boxplot()
-  p = ggplot2::ggplot(dt, aes(x = algorithm, y = dt[, measure], fill = algorithm, colour = algorithm)) +
+  p = ggplot2::ggplot(dt, ggplot2::aes(x = algorithm, y = dt[, measure], fill = algorithm, colour = algorithm)) +
     geometry
   if (facetting_problem) p = p + ggplot2::facet_wrap(~problem, ncol = 2)
   p = plotly::ggplotly(p)
