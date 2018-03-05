@@ -8,6 +8,6 @@ test_that("createRankPlot for mlr benchmark", {
 
 # Check if creating a Rank Plot throws an error
 test_that("createRankPlot for microbenchmark", {
-  p = createBoxPlot(microbenchmark.example, "measure.mean")
+  p = createRankPlot(microbenchmark.example, "measure.mean")
   expect_true(is.list(p))
 })
