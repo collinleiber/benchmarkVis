@@ -1,5 +1,18 @@
 mvalues = reactiveValues(matrix = NULL)
 gdata = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL)
+##get aggregation function, then realize the aggregation
+get_data = function() {
+  groupby = isolate((input$gcolumns))
+  aggfun_list = isolate((input$aggrf))
+  aggcol = isolate((input$aggrcol))
+  df = data()
+  aggfun <- parser.agg.input(aggfun_list)
+  gdata$dt = setDT(get.result(groupby, aggfun, aggcol, df))
+  gdata$trancol = get.num.columns.name(gdata$dt)
+  gdata$aggcol = gdata$trancol
+  result = gdata$dt
+  result
+}
 
 observeEvent(input$Submit, {
     req(data()) #only execute the rest, if dataframe is available
