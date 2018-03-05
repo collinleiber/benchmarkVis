@@ -7,7 +7,7 @@
 #' @param dt compatible data table
 #' @param measure measure for comparison
 #' @param violin if set to TRUE a violin plot instead of boxplot is produced (facetting_problem should be FALSE)
-#' @param facetting_problem if set to TRUE boxplot with facet wrap is produced (violin should be FALSE) 
+#' @param facetting_problem if set to TRUE boxplot with facet wrap is produced (violin should be FALSE)
 #' @return a box plot
 #' @export
 #' @examples
@@ -20,20 +20,20 @@ createBoxPlot = function(dt, measure, violin = FALSE, facetting_problem = FALSE)
   checkmate::assert_logical(violin)
   checkmate::assert_logical(facetting_problem)
   checkmate::assert_true(startsWith(measure, "measure."))
-  if(violin) checkmate::assert_false(facetting_problem)
-  if(facetting_problem) checkmate::assert_false(violin)
-  measure_short = strsplit(measure,"measure.")[[1]][2]
-  if(violin) geometry = geom_violin()
+  if (violin) checkmate::assert_false(facetting_problem)
+  if (facetting_problem) checkmate::assert_false(violin)
+  measure.short = strsplit(measure, "measure.")[[1]][2]
+  if (violin) geometry = geom_violin()
   else geometry = geom_boxplot()
-  p = ggplot2::ggplot(dt, aes(x = algorithm, y = dt[,measure], fill = algorithm, colour = algorithm)) +
+  p = ggplot2::ggplot(dt, aes(x = algorithm, y = dt[, measure], fill = algorithm, colour = algorithm)) +
     geometry
-  if(facetting_problem) p = p + facet_wrap( ~ problem, ncol=2)
-  p = plotly::ggplotly(p) 
+  if (facetting_problem) p = p + facet_wrap(~problem, ncol = 2)
+  p = plotly::ggplotly(p)
   p = plotly::layout(
     p,
-    xaxis = list( title = "algorithm"), 
-    yaxis = list( title = measure_short)
-  )  
+    xaxis = list(title = "algorithm"),
+    yaxis = list(title = measure.short)
+  )
   return(p)
 }
 
