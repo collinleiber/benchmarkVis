@@ -14,6 +14,17 @@ get_data = function() {
   result
 }
 
+observeEvent(input$Submit, {
+    req(data()) #only execute the rest, if dataframe is available
+    req(input$Submit) #only show the content if user has submitted
+    mvalues$matrix = data()
+})
+
+observeEvent(input$Reset, {
+  gdata$trancol = NULL
+  mvalues$matrix = table$data
+})
+
 observeEvent(input$Aggregation, {
   mvalues$matrix =
   {
@@ -26,11 +37,33 @@ observeEvent(input$Aggregation, {
   }
 })
 
-observeEvent(input$Reset, {
-  gdata$trancol = NULL
-  mvalues$matrix =
-    table$data
+output$table.aggregation = renderUI({
+  req(data()) #only execute the rest, if dataframe is available
+  req(input$Submit) #only show the content if user has submitted
+  data = data()
+  list(
+    selectInput(
+      'gcolumns',
+      'GroupBy Columns',
+      colnames(data),
+      selected = FALSE,
+      multiple = TRUE
+    ),
+    textInput(
+      'aggrf',
+      'Aggregation Function',
+      'mean,sd,median etc....'
+    ),
+    selectInput(
+      'aggrcol',
+      'Aggregated Column',
+      get.num.columns.name(data),
+      selected = FALSE,
+      multiple = TRUE
+    )
+  )
 })
+
 observeEvent(input$Transformation, {
   df = isolate(gdata$dt)
   measure = isolate(input$trancols)
@@ -63,18 +96,6 @@ observeEvent(input$Transformation, {
   mvalues$matrix = df
 })
 
-observeEvent(input$rp, {
-  gdata$dt = gdata$dt
-})
-observeEvent(input$Submit, {
-  mvalues$matrix =
-  {
-    req(data()) #only execute the rest, if dataframe is available
-    req(input$Submit) #only show the content if user has submitted
-    data = data()
-  }
-})
-
 output$table.transformation = renderUI({
   req(data()) #only execute the rest, if dataframe is available
   req(input$Submit) #only show the content if user has submitted
@@ -101,32 +122,6 @@ output$table.transformation = renderUI({
   )
 })
 
-output$table.aggregation = renderUI({
-  req(data()) #only execute the rest, if dataframe is available
-  req(input$Submit) #only show the content if user has submitted
-  data = data()
-  list(
-    selectInput(
-      'gcolumns',
-      'GroupBy Columns',
-      colnames(data),
-      selected = FALSE,
-      multiple = TRUE
-    ),
-    textInput(
-      'aggrf',
-      'Aggregation Function',
-      'mean,sd,median etc....'
-    ),
-    selectInput(
-      'aggrcol',
-      'Aggregated Column',
-      get.num.columns.name(data),
-      selected = FALSE,
-      multiple = TRUE
-    )
-  )
-})
 
 output$DataTable = DT::renderDataTable(
   mvalues$matrix,
@@ -137,7 +132,7 @@ output$DataTable = DT::renderDataTable(
     lengthMenu = c(5, 10, 15, 20),
     scrollX = TRUE,
     dom = 'Bfrtip',
-    buttons = c(I('colvis'), 'copy', 'csv', 'excel', 'pdf', 'print'),
+    buttons = c(I('colvis'), 'copy', 'csv', 'pdf', 'print'),
     colReorder = TRUE,
     dom = 't',
     fixedColumns = list(leftColumns = 1),
