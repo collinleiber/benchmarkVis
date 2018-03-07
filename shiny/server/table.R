@@ -1,18 +1,5 @@
 mvalues = reactiveValues(matrix = NULL)
 gdata = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL)
-##get aggregation function, then realize the aggregation
-get_data = function() {
-  groupby = isolate((input$gcolumns))
-  aggfun_list = isolate((input$aggrf))
-  aggcol = isolate((input$aggrcol))
-  df = data()
-  aggfun <- parser.agg.input(aggfun_list)
-  gdata$dt = get.result(groupby, aggfun, aggcol, df)
-  gdata$trancol = get.num.columns.name(gdata$dt)
-  gdata$aggcol = gdata$trancol
-  result = gdata$dt
-  result
-}
 
 observeEvent(input$Submit, {
     req(data()) #only execute the rest, if dataframe is available
@@ -26,16 +13,27 @@ observeEvent(input$Reset, {
 })
 
 observeEvent(input$Aggregation, {
-  mvalues$matrix =
-  {
-    req(data())
-    data = get_data()
+    req(data())    
     if (!is.null(gdata$dt)) {
-      data = gdata$dt
+      mvalues$matrix = gdata$dt
     }
-    data
-  }
+    else {
+      mvalues$matrix = get.aggr.data()
+    }
 })
+
+get.aggr.data = function() {
+  groupby = isolate((input$gcolumns))
+  aggfun_list = isolate((input$aggrf))
+  aggcol = isolate((input$aggrcol))
+  df = data()
+  aggfun <- parser.agg.input(aggfun_list)
+  gdata$dt = get.result(groupby, aggfun, aggcol, df)
+  gdata$trancol = get.num.columns.name(gdata$dt)
+  gdata$aggcol = gdata$trancol
+  result = gdata$dt
+  result
+}
 
 output$table.aggregation = renderUI({
   req(data()) #only execute the rest, if dataframe is available
@@ -52,7 +50,7 @@ output$table.aggregation = renderUI({
     textInput(
       'aggrf',
       'Aggregation Function',
-      'mean,sd,median etc....'
+      ''
     ),
     selectInput(
       'aggrcol',
@@ -69,24 +67,19 @@ observeEvent(input$Transformation, {
   measure = isolate(input$trancols)
 
   if ("rank" == isolate(input$tranfuns)) {
-    i = 1
     for(x in measure){
       abcd = df %>% dplyr::mutate(rank = order(eval(parse(text = sprintf("%s", x)))))
 
       order.scores = order(df[, x])
 
-      #order.scores = order(df[, measure])
-
       rank = NA
       rank[order.scores] = seq_len(nrow(df))
       name = paste0('rank(',x,')')
-      i = i + 1
       rank = as.factor(rank)
 
       df = cbind(df, rank)
 
       colnames(df)[ncol(df)] <- name
-
     }
   }
 
@@ -96,15 +89,28 @@ observeEvent(input$Transformation, {
   mvalues$matrix = df
 })
 
+get.transform.data = function() {
+  groupby = isolate((input$gcolumns))
+  aggfun_list = isolate((input$aggrf))
+  aggcol = isolate((input$aggrcol))
+  df = data()
+  aggfun <- parser.agg.input(aggfun_list)
+  gdata$dt = get.result(groupby, aggfun, aggcol, df)
+  gdata$trancol = get.num.columns.name(gdata$dt)
+  gdata$aggcol = gdata$trancol
+  result = gdata$dt
+  result
+}
+
 output$table.transformation = renderUI({
   req(data()) #only execute the rest, if dataframe is available
   req(input$Submit) #only show the content if user has submitted
   data = data()
-  trancols = get.num.columns.name(data)
-  tranfuns = list("rank")
-  if (is.null(gdata$trancol)) {
-  } else {
+  if (!is.null(gdata$trancol)) {
     trancols = gdata$trancol
+  }
+  else {    
+    trancols = get.num.columns.name(data)
   }
   list(
     selectInput(
@@ -117,7 +123,7 @@ output$table.transformation = renderUI({
     textInput(
       'tranfuns',
       'Transformation Functions',
-      'rank etc....'
+      ''
     )
   )
 })
