@@ -8,7 +8,7 @@
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
 #' @param df the input dataframe
-#' @return a dataframe
+#' @return a dataframe with aggregated column
 get.agg.result = function(fun, prefix_str, groupby, aggcol, df){
   newtable = do.agg(fun, groupby, aggcol, df)
   newtable = newtable[, aggcol, drop = FALSE]
@@ -19,7 +19,6 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, df){
   )
   colnames(newtable) = newcolsname
   return(newtable)
-
 }
 
 #' @title do aggregation result
@@ -35,25 +34,14 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, df){
 #' @param df the input dataframe
 #' @return a dataframe
 do.agg = function(fun, groupby, aggcol, df) {
+  fun = eval(parse(text = fun))
   tmp = df
-  tag = TRUE
-  check.data.type = function(type){
-    tag == tag && type == "numeric"
-  }
-  types = lapply(tmp[, aggcol], class)
-  lapply(types, check.data.type)
-  if (tag) {
-    newtable = aggregate(x = tmp[c(aggcol)],
+  #types = lapply(tmp[, aggcol], class)
+  #if(FALSE %in% lapply(types, is.numeric))
+  newtable = aggregate(x = tmp[c(aggcol)],
                          by = tmp[c(groupby)],
                          FUN = fun)
-    return(newtable)
-  }else {
-    #   #err msg
-    warning("invaild params to aggregate")
-    showNotification("invaild params to aggregate", type = "error")
-    #validate(need(!tag, "invaild type to aggregate."))
-    tmp
-  }
+  return(newtable)
 }
 
 #' @title do aggregation result
@@ -93,21 +81,16 @@ parser.agg.input = function(aggfun)
   return(aggfun)
 }
 
-#' @title check the input is a valid aggragate function name
+#' @title check if the input function is a valid aggregation function
 #'
 #' @description
-#' check the input is a valid aggragate function name
-#' @param x the string of the aggragate function.
-#' @return bool
-#' @export
-#' @examples
-#' check.agg.valid("mean")
-check.agg.valid = function(x)
-{
-  #http://www.r-tutor.com/elementary-statistics/numerical-measures
-  aggfun.list = list("max", "min", "rank", "mean", "sd", "median", "quantile", "range", "IQR", "var")
-  tag = is.element(x, aggfun.list)
-  return(tag)
+#' check if the input function is a valid aggregation function (i.e., returns a single numeric value)
+#' @param agg.fun aggregation function
+#' @return boolean
+check.agg.valid = function(agg.fun) {
+  if (is.character(agg.fun)) agg.fun = eval(parse(text = agg.fun))
+  result = do.call(agg.fun, list(c(1, 2, 3, 4)))
+  is.numeric(result) && length(result) == 1
 }
 
 #' @title get aggregation result
@@ -125,12 +108,10 @@ check.agg.valid = function(x)
 #' get.result(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
 get.result = function(groupby, aggfun, aggcol, df) {
   checkmate::assert_data_frame(df)
-  result = do.agg("mean", groupby, aggcol, df)
-  result = result[, groupby, drop = FALSE]
+  #result = do.agg("mean", groupby, aggcol, df)
+  result = df[, groupby, drop = FALSE]
   for (x in aggfun){
-    tag = TRUE
-    tag = check.agg.valid(x)
-    if (tag) {
+    if (check.agg.valid(x)) {
       newtable = get.agg.result(eval(x), x, groupby, aggcol, df)
       result = cbind(result, newtable)
     }

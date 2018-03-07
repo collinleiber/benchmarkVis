@@ -12,9 +12,9 @@ data = reactive({
     "mlr tuning" = useMlrTuningFileWrapper,
     "rbenchmark" = useRbenchmarkFileWrapper
   )
-  df = wrapper(input$file$datapath)
-  if (checkStructure(df)) {
-    df
+  dt = wrapper(input$file$datapath)
+  if (checkStructure(dt)) {
+    dt
   }
   else{
     return(NULL)
