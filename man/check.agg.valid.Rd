@@ -2,19 +2,16 @@
 % Please edit documentation in R/doAggregation.R
 \name{check.agg.valid}
 \alias{check.agg.valid}
-\title{check the input is a valid aggragate function name}
+\title{check if the input function is a valid aggregation function}
 \usage{
-check.agg.valid(x)
+check.agg.valid(agg.fun)
 }
 \arguments{
-\item{x}{the string of the aggragate function.}
+\item{agg.fun}{aggregation function}
 }
 \value{
-bool
+boolean
 }
 \description{
-check the input is a valid aggragate function name
-}
-\examples{
-check.agg.valid("mean")
+check if the input function is a valid aggregation function (i.e., returns a single numeric value)
 }

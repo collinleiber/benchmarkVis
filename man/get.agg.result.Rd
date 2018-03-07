@@ -18,7 +18,7 @@ get.agg.result(fun, prefix_str, groupby, aggcol, df)
 \item{df}{the input dataframe}
 }
 \value{
-a dataframe
+a dataframe with aggregated column
 }
 \description{
 do aggregation and return a new data table
