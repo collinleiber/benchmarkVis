@@ -16,7 +16,7 @@ test_that("aggregation function is valid", {
 
 # Check if Do aggregation for mlr benchmark with mean as aggfun works correctly
 test_that("Do aggregation for mlr benchmark", {
-  agd = get.result(
+  agd = aggregation.apply(
     groupby = c("problem", "algorithm"),
     aggfun = "mean",
     aggcol = c("measure.mmce.test.mean", "measure.ber.test.mean"),
@@ -37,7 +37,7 @@ test_that("Do aggregation for mlr benchmark", {
 
 # Check if Do aggregation for microbenchmark with mean as aggfun works correctly
 test_that("Do aggregation for microbenchmark", {
-  agd = get.result(
+  agd = aggregation.apply(
     groupby = c("problem", "algorithm"),
     aggfun = "mean",
     aggcol = c("measure.mean", "measure.median"),
@@ -58,7 +58,7 @@ test_that("Do aggregation for microbenchmark", {
 
 # Check if Do aggregation for microbenchmark with user-defined aggfun works correctly
 test_that("Do aggregation for microbenchmark", {
-  agd = get.result(
+  agd = aggregation.apply(
     groupby = c("problem", "algorithm"),
     aggfun = "function(x) 1",
     aggcol = c("measure.mean", "measure.median"),

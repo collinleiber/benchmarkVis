@@ -23,12 +23,12 @@ observeEvent(input$Aggregation, {
 })
 
 get.aggr.data = function() {
-  groupby = isolate((input$gcolumns))
-  aggfun_list = isolate((input$aggrf))
-  aggcol = isolate((input$aggrcol))
+  groupby = isolate(input$gcolumns)
+  aggfun.list = isolate(input$aggrf)
+  aggcol = isolate(input$aggrcol)
   df = data()
-  aggfun <- parser.agg.input(aggfun_list)
-  gdata$dt = get.result(groupby, aggfun, aggcol, df)
+  aggfun = parser.function.list(aggfun.list)
+  gdata$dt = aggregation.apply(groupby, aggfun, aggcol, df)
   gdata$trancol = get.num.columns.name(gdata$dt)
   gdata$aggcol = gdata$trancol
   result = gdata$dt
@@ -63,43 +63,16 @@ output$table.aggregation = renderUI({
 })
 
 observeEvent(input$Transformation, {
-  df = isolate(gdata$dt)
-  measure = isolate(input$trancols)
-
-  if ("rank" == isolate(input$tranfuns)) {
-    for(x in measure){
-      abcd = df %>% dplyr::mutate(rank = order(eval(parse(text = sprintf("%s", x)))))
-
-      order.scores = order(df[, x])
-
-      rank = NA
-      rank[order.scores] = seq_len(nrow(df))
-      name = paste0('rank(',x,')')
-      rank = as.factor(rank)
-
-      df = cbind(df, rank)
-
-      colnames(df)[ncol(df)] <- name
-    }
-  }
-
-  #cols <- names(df) == "rank"
-  #names(df)[cols] <- paste0('rank', seq_along(cols))
-
-  mvalues$matrix = df
+   mvalues$matrix = get.transform.data()
 })
 
-get.transform.data = function() {
-  groupby = isolate((input$gcolumns))
-  aggfun_list = isolate((input$aggrf))
-  aggcol = isolate((input$aggrcol))
-  df = data()
-  aggfun <- parser.agg.input(aggfun_list)
-  gdata$dt = get.result(groupby, aggfun, aggcol, df)
-  gdata$trancol = get.num.columns.name(gdata$dt)
-  gdata$aggcol = gdata$trancol
-  result = gdata$dt
-  result
+get.transform.data = function() {  
+  original.data = isolate(mvalues$matrix)
+  columns.to.transform = isolate(input$trancols)
+  transformation.functions = isolate(input$tranfuns)
+  transformation.functions = parser.function.list(transformation.functions)
+  gdata$dt = transformation.apply(original.data, columns.to.transform, transformation.functions)
+  gdata$dt  
 }
 
 output$table.transformation = renderUI({
