@@ -70,7 +70,7 @@ aggregation.apply = function(groupby, aggfun, aggcol, df) {
   return(result)
 }
 
-#TODO
+#TODO documentation
 #' @title get transformation result
 #'
 #' @description
@@ -83,33 +83,34 @@ aggregation.apply = function(groupby, aggfun, aggcol, df) {
 #' @return a dataframe
 #' @export
 #' @examples
-#' transformation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
-transformation.apply = function() {
-  checkmate::assert_data_frame(df)
-
-    if ("rank" == isolate(input$tranfuns)) {
-    for (x in measure) {
-      if (check.transform.valid(x)) {
-      newtable = get.agg.result(eval(x), x, groupby, aggcol, df)
-      result = cbind(result, newtable)
-    }
-
-      abcd = transformed.data %>% dplyr::mutate(rank = order(eval(parse(text = sprintf("%s", x)))))
-
-      order.scores = order(transformed.data[, x])
-
-      rank = NA
-      rank[order.scores] = seq_len(nrow(transformed.data))
-      name = paste0("rank(", x, ")")
-      rank = as.factor(rank)
-
-      transformed.data = cbind(transformed.data, rank)
-
-      colnames(transformed.data)[ncol(transformed.data)] = name
+#' transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
+transformation.apply = function(original.data, columns.to.transform, transformation.functions) {
+  checkmate::assert_data_frame(original.data)
+  result = original.data
+  for (transform.func in transformation.functions) { #TODO replace for-loops ?
+    if (check.transform.valid(transform.func)) {
+      for (column in columns.to.transform){
+        transformed.column = unlist(lapply(original.data[, column], transform.func))
+        result = cbind(result, transformed.column) #TODO: is it efficient?
+      }
     }
   }
   return(result)
 }
+
+#TODO: document; test
+#rank  = function(data, measure) {
+#  data magrittr::%>% dplyr::mutate(rank = order(eval(parse(text = measure))))
+#  order.scores = order(data[, x])
+#  #rank = NA
+#  rank[order.scores] = seq_len(nrow(data))
+#  name = paste0("rank(", measure, ")")
+#  rank = as.factor(rank)
+#  data = cbind(data, rank)
+#  colnames(data)[ncol(data)] = name
+#  return(data)
+#}
+
 
 #' @title do aggregation result
 #'
@@ -157,4 +158,18 @@ check.agg.valid = function(agg.fun) {
   if (is.character(agg.fun)) agg.fun = eval(parse(text = agg.fun))
   result = do.call(agg.fun, list(c(1, 2, 3, 4)))
   is.numeric(result) && length(result) == 1
+}
+
+#' @title check if the input function is a valid transformation function
+#'
+#' @description
+#' check if the input function is a valid transformation function (i.e., applied to a list
+#' of numeric values returns a list of numeric values of the same length)
+#' @param transform.fun transformation function
+#' @return boolean
+check.transform.valid = function(transform.fun) {
+  if (is.character(transform.fun)) transform.fun = eval(parse(text = transform.fun))
+  result.num = transform.fun(1)
+  result.list = lapply(c(1, 2, 3, 4), transform.fun)
+  is.numeric(result.num) && length(result.num) == 1 && is.list(result.list) && length(result.list) == 4
 }
