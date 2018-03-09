@@ -75,7 +75,7 @@ aggregation.apply = function(groupby, aggfun, aggcol, df) {
 #'
 #' @description
 #' do transformation and return a new data table
-#' @param original.data a data table in benchmarkVis format  
+#' @param original.data a data table in benchmarkVis format
 #' @param columns.to.transform the list of columns to apply the functions on
 #' @param transformation.functions the functions for transofrmation of data
 #' @return a data table containing the original data and transformed versions of columns
