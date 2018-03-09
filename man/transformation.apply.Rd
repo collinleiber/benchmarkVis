@@ -4,7 +4,8 @@
 \alias{transformation.apply}
 \title{get transformation result}
 \usage{
-transformation.apply()
+transformation.apply(original.data, columns.to.transform,
+  transformation.functions)
 }
 \arguments{
 \item{groupby}{the list of columns name that will be grouped}
@@ -23,5 +24,5 @@ do transformation and return a new data table.
 the groupby columns must include problem and algorithm
 }
 \examples{
-transformation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
+transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
 }
