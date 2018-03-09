@@ -35,3 +35,15 @@ test_that("createListDensityRankPlot Test microbenchmark", {
   p = createListDensityRankPlot(microbenchmark.example, "list.values")
   expect_true(is.list(p))
 })
+
+# Check if creating a list rank matrix bar plot throws an error
+test_that("createListRankMatrixBarPlot Test mlr benchmark", {
+  p = createListRankMatrixBarPlot(mlr.benchmark.example, "list.ber")
+  expect_true(is.list(p))
+})
+
+# Check if creating a list rank matrix bar plot throws an error
+test_that("createListRankMatrixBarPlot Test microbenchmark", {
+  p = createListRankMatrixBarPlot(microbenchmark.example, "list.values")
+  expect_true(is.list(p))
+})

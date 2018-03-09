@@ -1,3 +1,8 @@
+# Startup message
+.onAttach = function(libname, pkgname) {
+  packageStartupMessage("Welcome to the benchmarkVis package. For instructions visit the wiki at https://github.com/collinleiber/benchmarkVis/wiki")
+}
+
 #' @title Get list of all possible plots
 #'
 #' @description

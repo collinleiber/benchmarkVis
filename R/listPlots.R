@@ -55,6 +55,84 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id") {
   return(p)
 }
 
+#' @title Create a list rank matrix bar plot
+#'
+#' @description
+#' Create a plotly rank matrix bar plot out of a benchmarkVis compatible data table.
+#' The created bar chart shows the the rank of the specified list measure for each iteration.
+#'
+#' @param dt campatible data table
+#' @param list.measure the column name containing the list of a specific measure
+#' @return a plotly rank matrix bar plot
+#' @export
+#' @examples
+#' createListRankMatrixBarPlot(microbenchmark.example, "list.values")
+createListRankMatrixBarPlot = function(dt, list.measure) {
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(list.measure)
+  checkmate::assert_true(list.measure %in% getLists(dt))
+  # Get minimum amount of lists
+  min.iterations = min(sapply(dt[[list.measure]], function(x) {
+    return(length(x))
+  }))
+  # Remove values if there are more than min.iterations
+  lists = lapply(dt[[list.measure]], function(x) {
+    return(x[1:min.iterations])
+  })
+  # Add ranks
+  rank.measure = repList(list(), nrow(dt))
+  for (i in 1:min.iterations) {
+    tmp = vector()
+    for (row in seq(nrow(dt))) {
+      tmp[row] = lists[[row]][i]
+    }
+    # Get ranks
+    for (row in seq(nrow(dt))) {
+      rank.measure[[row]][i] = rank(tmp, ties.method = "min")[row]
+    }
+  }
+  # Create new dataframe
+  new.df = data.table::data.table(algorithm = rep(interaction(dt$problem, dt$algorithm),
+    rep(nrow(dt), nrow(dt))),
+    rank = as.factor(rep(seq(nrow(
+      dt
+    )), nrow(dt))))
+  # Count ranks
+  counter = vector()
+  for (row in seq(nrow(dt))) {
+    # Go through all possible ranks
+    for (i in seq(nrow(dt))) {
+      count = 0
+      for (rank in rank.measure[[row]]) {
+        # Count matches
+        if (rank == i) {
+          count = count + 1
+        }
+      }
+      counter = c(counter, count)
+    }
+  }
+  new.df$count = counter
+  # Aggregate
+  #new.df = new.df[, .( count = sum(count)), by = .(algorithm, rank)]
+  # Create plot
+  p = plotly::plot_ly(
+    new.df,
+    x = ~ rank,
+    y = ~ count,
+    type = "bar",
+    color = ~ algorithm,
+    marker = list(line = list(color = "gray", width = 2))
+  )
+  p = plotly::layout(
+    p,
+    yaxis = list(title = "frequency"),
+    xaxis = list(title = "ranks"),
+    barmode = "stack"
+  )
+  return(p)
+}
+
 #' @title Create a list density plot
 #'
 #' @description
@@ -76,15 +154,13 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   combined.df = data.frame()
   for (row in seq(nrow(dt))) {
     list.length = length(dt[[row, list.measure]])
-    df = data.frame(
-      problem.algorithm = paste(rep(dt[[row, "problem"]], list.length),
+    df = data.frame(problem.algorithm = paste(rep(dt[[row, "problem"]], list.length),
       rep(dt[[row, "algorithm"]], list.length), sep = "."),
       measure = dt[[row, list.measure]])
     combined.df = rbind(combined.df, df)
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm)
-    )  + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm))  + ggplot2::theme_bw()
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
@@ -131,7 +207,7 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
     }
     # Get ranks
     for (row in seq(nrow(dt))) {
-      rank.measure[[row]][i] = rank(tmp)[row]
+      rank.measure[[row]][i] = rank(tmp, ties.method = "min")[row]
     }
   }
   # Create new dataframe
@@ -140,12 +216,12 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
     df = data.frame(
       problem.algorithm = paste(rep(dt[[row, "problem"]], min.iterations),
         rep(dt[[row, "algorithm"]], min.iterations), sep = "."),
-      measure = unlist(rank.measure[[row]]))
+      measure = unlist(rank.measure[[row]])
+    )
     combined.df = rbind(combined.df, df)
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm)
-  )  + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm))  + ggplot2::theme_bw()
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
