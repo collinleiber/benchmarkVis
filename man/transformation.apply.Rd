@@ -2,26 +2,23 @@
 % Please edit documentation in R/tableOps.R
 \name{transformation.apply}
 \alias{transformation.apply}
-\title{get transformation result}
+\title{apply transformation functions}
 \usage{
 transformation.apply(original.data, columns.to.transform,
   transformation.functions)
 }
 \arguments{
-\item{groupby}{the list of columns name that will be grouped}
+\item{original.data}{a data table in benchmarkVis format}
 
-\item{aggcol}{the list of columns name that will be aggregated}
+\item{columns.to.transform}{the list of columns to apply the functions on}
 
-\item{aggfun}{the function to aggregate with}
-
-\item{df}{the input dataframe}
+\item{transformation.functions}{the functions for transofrmation of data}
 }
 \value{
-a dataframe
+a data table containing the original data and transformed versions of columns
 }
 \description{
-do transformation and return a new data table.
-the groupby columns must include problem and algorithm
+do transformation and return a new data table
 }
 \examples{
 transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))

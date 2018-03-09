@@ -70,17 +70,15 @@ aggregation.apply = function(groupby, aggfun, aggcol, df) {
   return(result)
 }
 
-#TODO documentation
-#' @title get transformation result
+
+#' @title apply transformation functions
 #'
 #' @description
-#' do transformation and return a new data table.
-#' the groupby columns must include problem and algorithm
-#' @param groupby the list of columns name that will be grouped
-#' @param aggcol the list of columns name that will be aggregated
-#' @param aggfun the function to aggregate with
-#' @param df the input dataframe
-#' @return a dataframe
+#' do transformation and return a new data table
+#' @param original.data a data table in benchmarkVis format  
+#' @param columns.to.transform the list of columns to apply the functions on
+#' @param transformation.functions the functions for transofrmation of data
+#' @return a data table containing the original data and transformed versions of columns
 #' @export
 #' @examples
 #' transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
