@@ -139,10 +139,7 @@ get.num.columns.name = function(data) {
 #' parse the list of functions to a vector of function names.
 #' @param function.list list of functions to parse
 #' @return a vector
-#' @examples
-#' parser.function.list("mean,standard deviation,median")
-parser.function.list = function(function.list)
-{
+parser.function.list = function(function.list) {
   function.list = strsplit(function.list, ",")
   function.list = unlist(function.list, use.names = FALSE)
   return(function.list)

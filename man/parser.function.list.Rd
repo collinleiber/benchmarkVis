@@ -15,6 +15,3 @@ a vector
 \description{
 parse the list of functions to a vector of function names.
 }
-\examples{
-parser.function.list("mean,standard deviation,median")
-}
