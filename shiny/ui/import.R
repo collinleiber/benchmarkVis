@@ -1,5 +1,8 @@
 tabpanel.import =  list(
-       h3("Import the file with benchmark results"),              
+    shinyjs::useShinyjs(), 
+     # extendShinyjs(text = jsResetCode),
+       h3("Import the file with benchmark results"),    
+       div(id="importtab",    
               uiOutput("data.format"),
               fileInput("file", "Choose File",
                         multiple = FALSE,
@@ -11,9 +14,9 @@ tabpanel.import =  list(
                 actionButton("Submit", "Submit", icon = icon("check"))
               ),
               conditionalPanel(
-                condition = "input.Submit == true",                
-                imageOutput("accepted")
-                #,
-                #actionButton("new.data", "Upload new data", icon = icon("check"))
+                condition = "input.Submit == true",     
+                imageOutput("accepted"),
+                actionButton("new.data", "Upload new data", icon = icon("check"))
               )
+       )
 )

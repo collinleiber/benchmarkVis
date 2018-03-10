@@ -2,6 +2,7 @@
 library(shinydashboard)
 library(plotly)
 
+#jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page                                             
 ui.files = list.files(path = "./ui", pattern = "*.R")
 ui.files = paste0("ui/", ui.files)
 
@@ -15,7 +16,7 @@ dashboardPage(
     sidebarMenu(
       menuItem("Import", tabName = "import", icon = icon("file-excel-o")),
       menuItem("Data table", tabName = "table", icon = icon("table")),
-      menuItem("Plots", tabName = "plots", icon = icon("line-chart"))
+      menuItem("Plots", tabName = "plots", icon = icon("line-chart"))      
       #menuItem("Box Plot", tabName = "plots_box", icon = icon("line-chart")),
       #menuItem("Rank Plot", tabName = "plots_rank", icon = icon("line-chart")),
       #menuItem("Replication Plot", tabName = "plots_repl", icon = icon("line-chart")),
