@@ -13,7 +13,7 @@
 createRankPlot = function(dt, measure) {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
-  checkmate::assert_true(startsWith(measure, "measure."))
+  #checkmate::assert_true(startsWith(measure, "measure."))
   if (length(dt[, measure])) {
 
     `%>%` = magrittr::`%>%`

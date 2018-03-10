@@ -1,4 +1,5 @@
 library(DT)
+library(data.table)
 
 
 shinyServer(function(input, output, session) {
