@@ -83,31 +83,26 @@ aggregation.apply = function(groupby, aggfun, aggcol, df) {
 #' @examples
 #' transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
 transformation.apply = function(original.data, columns.to.transform, transformation.functions) {
-  checkmate::assert_data_frame(original.data)
+  checkmate::assert_data_table(original.data)
   result = original.data
   for (transform.func in transformation.functions) { #TODO replace for-loops ?
-    if (check.transform.valid(transform.func)) {
-      for (column in columns.to.transform){
-        transformed.column = unlist(lapply(original.data[, column], transform.func))
-        result = cbind(result, transformed.column) #TODO: is it efficient?
+      if (check.transform.valid(transform.func)) {
+        for (column in columns.to.transform){
+          if (transform.func == "rank") {
+            transformed.column = rank(original.data[, column])
+          }
+          else {
+            transformed.column = unlist(lapply(original.data[, column], transform.func))
+          }
+          result = cbind(result, transformed.column) #TODO: is it efficient?
+          new.column.name = paste(transform.func, "_", column, "", sep  = "")
+          setnames(result, "transformed.column", new.column.name)
       }
     }
   }
   return(result)
 }
 
-#TODO: document; test
-#rank  = function(data, measure) {
-#  data magrittr::%>% dplyr::mutate(rank = order(eval(parse(text = measure))))
-#  order.scores = order(data[, x])
-#  #rank = NA
-#  rank[order.scores] = seq_len(nrow(data))
-#  name = paste0("rank(", measure, ")")
-#  rank = as.factor(rank)
-#  data = cbind(data, rank)
-#  colnames(data)[ncol(data)] = name
-#  return(data)
-#}
 
 
 #' @title do aggregation result
