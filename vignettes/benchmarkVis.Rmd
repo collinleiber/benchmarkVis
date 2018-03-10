@@ -1,65 +1,75 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "benchmarkVis - Benchmark Visualizations in R"
+author: "Collin Leiber, Alona Sydorova, Kunlan Li"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{benchmarkVis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+This vignette is supposed to give you a short and easy introduction into the benchmarkVis package.
+The purpose of the package is to provide a flexible and simple to use framework to visualize benchmark results. There are several differant visualization possibilitys which range from simple bar charts to complex parallel coordinates plots. All the functionalities are also provided from an interactive shiny application. This includes comprehensive methods to manipulate the input benchmark data. The benchmarks themselves are not generated with this package. They have to be imported from other tools. But no problem - the benchmarkVis package offers several easy ways to integrate benchmark results from your favorite software. Therefore a clearly structured input data format has been defined which is combinable with csv files, R [data.table](https://github.com/Rdatatable/data.table) or directly with R benchmark packages like [mlr](https://github.com/mlr-org/mlr), [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) or [rbenchmark](https://github.com/eddelbuettel/rbenchmark) through different wrappers.
+
+# Input data structure
+
+In this section we will describe the input data structure for the benchmarkVis package. It consists of a table of the following structure:
+
+| problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.1 | measure.2 | list.1 | list.2 |
+|---|---|---|---|---|---|---|---|---|---|
+| factor | list | factor | list | factor | list | numeric | numeric | vector | vector |
+| mandatory | mandatory | mandatory | mandatory | mandatory | mandatory | optional | optional | optional | optional |
+
+As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
+The table can contain any number of measures and lists. It is just important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
+
+# Imort data
+
+As stated before, there are several ways to use your data with the benchmarkVis package.
+
+### Use csv file 
+
+The most flexible way is to create your benchmark result as a csv file and import the csv file direclty into the package. This is done through:
+
+``` 
+csvImport(PATH.TO.CSV.File)
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+There are just a few rules if you choose this import possibility.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+* For the parameter lists your input has to be of following structure:
+  ```
+  "list(numeric.field = variable, character.field = 'example.string')"
+  ```
+  Beware that a character input in the list needs a extra single quotation! 
+* For the vector columns the input needs to look like:
+  ```
+  "c(value1, value2, value3)"
+  ```
 
-## Vignette Info
+If you are still not exactly sure how to design a compatible csv file take a look at the example file `ml.example.csv` at [Link](https://github.com/collinleiber/benchmarkVis/blob/lkl_new_feature/data/ml.example.csv).
+After the import a structure check will be run to see if everything is correct.
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+### Use a wrapper
 
-## Styles
+Another simple way to use your benchmark data is to create your benchmarks with a R package for which a wrapper is contained in the benchmarkVis package. To see a fill list of compatible wrappers use following function:
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```
+listWrappers()
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+For this approach a structure check will run again to see if everything is working as intended.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+### Use a R data.table
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+The third option is to create your data.table directly with R. Too see if your table is compatible with the benchmarkVis package it is recommended to run a structure check when your creation is done:
 
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```
+checkStructure(data.table)
 ```
 
-Also a quote using `>`:
+This way you can be certain all methods are working properly.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+# Next
+
