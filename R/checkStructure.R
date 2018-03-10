@@ -55,15 +55,15 @@ checkStructure = function(dt) {
   for (x in getLists(dt)) {
     checkmate::assert_true(is.vector(dt[[x]]))
   }
-  # Check iteration algorithms. Iteration parameter must me included
+  # Check iteration algorithms. Iteration parameter must be included
   for (x in getIterationAlgorithms(dt)) {
-    checkmate::assert_true(all(sapply(dt[algorithm == x]$algorithm.parameter, function(x) {
+    checkmate::assert_true(all(sapply(dt[dt$algorithm == x, ]$algorithm.parameter, function(x) {
       "iteration" %in% names(x)
     })))
     # Check for duplicate iteration values
-    checkmate::assert_true(0 == anyDuplicated(sapply(dt[algorithm == x]$algorithm.parameter, function(x) {
+    checkmate::assert_true(0 == anyDuplicated(sapply(dt[dt$algorithm == x, ]$algorithm.parameter, function(x) {
       x$iteration
-    })) )
+    })))
   }
   # All checks passed. Return true
   return(TRUE)

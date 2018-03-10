@@ -27,9 +27,9 @@ getListsCount = function(dt) {
 getIterationAlgorithms = function(dt) {
   iteration.algorithms = vector()
   for (i in nrow(dt)) {
-    if ("iteration" %in% names(dt[i, algorithm.parameter][[1]]) &&
-        !dt[i, algorithm] %in% iteration.algorithms) {
-      iteration.algorithms = c(iteration.algorithms, as.character(dt[i, algorithm]))
+    if ("iteration" %in% names(dt[i, "algorithm.parameter"][[1]]) &&
+        !as.character(dt[i, "algorithm"]) %in% iteration.algorithms) {
+      iteration.algorithms = c(iteration.algorithms, as.character(dt[i, "algorithm"]))
     }
   }
   return(iteration.algorithms)

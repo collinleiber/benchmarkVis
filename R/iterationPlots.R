@@ -27,7 +27,7 @@ createIterationParameterPlot = function(dt,
   checkmate::assert_string(iteration.algorithm)
   checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
   # Filter data table
-  dt = dt[algorithm == iteration.algorithm]
+  dt = dt[dt$algorithm == iteration.algorithm, ]
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
@@ -88,7 +88,7 @@ createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 =
   checkmate::assert_string(iteration.algorithm)
   checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
   # Filter data table
-  dt = dt[algorithm == iteration.algorithm]
+  dt = dt[dt$algorithm == iteration.algorithm, ]
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
@@ -170,7 +170,7 @@ createIterationPlot = function(dt,
   checkmate::assert_string(iteration.algorithm)
   checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
   # Filter data table
-  dt = dt[algorithm == iteration.algorithm]
+  dt = dt[dt$algorithm == iteration.algorithm, ]
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
