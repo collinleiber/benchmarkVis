@@ -4,16 +4,16 @@ getMeasures = function(dt) {
   return(subset(names(dt), startsWith(names(dt), "measure.")))
 }
 
-# Get the names of list columns (eg replication measures) within the data table
-# List columns start with "list."
-getLists = function(dt) {
-  return(subset(names(dt), startsWith(names(dt), "list.")))
-}
-
 # Get the number of measure columns within the data table
 # Measures columns start with "measure."
 getMeasuresCount = function(dt) {
   return(length(getMeasures(dt)))
+}
+
+# Get the names of list columns (eg replication measures) within the data table
+# List columns start with "list."
+getLists = function(dt) {
+  return(subset(names(dt), startsWith(names(dt), "list.")))
 }
 
 # Get the number of list columns (eg replication measures) within the data table
@@ -22,13 +22,32 @@ getListsCount = function(dt) {
   return(length(getLists(dt)))
 }
 
+# Get the names of algorithms with multiple iterations within the data table
+# Algorithms for which the parameters contain "iteration" field
+getIterationAlgorithms = function(dt) {
+  iteration.algorithms = vector()
+  for (i in nrow(dt)) {
+    if ("iteration" %in% names(dt[i, algorithm.parameter][[1]]) &&
+        !dt[i, algorithm] %in% iteration.algorithms) {
+      iteration.algorithms = c(iteration.algorithms, as.character(dt[i, algorithm]))
+    }
+  }
+  return(iteration.algorithms)
+}
+
+# Get the number of algorithms with multiple iterations within the data table
+# Algorithms for which the parameters contain "iteration" field
+getIterationAlgorithmsCount = function(dt) {
+  return(length(getIterationAlgorithms(dt)))
+}
+
 # Return a list containing multiple lists of type input.list (Default = list()).
 # Number of repitition can be set with repitition.count (Default is 1).
 repList = function(input.list = list(),
   repitition.count = 1) {
   mylist = list()
   for (i in 1:repitition.count) {
-    # Create copy of list
+    # Create copy of list (rep would ignore empty list)
     mylist[[i]] = lapply(input.list, function(x) {
       x
     })

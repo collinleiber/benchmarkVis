@@ -11,6 +11,12 @@
 #' checkColumnNames(microbenchmark.example)
 checkColumnNames = function(dt) {
   checkmate::assert_true(6 + getMeasuresCount(dt) + getListsCount(dt) == ncol(dt))
+  checkmate::assert_true("problem" %in% colnames(dt))
+  checkmate::assert_true("problem.parameter" %in% colnames(dt))
+  checkmate::assert_true("algorithm" %in% colnames(dt))
+  checkmate::assert_true("algorithm.parameter" %in% colnames(dt))
+  checkmate::assert_true("replication" %in% colnames(dt))
+  checkmate::assert_true("replication.parameter" %in% colnames(dt))
   return(TRUE)
 }
 
@@ -31,44 +37,33 @@ checkStructure = function(dt) {
     any.missing = TRUE,
     min.rows = 1,
     min.cols = 7)
-  # Check if data table contains not allowed columns
- checkmate::assert_true(checkColumnNames(dt))
-  # Check basic structure
-  checkmate::assert_true(
-    "problem" %in% colnames(dt) &&
-      is.factor(dt$problem)
-  )
-  checkmate::assert_true(
-    "problem.parameter" %in% colnames(dt) &&
-      is.list(dt$problem.parameter)
-  )
-  checkmate::assert_true(
-    "algorithm" %in% colnames(dt) &&
-      is.factor(dt$algorithm)
-  )
-  checkmate::assert_true(
-    "algorithm.parameter" %in% colnames(dt) &&
-      is.list(dt$algorithm.parameter)
-  )
-  checkmate::assert_true(
-    "replication" %in% colnames(dt) &&
-      is.factor(dt$replication)
-  )
-  checkmate::assert_true(
-    "replication.parameter" %in% colnames(dt) &&
-      is.list(dt$replication.parameter)
-  )
   # Check measure count + list count (must be >1)
   checkmate::assert_true(getMeasuresCount(dt) + getListsCount(dt) > 0)
+  # Check if data table contains not allowed columns
+  checkmate::assert_true(checkColumnNames(dt))
+  # Check basic structure
+  checkmate::assert_true(is.factor(dt$problem))
+  checkmate::assert_true(is.list(dt$problem.parameter))
+  checkmate::assert_true(is.factor(dt$algorithm))
+  checkmate::assert_true(is.list(dt$algorithm.parameter))
+  checkmate::assert_true(is.factor(dt$replication))
+  checkmate::assert_true(is.list(dt$replication.parameter))
   # Check measures and list measures
-  for (x in colnames(dt)) {
-    if (startsWith(x, "list.")) {
-      # Should be a list measure vector
-      checkmate::assert_true(is.vector(dt[[x]]))
-    } else if (startsWith(x, "measure.")) {
-      # Should be a measure
-      checkmate::assert_true(is.numeric(dt[[x]]))
-    }
+  for (x in getMeasures(dt)) {
+    checkmate::assert_true(is.numeric(dt[[x]]))
+  }
+  for (x in getLists(dt)) {
+    checkmate::assert_true(is.vector(dt[[x]]))
+  }
+  # Check iteration algorithms. Iteration parameter must me included
+  for (x in getIterationAlgorithms(dt)) {
+    checkmate::assert_true(all(sapply(dt[algorithm == x]$algorithm.parameter, function(x) {
+      "iteration" %in% names(x)
+    })))
+    # Check for duplicate iteration values
+    checkmate::assert_true(0 == anyDuplicated(sapply(dt[algorithm == x]$algorithm.parameter, function(x) {
+      x$iteration
+    })) )
   }
   # All checks passed. Return true
   return(TRUE)

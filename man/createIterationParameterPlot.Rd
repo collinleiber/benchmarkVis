@@ -4,7 +4,8 @@
 \alias{createIterationParameterPlot}
 \title{Create a iteration parameter scatter plot}
 \usage{
-createIterationParameterPlot(dt, measure, parameter)
+createIterationParameterPlot(dt, measure, parameter,
+  iteration.algorithm = "default")
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -12,6 +13,9 @@ createIterationParameterPlot(dt, measure, parameter)
 \item{measure}{the column name containing the results of a measure}
 
 \item{parameter}{the algorithm parameter you want to examine}
+
+\item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+(default: "default" - would take the first from getIterationAlgorithms())}
 }
 \value{
 a plotly scatter plot
