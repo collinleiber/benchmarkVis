@@ -1,6 +1,6 @@
 # benchmarkVis - Benchmark Visualizations in R
 
-[![Build Status](https://travis-ci.org/collinleiber/benchmarkVis.svg?branch=master)](https://travis-ci.org/collinleiber/benchmarkVis)
+[![Build Status](https://travis-ci.org/collinleiber/benchmarkVis.svg?branch=master)](https://travis-ci.org/collinleiber/benchmarkVis) [![codecov](https://codecov.io/github/collinleiber/benchmarkVis/branch/master/graphs/badge.svg)](https://codecov.io/github/collinleiber/benchmarkVis) 
 
 benchmarkVis is a R package to visualize benchmark results in different ways. It is working with standard csv files and can also be combined with several benchmark R packages like [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) , [rbenchmark](https://github.com/eddelbuettel/rbenchmark) or [mlr](https://github.com/mlr-org/mlr). 
 

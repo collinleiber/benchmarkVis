@@ -26,10 +26,10 @@ getListsCount = function(dt) {
 # Algorithms for which the parameters contain "iteration" field
 getIterationAlgorithms = function(dt) {
   iteration.algorithms = vector()
-  for (i in nrow(dt)) {
-    if ("iteration" %in% names(dt[i, "algorithm.parameter"][[1]]) &&
-        !as.character(dt[i, "algorithm"]) %in% iteration.algorithms) {
-      iteration.algorithms = c(iteration.algorithms, as.character(dt[i, "algorithm"]))
+  for (row in nrow(dt)) {
+    if ("iteration" %in% names(dt[[row, "algorithm.parameter"]]) &&
+        !as.character(dt[[row, "algorithm"]]) %in% iteration.algorithms) {
+      iteration.algorithms = c(iteration.algorithms, as.character(dt[[row, "algorithm"]]))
     }
   }
   return(iteration.algorithms)

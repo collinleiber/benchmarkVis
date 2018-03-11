@@ -17,7 +17,8 @@ Imports:
 	checkmate (>= 1.8.2),
 	plotly,
 	data.table,
-	ggplot2
+	ggplot2,
+	radarchart
 Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),
