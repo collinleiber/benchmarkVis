@@ -1,5 +1,5 @@
 mvalues = reactiveValues(matrix = NULL)
-gdata = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL)
+gdata = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL, rows.selected = NULL)
 
 observeEvent(input$Submit, {
     req(data()) #only execute the rest, if dataframe is available
@@ -9,17 +9,33 @@ observeEvent(input$Submit, {
 
 observeEvent(input$Reset, {
   gdata$trancol = NULL
+  gdata$dt = NULL
   mvalues$matrix = table$data
 })
 
 observeEvent(input$Aggregation, {
-    req(data())    
+    req(data())
     if (!is.null(gdata$dt)) {
       mvalues$matrix = gdata$dt
     }
     else {
       mvalues$matrix = get.aggr.data()
     }
+})
+
+observeEvent(input$DataTable_rows_selected, {
+  gdata$rows.selected = input$DataTable_rows_selected
+})
+
+observeEvent(input$DeleteSelectedRows, {
+  selected.rows = isolate(gdata$rows.selected)
+  req(data())
+  if (!is.null(selected.rows)) {
+    mvalues$matrix = mvalues$matrix[-as.numeric(selected.rows),]
+  }
+  else {
+    mvalues$matrix = get.aggr.data()
+  }
 })
 
 get.aggr.data = function() {
@@ -66,13 +82,13 @@ observeEvent(input$Transformation, {
    mvalues$matrix = get.transform.data()
 })
 
-get.transform.data = function() {  
+get.transform.data = function() {
   original.data = isolate(mvalues$matrix)
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
   gdata$dt = transformation.apply(original.data, columns.to.transform, transformation.functions)
-  gdata$dt  
+  gdata$dt
 }
 
 output$table.transformation = renderUI({
@@ -82,7 +98,7 @@ output$table.transformation = renderUI({
   if (!is.null(gdata$trancol)) {
     trancols = gdata$trancol
   }
-  else {    
+  else {
     trancols = get.num.columns.name(data)
   }
   list(
