@@ -39,16 +39,7 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id") {
     algorithm = rep(dt$algorithm, rep(max.iterations, nrow(dt)))
   )
   # Create plot
-  p = ggplot2::ggplot(
-    data = new.df,
-    ggplot2::aes(
-      x = iteration,
-      y = measure,
-      group = interaction(problem, algorithm),
-      colour = algorithm,
-      linetype = problem
-    )
-  ) + ggplot2::geom_point() + ggplot2::geom_line() + ggplot2::theme_bw()
+  p = plotly::plot_ly(new.df, x = ~iteration, y = ~measure, color = ~algorithm, linetype = ~problem, type = "scatter", mode = "lines+markers")
   # Convert plot to plotly
   p = plotly::ggplotly(p)
   p = plotly::layout(p, yaxis = list(title = list.measure))
@@ -229,6 +220,6 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
   }
   # Convert plot to plotly
   p = plotly::ggplotly(p)
-  p = plotly::layout(p, xaxis = list(title = list.measure))
+  p = plotly::layout(p, xaxis = list(title = "ranks"))
   return(p)
 }

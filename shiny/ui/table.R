@@ -10,9 +10,11 @@ tabpanel.table =  list(
             ),
             column(3,
                 uiOutput("table.transformation"),
-                actionButton("Transformation", "Transformation", icon = icon("check"))                
+                actionButton("Transformation", "Transformation", icon = icon("check")),
+                actionButton("DeleteSelectedRows", "DeleteSelectedRows", icon = icon("check"))                
             )
         ),
+
         DT::dataTableOutput("DataTable")
     )
 )

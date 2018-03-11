@@ -55,5 +55,6 @@ createParallelCoordinatesPlot = function(dt) {
     ),
     dimensions = dim
   )
+  p = plotly::layout(p, margin = list(l = 100))
   return(p)
 }
