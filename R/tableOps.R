@@ -96,7 +96,7 @@ transformation.apply = function(original.data, columns.to.transform, transformat
           }
           result = cbind(result, transformed.column) #TODO: is it efficient?
           new.column.name = paste(transform.func, "_", column, "", sep  = "")
-          setnames(result, "transformed.column", new.column.name)
+          data.table::setnames(result, "transformed.column", new.column.name)
       }
     }
   }

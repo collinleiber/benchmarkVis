@@ -29,7 +29,7 @@ test_that("Do rank and log2 transformation for mlr benchmark", {
 
 test_that("Do log2 transformation", {
   result = transformation.apply(
-    original.data = data.table(measure = c(2, 4, 8)),
+    original.data = data.table::data.table(measure = c(2, 4, 8)),
     columns.to.transform = "measure",
     transformation.functions = "log2"
   )
@@ -40,7 +40,7 @@ test_that("Do log2 transformation", {
 
 test_that("Do rank transformation", {
   result = transformation.apply(
-    original.data = data.table(measure = c(2, 4, 1)),
+    original.data = data.table::data.table(measure = c(2, 4, 1)),
     columns.to.transform = "measure",
     transformation.functions = "rank"
   )
