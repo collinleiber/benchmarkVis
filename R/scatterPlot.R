@@ -1,4 +1,4 @@
-#' @title Create a dot plot
+#' @title Create a scatter plot
 #'
 #' @description
 #' Create a scatter plot out of a benchmarkVis compatible data table.
@@ -11,7 +11,7 @@
 #' @param measure2 the second measure  for comparison
 #' @param pointsize the size of ploted point
 #' @param jitter small vertical jitter to deal with overplotting in case of equal scores
-#' @return a dot scatter plot
+#' @return a scatter plot
 #' @export
 #' @examples
 #' createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')
