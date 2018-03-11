@@ -32,7 +32,6 @@ createIterationParameterPlot = function(dt,
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
   checkmate::assert_string(measure)
-  checkmate::assert_string(iteration.algorithm)
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
   })))

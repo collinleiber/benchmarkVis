@@ -10,7 +10,14 @@ vignette: >
 ---
 
 This vignette is supposed to give you a short and easy introduction into the benchmarkVis package.
-The purpose of the package is to provide a flexible and simple to use framework to visualize benchmark results. There are several differant visualization possibilitys which range from simple bar charts to complex parallel coordinates plots. All the functionalities are also provided from an interactive shiny application. This includes comprehensive methods to manipulate the input benchmark data. The benchmarks themselves are not generated with this package. They have to be imported from other tools. But no problem - the benchmarkVis package offers several easy ways to integrate benchmark results from your favorite software. Therefore a clearly structured input data format has been defined which is combinable with csv files, R [data.table](https://github.com/Rdatatable/data.table) or directly with R benchmark packages like [mlr](https://github.com/mlr-org/mlr), [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) or [rbenchmark](https://github.com/eddelbuettel/rbenchmark) through different wrappers.
+
+The purpose of the package is to provide a flexible and simple to use framework to visualize benchmark results. 
+
+Benchmarking is a good way to compare the performances of different algorithms. To evaluate the results often the same procedures are used. But even though different benchmarks normally contain similar information, the structure can differ significantly. This increases the effort to visualize and analyze them. You have to do the same creation steps over and over again with just a few little changes. At this point the benchmarkVis package comes into play. It aims to convert various formats into a default data table which then can be visualized in multiple ways. 
+
+The package offers several differant plots which range from simple bar charts to complex parallel coordinates plots. All the functionalities are also provided from an interactive shiny application to simplify the workflow even more. This includes comprehensive methods to manipulate the input benchmark data. 
+
+The benchmarks themselves are not generated with this package. They have to be imported from other tools. But no problem, the benchmarkVis package offers several easy ways to integrate benchmark results from your favorite software. Therefore a clearly structured input data format has been defined which is combinable with csv files, R [data.table](https://github.com/Rdatatable/data.table) or directly with R benchmark packages like [mlr](https://github.com/mlr-org/mlr), [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) or [rbenchmark](https://github.com/eddelbuettel/rbenchmark) through different wrappers.
 
 # Input data structure
 
@@ -24,11 +31,13 @@ In this section we will describe the input data structure for the benchmarkVis p
 As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
 The table can contain any number of measures and lists. It is just important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
 
-# Imort data
+One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the specified algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
 
-As stated before, there are several ways to use your data with the benchmarkVis package.
+# Import data
 
-### Use csv file 
+As stated before, there are several ways to use your data in the benchmarkVis package.
+
+### Use a csv file 
 
 The most flexible way is to create your benchmark result as a csv file and import the csv file direclty into the package. This is done through:
 
@@ -59,11 +68,11 @@ Another simple way to use your benchmark data is to create your benchmarks with 
 listWrappers()
 ```
 
-For this approach a structure check will run again to see if everything is working as intended.
+Also for this approach a structure check will run to see if everything is working as intended.
 
 ### Use a R data.table
 
-The third option is to create your data.table directly with R. Too see if your table is compatible with the benchmarkVis package it is recommended to run a structure check when your creation is done:
+The third option is to create your data.table directly with R. To see if your table is compatible with the benchmarkVis package it is recommended to run a structure check:
 
 ```
 checkStructure(data.table)
@@ -71,5 +80,31 @@ checkStructure(data.table)
 
 This way you can be certain all methods are working properly.
 
-# Next
+# Create plots
 
+The main feature of the package is to create different kinds of plots. These can roughly be devided into three groups:
+
+* Measure plots
+* List plots
+* Iteration plots
+
+To see a list with all possible charts use the method:
+
+```
+listPlots()
+```
+
+If you don't know the needed arguments of a special plot, take a look into the package documentation.
+
+# Shiny application
+
+All the functionalities of the package are also provided from an interactive shiny application. Therefore just open the `ui.R` or `server.ui` file from the shiny directory from RStudio and click the "Run App" button in the upper right. If you do not use RStudio you can load the benchmarkVis package and run the R command `shiny::runApp('shiny')`.
+
+After the shiny applicaion has been started the first step you need to do is to import your data. First select you import data type and then choose the corresponding csv or Rds file. When the upload is finished you can select the `Manipulate table` entry in the menu on the left. There you can execute aggretaions and transformations to transform the table into the desired structure. The transformed table can be saved as csv file to better share your results. 
+
+Next you need to switch to the `Plots` menu, where you can create all kinds of charts. After a plot type has been chosen and all parameters have been defined the plot will be created in the bottom of the screen. Through the usage of the `plotly` package there is a wide range of interaction possibilities. If you want to save a plot for a later comparison you can insert it into the menu on the left by clicking `Save plot`.
+
+# Wiki
+
+If there are questions left, take a look into our [Wiki](https://github.com/collinleiber/benchmarkVis/wiki). There you can find more tips to simplify the usage of the benchmarkVis package.
+Should there be no answer to your question or do you find any errors in the software feel free to open an [Issue](https://github.com/collinleiber/benchmarkVis/issues).
