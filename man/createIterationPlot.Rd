@@ -5,7 +5,8 @@
 \title{Create a iteration line plot}
 \usage{
 createIterationPlot(dt, measure, cumulative.function = "min",
-  show.histogram = TRUE, parameter = "None")
+  show.histogram = TRUE, iteration.algorithm = "default",
+  parameter = "None")
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -15,6 +16,9 @@ createIterationPlot(dt, measure, cumulative.function = "min",
 \item{cumulative.function}{the cumulative function to use for the measure values (default: "min")}
 
 \item{show.histogram}{shows the histogram of the measure values in the background (default: TRZUE)}
+
+\item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+(default: "default" - would take the first from getIterationAlgorithms())}
 
 \item{parameter}{the algorithm parameter}
 }
@@ -35,5 +39,5 @@ y-Axis: the measure.
 y2-Axis (on the right): the optional algorithm parameter
 }
 \examples{
-createIterationPlot(mlr.tuning.example, "measure.acc.test.mean", "id", TRUE, "C")
+createIterationPlot(mlr.tuning.example, "measure.acc.test.mean", "id", TRUE, "classif.ksvm", "C")
 }

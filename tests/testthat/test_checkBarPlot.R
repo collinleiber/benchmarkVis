@@ -1,4 +1,4 @@
-context("Box Plots")
+context("Bar Plots")
 
 # Check if creating a Bar Plot throws an error
 test_that("createBarPlot for mlr benchmark", {
