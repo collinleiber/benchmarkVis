@@ -20,12 +20,12 @@ createScatterPlot = function(dt, measure1, measure2, color.algorithm.only = TRUE
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure1)
   checkmate::assert_string(measure2)
-  if(!color.algorithm.only) {
-    col_op = interaction(dt$problem, dt$algorithm, sep = "-", lex.order = TRUE)
+  if (!color.algorithm.only) {
+    col.op = interaction(dt$problem, dt$algorithm, sep = "-", lex.order = TRUE)
   } else {
-    col_op = dt$algorithm
+    col.op = dt$algorithm
   }
-  p = ggplot2::ggplot(dt, ggplot2::aes_string(x = measure1, y = measure2, col = col_op))
+  p = ggplot2::ggplot(dt, ggplot2::aes_string(x = measure1, y = measure2, col = col.op))
   p = p + ggplot2::geom_point(size = pointsize, position = ggplot2::position_jitter(width = 0, height = jitter))
   p = p + ggplot2::ylab(measure1)
   p = p + ggplot2::xlab(measure2)
