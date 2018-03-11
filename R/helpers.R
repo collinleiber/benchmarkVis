@@ -93,3 +93,23 @@ getCumulativeValues = function(list, cumulative.function) {
   # Return new created vector
   return(new.list)
 }
+
+#Return a list of plots suitable for the given data
+#(depends on the presence/absence of measures, iteration and list data)
+getValidPlots = function(dt) {
+  all.plots = listPlots() #all plots available in the package
+  valid.plots = list()
+  if (getMeasuresCount(dt) > 0) {
+    measures.plots = sapply(all.plots, function(plot) {!grepl("Iteration", plot) && !grepl("List", plot)})
+    valid.plots = c(all.plots[measures.plots])
+  }
+  if (getIterationAlgorithmsCount(dt) > 0) {
+    iteration.plots = sapply(all.plots, function(plot) {grepl("Iteration", plot)})
+    valid.plots = c(valid.plots, all.plots[iteration.plots])
+  }
+  if (getListsCount(dt) > 0) {
+    list.plots = sapply(all.plots, function(plot) {grepl("List", plot)})
+    valid.plots = c(valid.plots, all.plots[list.plots])
+  }
+  return(valid.plots)
+}

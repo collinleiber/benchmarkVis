@@ -3,16 +3,10 @@ tabpanel.plots =  list(
         h3("Here you can create plots for your data"),
         fluidRow(
             column(4,
-                radioButtons("datatype", "Choose type of data to work with:",
+                radioButtons("currentdata", "Choose type of data to work with:",
                            choices = c('submitted data', 'aggregated data'),
                            selected = "submitted data"),
-                 selectInput(
-                        'plots',
-                        'Choose a plot',
-                        listPlots(),
-                        selected = FALSE,
-                        multiple = FALSE
-                        )
+                uiOutput("plotselection")
             ),
             column(4,
                 conditionalPanel("input.plots!=0",

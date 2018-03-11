@@ -1,5 +1,5 @@
 mvalues = reactiveValues(matrix = NULL)
-gdata = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL, rows.selected = NULL)
+aggregated.data = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol = NULL, rows.selected = NULL)
 
 observeEvent(input$Submit, {
     req(data()) #only execute the rest, if dataframe is available
@@ -8,15 +8,15 @@ observeEvent(input$Submit, {
 })
 
 observeEvent(input$Reset, {
-  gdata$trancol = NULL
-  gdata$dt = NULL
+  aggregated.data$trancol = NULL
+  aggregated.data$dt = NULL
   mvalues$matrix = table$data
 })
 
 observeEvent(input$Aggregation, {
     req(data())
-    if (!is.null(gdata$dt)) {
-      mvalues$matrix = gdata$dt
+    if (!is.null(aggregated.data$dt)) {
+      mvalues$matrix = aggregated.data$dt
     }
     else {
       mvalues$matrix = get.aggr.data()
@@ -24,11 +24,11 @@ observeEvent(input$Aggregation, {
 })
 
 observeEvent(input$DataTable_rows_selected, {
-  gdata$rows.selected = input$DataTable_rows_selected
+  aggregated.data$rows.selected = input$DataTable_rows_selected
 })
 
 observeEvent(input$DeleteSelectedRows, {
-  selected.rows = isolate(gdata$rows.selected)
+  selected.rows = isolate(aggregated.data$rows.selected)
   req(data())
   if (!is.null(selected.rows)) {
     mvalues$matrix = mvalues$matrix[-as.numeric(selected.rows),]
@@ -44,10 +44,10 @@ get.aggr.data = function() {
   aggcol = isolate(input$aggrcol)
   df = data()
   aggfun = parser.function.list(aggfun.list)
-  gdata$dt = aggregation.apply(groupby, aggfun, aggcol, df)
-  gdata$trancol = get.num.columns.name(gdata$dt)
-  gdata$aggcol = gdata$trancol
-  result = gdata$dt
+  aggregated.data$dt = aggregation.apply(groupby, aggfun, aggcol, df)
+  aggregated.data$trancol = get.num.columns.name(aggregated.data$dt)
+  aggregated.data$aggcol = aggregated.data$trancol
+  result = aggregated.data$dt
   result
 }
 
@@ -87,16 +87,16 @@ get.transform.data = function() {
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
-  gdata$dt = transformation.apply(original.data, columns.to.transform, transformation.functions)
-  gdata$dt
+  aggregated.data$dt = transformation.apply(original.data, columns.to.transform, transformation.functions)
+  aggregated.data$dt
 }
 
 output$table.transformation = renderUI({
   req(data()) #only execute the rest, if dataframe is available
   req(input$Submit) #only show the content if user has submitted
   data = data()
-  if (!is.null(gdata$trancol)) {
-    trancols = gdata$trancol
+  if (!is.null(aggregated.data$trancol)) {
+    trancols = aggregated.data$trancol
   }
   else {
     trancols = get.num.columns.name(data)

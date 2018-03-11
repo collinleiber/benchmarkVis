@@ -34,6 +34,8 @@ observeEvent(input$Submit, {
     req(data())
     data = data()
   }
+  current.data$data = table$data
+  aggregated.data$dt = table$data
 })
 
 output$fileUploaded = reactive({
