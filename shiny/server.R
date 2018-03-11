@@ -8,5 +8,4 @@ shinyServer(function(input, output, session) {
     source(server.files[i], local = TRUE)
   }
 
-  session$onSessionEnded(stopApp)
 })

@@ -2,7 +2,7 @@
 library(shinydashboard)
 library(plotly)
 
-#jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page                                             
+jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page                                             
 ui.files = list.files(path = "./ui", pattern = "*.R")
 ui.files = paste0("ui/", ui.files)
 

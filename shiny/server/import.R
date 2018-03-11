@@ -29,11 +29,7 @@ observeEvent(input$new.data, {
 })
 
 observeEvent(input$Submit, {
-  table$data =
-  {
-    req(data())
-    data = data()
-  }
+  table$data = data()  
   current.data$data = table$data
   aggregated.data$dt = table$data
 })
