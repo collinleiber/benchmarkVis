@@ -2,16 +2,23 @@ current.data = reactiveValues(data = NULL)
 current.plot = reactiveValues(func = NULL, parameter = list())
 observeEvent(input$current.data, {
     if(input$current.data == 'submitted data') {        
-        current.data$data = table$data
+        current.data$data = isolate(table$data)
     }
     else {
-        current.data$data = aggregated.data$dt
+        current.data$data = isolate(mvalues$matrix)
     }
+    current.plot$func = NULL
+    current.plot$parameter = NULL
+    #DEBUG()
 })
 
 observeEvent(input$plotchoice, {
-    current.plot$func = input$plotchoice
-    current.plot$parameter = as.list(args(input$plotchoice))        
+    #DEBUG()
+    plot.func = isolate(input$plotchoice)
+    if (plot.func!=""){
+        current.plot$func = plot.func
+        current.plot$parameter = as.list(args(plot.func)) 
+    }    
 })
 
 observeEvent(input$createtab, {
@@ -38,7 +45,7 @@ output$newtab = renderUI({
 })
 
 output$plot.parameter.selection = renderUI({
-    parameter = as.list(args(input$plotchoice))
+    parameter = as.list(args(current.plot$func))
     uilist = list()
     for (i in 1:length(parameter)) {
         ui.elem = getValidParameterUI(parameter[i])        
@@ -50,7 +57,7 @@ output$plot.parameter.selection = renderUI({
 })
 
 output$plot = renderPlotly({
-    plot.function = eval(parse(text=input$plotchoice))
+    plot.function = eval(parse(text=current.plot$func))
     current.plot$parameter$dt = isolate(current.data$data)
     plot.param = isolate(current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))])
     do.call(plot.function, plot.param)

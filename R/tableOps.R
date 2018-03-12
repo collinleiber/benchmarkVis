@@ -62,7 +62,7 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
 #' @examples
 #' transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
 transformation.apply = function(original.data, columns.to.transform, transformation.functions) {
-  checkmate::assert_data_table(original.data)
+  checkmate::assert_data_frame(original.data)
   result = original.data
   for (transform.func in transformation.functions) { #TODO replace for-loops ?
       if (check.transform.valid(transform.func)) {
