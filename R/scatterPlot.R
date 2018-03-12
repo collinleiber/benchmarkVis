@@ -9,6 +9,7 @@
 #' @param dt compatible data table
 #' @param measure1 the first measure for comparison
 #' @param measure2 the second measure  for comparison
+#' @param color.algorithm.only if set to true, each color corresponds to an algorithm, otherwise to algorithm and problem
 #' @param pointsize the size of ploted point
 #' @param jitter small vertical jitter to deal with overplotting in case of equal scores
 #' @return a scatter plot

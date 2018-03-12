@@ -14,6 +14,8 @@ createScatterPlot(dt, measure1, measure2, color.algorithm.only = TRUE,
 
 \item{measure2}{the second measure  for comparison}
 
+\item{color.algorithm.only}{if set to true, each color corresponds to an algorithm, otherwise to algorithm and problem}
+
 \item{pointsize}{the size of ploted point}
 
 \item{jitter}{small vertical jitter to deal with overplotting in case of equal scores}
