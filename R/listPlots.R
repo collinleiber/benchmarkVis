@@ -41,7 +41,6 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id") {
   # Create plot
   p = plotly::plot_ly(new.df, x = ~iteration, y = ~measure, color = ~algorithm, linetype = ~problem, type = "scatter", mode = "lines+markers")
   # Convert plot to plotly
-  p = plotly::ggplotly(p)
   p = plotly::layout(p, yaxis = list(title = list.measure))
   return(p)
 }

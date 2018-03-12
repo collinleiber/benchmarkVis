@@ -1,13 +1,61 @@
 context("Helpers")
 
-# Check if exporting and importing a csv file works properly
-test_that("Helper functions work well", {
-  dt = mlr.benchmark.example
-  expect_equal(getMeasuresCount(dt), 3)
+# Check if getMeasures() for mlr benchmark is working correctly
+test_that("getMeasures for mlr benchmark", {
+  measures = getMeasures(mlr.benchmark.example)
+  expect_identical(measures, c("measure.mmce.test.mean", "measure.ber.test.mean", "measure.timetrain.test.mean"))
+})
 
-  dt = microbenchmark.example
-  expect_equal(getListsCount(dt), 1)
+# Check if getMeasuresCount() for microbenchmark is working correctly
+test_that("getMeasuresCount for microbenchmark", {
+  count = getMeasuresCount(microbenchmark.example)
+  expect_equal(count, 6)
+})
 
-  dt = mlr.tuning.example
-  expect_equal(getIterationAlgorithmsCount(dt), 1)
+# Check if getLists() for mlr benchmark is working correctly
+test_that("getLists for mlr benchmark", {
+  measures = getLists(mlr.benchmark.example)
+  expect_identical(measures, c("list.mmce", "list.ber", "list.timetrain"))
+})
+
+# Check if getListsCount() for microbenchmark is working correctly
+test_that("getListsCount for microbenchmark", {
+  count = getListsCount(microbenchmark.example)
+  expect_equal(count, 1)
+})
+
+# Check if getIterationAlgorithms() for mlr tuning is working correctly
+test_that("getIterationAlgorithms for mlr tuning", {
+  measures = getIterationAlgorithms(mlr.tuning.example)
+  expect_identical(measures, "classif.ksvm")
+})
+
+# Check if getIterationAlgorithmsCount() for mlr tuning is working correctly
+test_that("getIterationAlgorithmsCount  mlr tuning", {
+  count = getIterationAlgorithmsCount(mlr.tuning.example)
+  expect_equal(count, 1)
+})
+
+# Check if getCumulativeValues() min is working correctly
+test_that("getCumulativeValues  min", {
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "min")
+  expect_equal(values, c(2, 2, 2, 2, 1, 1))
+})
+
+# Check if getCumulativeValues() id is working correctly
+test_that("getCumulativeValues  id", {
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "id")
+  expect_equal(values, c(2, 5, 3, 7, 1, 4))
+})
+
+# Check if getCumulativeValues() max is working correctly
+test_that("getCumulativeValues  max", {
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "max")
+  expect_equal(values, c(2, 5, 5, 7, 7, 7))
+})
+
+# Check if getCumulativeValues() mean is working correctly
+test_that("getCumulativeValues  mean", {
+  values = getCumulativeValues(c(2, 4, 3, 3, 8), "mean")
+  expect_equal(values, c(2, 3, 3, 3, 4))
 })
