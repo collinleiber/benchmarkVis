@@ -38,24 +38,24 @@ test_that("getIterationAlgorithmsCount  mlr tuning", {
 
 # Check if getCumulativeValues() min is working correctly
 test_that("getCumulativeValues  min", {
-  values = getCumulativeValues(c(2,5,3,7,1,4), "min")
-  expect_equal(values, c(2,2,2,2,1,1))
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "min")
+  expect_equal(values, c(2, 2, 2, 2, 1, 1))
 })
 
 # Check if getCumulativeValues() id is working correctly
 test_that("getCumulativeValues  id", {
-  values = getCumulativeValues(c(2,5,3,7,1,4), "id")
-  expect_equal(values, c(2,5,3,7,1,4))
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "id")
+  expect_equal(values, c(2, 5, 3, 7, 1, 4))
 })
 
 # Check if getCumulativeValues() max is working correctly
 test_that("getCumulativeValues  max", {
-  values = getCumulativeValues(c(2,5,3,7,1,4), "max")
-  expect_equal(values, c(2,5,5,7,7,7))
+  values = getCumulativeValues(c(2, 5, 3, 7, 1, 4), "max")
+  expect_equal(values, c(2, 5, 5, 7, 7, 7))
 })
 
 # Check if getCumulativeValues() mean is working correctly
 test_that("getCumulativeValues  mean", {
-  values = getCumulativeValues(c(2,4,3,3,8), "mean")
-  expect_equal(values, c(2,3,3,3,4))
+  values = getCumulativeValues(c(2, 4, 3, 3, 8), "mean")
+  expect_equal(values, c(2, 3, 3, 3, 4))
 })
