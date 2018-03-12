@@ -10,16 +10,16 @@ tabpanel.plots =  list(
             ),
             column(4,
                 uiOutput("plot.parameter.selection"),
-                actionButton("createplot", "Create plot", icon = icon("check"))          
+                actionButton("createplot", "Create plot", icon = icon("check"))  
             ),
             column(3,
-                conditionalPanel("input.createplot == true",
-                    actionButton("create.tab", "Create a new tab for this plot", icon = icon("check"))
+                conditionalPanel("input.createplot > 0",
+                    uiOutput("newtab"),
+                    actionButton("createtab", "Create a new tab for this plot", icon = icon("check"))
                 )          
             )
         ),
-        #TODO: conditional panel with plot
-        conditionalPanel("input.createplot == true",
+        conditionalPanel("input.createplot > 0",
             plotlyOutput("plot")
         ) 
     )

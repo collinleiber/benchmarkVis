@@ -15,8 +15,9 @@ tabpanel.import =  list(
               ),
               conditionalPanel(
                 condition = "input.Submit == true",     
-                imageOutput("accepted"),
-                actionButton("new.data", "Upload new data", icon = icon("check"))
+                actionButton("new.data", "Upload new data", icon = icon("sync")),
+                br(),br(),
+                imageOutput("accepted")                
               )
        )
 )
