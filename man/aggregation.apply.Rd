@@ -2,9 +2,9 @@
 % Please edit documentation in R/tableOps.R
 \name{aggregation.apply}
 \alias{aggregation.apply}
-\title{get aggregation result}
+\title{apply aggregation function}
 \usage{
-aggregation.apply(groupby, aggfun, aggcol, df)
+aggregation.apply(groupby, aggfun, aggcol, dt)
 }
 \arguments{
 \item{groupby}{the list of columns name that will be grouped}
@@ -13,7 +13,7 @@ aggregation.apply(groupby, aggfun, aggcol, df)
 
 \item{aggcol}{the list of columns name that will be aggregated}
 
-\item{df}{the input dataframe}
+\item{dt}{the input dataframe}
 }
 \value{
 a dataframe
@@ -23,5 +23,5 @@ do aggregation and return a new data table.
 the groupby columns must include problem and algorithm
 }
 \examples{
-aggregation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
+aggregation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), dt= mlr.benchmark.example)
 }

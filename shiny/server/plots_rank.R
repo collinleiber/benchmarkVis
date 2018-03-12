@@ -20,7 +20,7 @@ output$rankplot.measure = renderUI({
     selectInput(
       'rank.measure',
       'performance measure to rank',
-      gdata$aggcol,
+      aggregated.data$aggcol,
       multiple = FALSE
     )
   )
@@ -33,5 +33,5 @@ output$plot_rank_submitted = renderPlotly({
 
 output$plot_rank_aggr = renderPlotly({
   req(input$rank.measure)
-  createRankPlot(gdata$dt, input$rank.measure)
+  createRankPlot(aggregated.data$dt, input$rank.measure)
 })

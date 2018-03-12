@@ -6,7 +6,7 @@ output$boxplot.measure = renderUI({
     selectInput(
       'box.measure',
       'performance measure to compare on',
-      input$measures,
+      getMeasures(data),
       multiple = FALSE
     )
   )

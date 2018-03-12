@@ -29,11 +29,22 @@ test_that("Do rank and log2 transformation for mlr benchmark", {
 
 test_that("Do log2 transformation", {
   result = transformation.apply(
-    original.data = data.frame(measure = c(2, 4, 8)),
+    original.data = data.table::data.table(measure = c(2, 4, 8)),
     columns.to.transform = "measure",
     transformation.functions = "log2"
   )
   expect_true(is.data.frame(result) && ncol(result) == 2L)
   expect_true(is.numeric(result[, 2L]))
   expect_true(!(FALSE %in% (result[, 2L] == c(1, 2, 3))))
+})
+
+test_that("Do rank transformation", {
+  result = transformation.apply(
+    original.data = data.table::data.table(measure = c(2, 4, 1)),
+    columns.to.transform = "measure",
+    transformation.functions = "rank"
+  )
+  expect_true(is.data.frame(result) && ncol(result) == 2L)
+  expect_true(is.numeric(result[, 2L]))
+  expect_true(!(FALSE %in% (result[, 2L] == c(2, 3, 1))))
 })
