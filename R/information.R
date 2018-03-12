@@ -40,10 +40,11 @@ listWrappers = function() {
 #' @description
 #' Get a complete list of all plots implemented within the benchmarkVis application. Uses the listPlots() method and transforms the result into the better readable format: "Type: Name"
 #'
+#' @param input.list the plot list you want to beautify
 #' @return vector containing all plots in a readable format
 #' @export
-getNicePlotList = function() {
-  l = sapply(listPlots(), function(x) {
+getPrettyPlotList = function(input.list) {
+  pretty.list = sapply(input.list, function(x) {
     switch(
       x,
       "createBarPlot" = "Measure: Bar Plot",
@@ -64,5 +65,5 @@ getNicePlotList = function() {
       x
     )
   })
-  return(l)
+  return(pretty.list)
 }

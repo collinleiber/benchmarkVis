@@ -20,9 +20,9 @@ test_that("listWrappers test", {
   })))
 })
 
-# Check if getNicePlotList() is working correctly
-test_that("getNicePlotList test", {
-  plots = getNicePlotList()
+# Check if getPrettyPlotList() is working correctly
+test_that("getPrettyPlotList test", {
+  plots = getPrettyPlotList(listPlots())
   expect_true(is.vector(plots))
   expect_true(length(plots) > 0)
   expect_true(all(sapply(plots, function(x) {
