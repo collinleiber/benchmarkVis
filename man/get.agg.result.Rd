@@ -4,7 +4,7 @@
 \alias{get.agg.result}
 \title{get aggregation result}
 \usage{
-get.agg.result(fun, prefix_str, groupby, aggcol, df)
+get.agg.result(fun, prefix_str, groupby, aggcol, dt)
 }
 \arguments{
 \item{fun}{aggregate functions}
@@ -15,7 +15,7 @@ get.agg.result(fun, prefix_str, groupby, aggcol, df)
 
 \item{aggcol}{the list of columns name that will be aggregated}
 
-\item{df}{the input dataframe}
+\item{dt}{the input dataframe}
 }
 \value{
 a dataframe with aggregated column

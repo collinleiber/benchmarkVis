@@ -7,44 +7,26 @@
 #' @param prefix_str the column name's prefix
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
-#' @param df the input dataframe
+#' @param dt the input dataframe
 #' @return a dataframe with aggregated column
-get.agg.result = function(fun, prefix_str, groupby, aggcol, df){
-  newtable = do.agg(fun, groupby, aggcol, df)
-  newtable = newtable[, aggcol, drop = FALSE]
-  newcolsname = lapply(aggcol,
+get.agg.result = function(fun, prefix_str, groupby, aggcol, dt){
+  newtable = aggregate(x = dt[aggcol],
+                         by = dt[groupby],
+                         FUN = eval(parse(text = fun)))
+  colnames(newtable) = lapply(colnames(newtable),
                        FUN = function(colname) {
-                         newname = paste(prefix_str, "_", colname, "", sep  = "")
+                         if (colname %in% aggcol) {
+                            newname = paste(prefix_str, "_", colname, "", sep  = "")
+                         }
+                         else {
+                           colname
+                         }
                        }
   )
-  colnames(newtable) = newcolsname
   return(newtable)
 }
 
-#' @title do aggregation result
-#'
-#' @description
-#' do aggregation and return a new data table.
-#' the aggcol must include problem and algorithm.
-#' only nummeric columns can be aggregated.
-#'
-#' @param fun aggregate functions
-#' @param groupby the list of columns name that will be grouped
-#' @param aggcol the list of columns name that will be aggregated
-#' @param df the input dataframe
-#' @return a dataframe
-do.agg = function(fun, groupby, aggcol, df) {
-  fun = eval(parse(text = fun))
-  tmp = df
-  #types = lapply(tmp[, aggcol], class)
-  #if(FALSE %in% lapply(types, is.numeric))
-  newtable = aggregate(x = tmp[c(aggcol)],
-                         by = tmp[c(groupby)],
-                         FUN = fun)
-  return(newtable)
-}
-
-#' @title get aggregation result
+#' @title apply aggregation function
 #'
 #' @description
 #' do aggregation and return a new data table.
@@ -52,19 +34,16 @@ do.agg = function(fun, groupby, aggcol, df) {
 #' @param groupby the list of columns name that will be grouped
 #' @param aggcol the list of columns name that will be aggregated
 #' @param aggfun the function to aggregate with
-#' @param df the input dataframe
+#' @param dt the input dataframe
 #' @return a dataframe
 #' @export
 #' @examples
-#' aggregation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), df= mlr.benchmark.example)
-aggregation.apply = function(groupby, aggfun, aggcol, df) {
-  checkmate::assert_data_frame(df)
-  #result = do.agg("mean", groupby, aggcol, df)
-  result = df[, groupby, drop = FALSE]
+#' aggregation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), dt= mlr.benchmark.example)
+aggregation.apply = function(groupby, aggfun, aggcol, dt) {
+  checkmate::assert_data_table(dt)
   for (x in aggfun){
     if (check.agg.valid(x)) {
-      newtable = get.agg.result(eval(x), x, groupby, aggcol, df)
-      result = cbind(result, newtable)
+      result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
   }
   return(result)
@@ -86,28 +65,23 @@ transformation.apply = function(original.data, columns.to.transform, transformat
   checkmate::assert_data_frame(original.data)
   result = original.data
   for (transform.func in transformation.functions) { #TODO replace for-loops ?
-    if (check.transform.valid(transform.func)) {
-      for (column in columns.to.transform){
-        transformed.column = unlist(lapply(original.data[, column], transform.func))
-        result = cbind(result, transformed.column) #TODO: is it efficient?
+      if (check.transform.valid(transform.func)) {
+        for (column in columns.to.transform){
+          if (transform.func == "rank") {
+            transformed.column = rank(original.data[, column])
+          }
+          else {
+            transformed.column = unlist(lapply(original.data[, column], transform.func))
+          }
+          result = cbind(result, transformed.column) #TODO: is it efficient?
+          new.column.name = paste(transform.func, "_", column, "", sep  = "")
+          data.table::setnames(result, "transformed.column", new.column.name)
       }
     }
   }
   return(result)
 }
 
-#TODO: document; test
-#rank  = function(data, measure) {
-#  data magrittr::%>% dplyr::mutate(rank = order(eval(parse(text = measure))))
-#  order.scores = order(data[, x])
-#  #rank = NA
-#  rank[order.scores] = seq_len(nrow(data))
-#  name = paste0("rank(", measure, ")")
-#  rank = as.factor(rank)
-#  data = cbind(data, rank)
-#  colnames(data)[ncol(data)] = name
-#  return(data)
-#}
 
 
 #' @title do aggregation result
