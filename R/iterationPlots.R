@@ -51,10 +51,12 @@ createIterationParameterPlot = function(dt,
     type = "scatter",
     mode = "markers"
   )
-  p = plotly::layout(p,
+  p = plotly::layout(
+    p,
     title = iteration.algorithm,
     yaxis = list(title = measure),
-    xaxis = list(title = parameter))
+    xaxis = list(title = parameter)
+  )
   return(p)
 }
 
@@ -72,13 +74,18 @@ createIterationParameterPlot = function(dt,
 #' @param measure the column name containing the results of a measure
 #' @param parameter the first parameter you want to examine
 #' @param parameter2 the second parameter you want to examine (default: "iteration")
+#' @param plot.area plot the measure as an area instead of scatters (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly scatter plot
 #' @export
 #' @examples
 #' createIterationDualParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", "sigma")
-createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 = "iteration",
+createIterationDualParameterPlot = function(dt,
+  measure,
+  parameter,
+  parameter2 = "iteration",
+  plot.area = FALSE,
   iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
@@ -108,25 +115,52 @@ createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 =
     return(x[[parameter2]])
   })
   # Create new plotly compatible data frame
-  new.df = data.frame(parameter = param,
-    parameter2 = param2,
-    measure = dt[[measure]])
+  new.df = data.frame(param = param,
+    param2 = param2,
+    me = dt[[measure]])
   # Create plot
-  p = plotly::plot_ly(
-    new.df,
-    x = ~ parameter2,
-    y = ~ parameter,
-    type = "scatter",
-    mode = "markers",
-    color = ~ measure,
-    size = ~ measure,
-    colors = c("green", "blue"),
-    marker = list(colorbar = list(title = measure))
-  )
-  p = plotly::layout(p,
+  if (!plot.area) {
+    p = plotly::plot_ly(
+      new.df,
+      x = ~ param2,
+      y = ~ param,
+      type = "scatter",
+      mode = "markers",
+      color = ~ me,
+      size = ~ me,
+      text = ~ paste(
+        parameter2,
+        ": ",
+        param2,
+        "<br>",
+        parameter,
+        ": ",
+        param,
+        "<br>",
+        measure,
+        ": ",
+        me,
+        sep = ""
+      ),
+      colors = c("green", "blue"),
+      marker = list(colorbar = list(title = measure))
+    )
+  } else {
+    p = plotly::plot_ly(
+      new.df,
+      x = ~ param2,
+      y = ~ param,
+      z = ~ me,
+      type = "contour"
+    )
+    p = plotly::colorbar(p, title = measure)
+  }
+  p = plotly::layout(
+    p,
     title = iteration.algorithm,
     yaxis = list(title = parameter),
-    xaxis = list(title = parameter2))
+    xaxis = list(title = parameter2)
+  )
   return(p)
 }
 
@@ -155,8 +189,8 @@ createIterationDualParameterPlot = function(dt, measure, parameter, parameter2 =
 #' @return a plotly line plot
 #' @export
 #' @examples
-#' createIterationPlot(mlr.tuning.example, "measure.acc.test.mean", "id", TRUE, "classif.ksvm", "C")
-createIterationPlot = function(dt,
+#' createIterationLinePlot(mlr.tuning.example, "measure.acc.test.mean", "id", TRUE, "classif.ksvm", "C")
+createIterationLinePlot = function(dt,
   measure,
   cumulative.function = "min",
   show.histogram = TRUE,
@@ -237,10 +271,12 @@ createIterationPlot = function(dt,
       yaxis2 = list(side = "right", title = parameter)
     )
   } else {
-    p = plotly::layout(p,
+    p = plotly::layout(
+      p,
       title = iteration.algorithm,
       xaxis = list(title = "iteration"),
-      yaxis = list(title = measure))
+      yaxis = list(title = measure)
+    )
   }
   return(p)
 }

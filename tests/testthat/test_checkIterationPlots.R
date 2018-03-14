@@ -12,8 +12,20 @@ test_that("createIterationDualParameterPlot Test", {
   expect_true(is.list(p))
 })
 
-# Check if creating a iteration plot throws an error
-test_that("createIterationPlot Test", {
-  p = createIterationPlot(mlr.tuning.example, "measure.acc.test.mean", "mean", TRUE, "classif.ksvm", "C")
+# Check if creating a iteration dual parameter with area plot throws an error
+test_that("createIterationDualParameterPlot with area Test", {
+  p = createIterationDualParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", "sigma", TRUE)
+  expect_true(is.list(p))
+})
+
+# Check if creating a iteration line plot throws an error
+test_that("createIterationLinePlot Test", {
+  p = createIterationLinePlot(mlr.tuning.example, "measure.acc.test.mean", "mean", TRUE)
+  expect_true(is.list(p))
+})
+
+# Check if creating a iteration line plot with parameter throws an error
+test_that("createIterationLinePlot with parameter Test", {
+  p = createIterationLinePlot(mlr.tuning.example, "measure.acc.test.mean", "mean", TRUE, "classif.ksvm", "C")
   expect_true(is.list(p))
 })

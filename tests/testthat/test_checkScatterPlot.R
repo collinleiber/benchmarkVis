@@ -8,6 +8,6 @@ test_that("createScatterPlot for mlr benchmark", {
 
 # Check if creating a Scatter Plot throws an error
 test_that("createScatterPlot for microbenchmark", {
-  p = createScatterPlot(microbenchmark.example, "measure.mean", "measure.median")
+  p = createScatterPlot(microbenchmark.example, "measure.mean", "measure.median", FALSE)
   expect_true(is.list(p))
 })

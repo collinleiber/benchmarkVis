@@ -16,7 +16,7 @@
 #' @export
 #' @examples
 #' createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')
-createScatterPlot = function(dt, measure1, measure2, color.algorithm.only = TRUE, pointsize = 4L, jitter = 1) {
+createScatterPlot = function(dt, measure1, measure2, color.algorithm.only = TRUE, pointsize = 4L, jitter = 0) {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure1)

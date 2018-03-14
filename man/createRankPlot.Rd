@@ -19,5 +19,5 @@ Create a plotly rank plot out of a benchmarkVis compatible data table.
 The created rank plot allows for Ranking of algorithms based on a given performance measure for different datasets
 }
 \examples{
-createRankPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
+createRankPlot(mlr.benchmark.example, "measure.mmce.test.mean")
 }
