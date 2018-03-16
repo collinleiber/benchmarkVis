@@ -4,7 +4,8 @@
 \alias{createListLinePlot}
 \title{Create a list line plot}
 \usage{
-createListLinePlot(dt, list.measure, cumulative.function = "id")
+createListLinePlot(dt, list.measure, cumulative.function = "id",
+  show.histogram = FALSE)
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -12,6 +13,8 @@ createListLinePlot(dt, list.measure, cumulative.function = "id")
 \item{list.measure}{the column name containing the list of a specific measure}
 
 \item{cumulative.function}{the cumulative function to use for the list measure (default: "id")}
+
+\item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
 }
 \value{
 a plotly line plot
@@ -23,5 +26,5 @@ A cumulative function can be defined to get a better feeling of the course of th
 Possible parameters for the cumulative function are: "id" (identity function), "min", "max", "mean" - default is id.
 }
 \examples{
-createListLinePlot(microbenchmark.example, "list.values")
+createListLinePlot(microbenchmark.example, "list.values", "id", TRUE)
 }

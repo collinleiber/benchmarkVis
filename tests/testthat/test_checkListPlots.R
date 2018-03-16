@@ -1,8 +1,8 @@
 context("Replication plots")
 
-# Check if creating a list line plot throws an error
-test_that("createListLinePlot Test mlr benchmark", {
-  p = createListLinePlot(mlr.benchmark.example, "list.ber", "mean")
+# Check if creating a list line plot with histogram throws an error
+test_that("createListLinePlot Test mlr benchmark with histogram", {
+  p = createListLinePlot(mlr.benchmark.example, "list.ber", "mean", TRUE)
   expect_true(is.list(p))
 })
 

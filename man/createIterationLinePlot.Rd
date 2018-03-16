@@ -5,7 +5,7 @@
 \title{Create a iteration line plot}
 \usage{
 createIterationLinePlot(dt, measure, cumulative.function = "min",
-  show.histogram = TRUE, iteration.algorithm = "default",
+  show.histogram = FALSE, iteration.algorithm = "default",
   parameter = "None")
 }
 \arguments{
@@ -15,7 +15,7 @@ createIterationLinePlot(dt, measure, cumulative.function = "min",
 
 \item{cumulative.function}{the cumulative function to use for the measure values (default: "min")}
 
-\item{show.histogram}{shows the histogram of the measure values in the background (default: TRZUE)}
+\item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
 
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}

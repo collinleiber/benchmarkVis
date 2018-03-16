@@ -10,28 +10,28 @@
 #' @param dt compatible data table
 #' @param measure the column name containing the results of a measure
 #' @param parameter the algorithm parameter you want to examine
+#' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly scatter plot
 #' @export
 #' @examples
-#' createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C")
+#' createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", TRUE)
 createIterationParameterPlot = function(dt,
   measure,
   parameter,
+  show.histogram = FALSE,
   iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
   }
-  checkmate::assert_string(iteration.algorithm)
-  checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
-  # Filter data table
-  dt = dt[dt$algorithm == iteration.algorithm, ]
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
   checkmate::assert_string(measure)
+  checkmate::assert_logical(show.histogram)
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
   })))
@@ -45,18 +45,36 @@ createIterationParameterPlot = function(dt,
     measure = dt[[measure]])
   # Create plot
   p = plotly::plot_ly(
-    new.df,
-    x = ~ parameter,
+    new.df
+  )
+  p = plotly::add_trace(p, x = ~ parameter,
     y = ~ measure,
+    name = "Results",
     type = "scatter",
-    mode = "markers"
-  )
-  p = plotly::layout(
-    p,
-    title = iteration.algorithm,
-    yaxis = list(title = measure),
-    xaxis = list(title = parameter)
-  )
+    mode = "markers")
+  # Plot optional histogram
+  if (show.histogram) {
+    p = plotly::add_histogram(p,
+      y = ~ measure,
+      alpha = 0.4,
+      name = "Measure distribution",
+      xaxis = "x2")
+    p = plotly::layout(
+      p,
+      title = iteration.algorithm,
+      yaxis = list(title = measure),
+      xaxis = list(title = parameter, overlaying = "x2"),
+      xaxis2 = list(side = "top", title = "Count"),
+      margin = list(t = 130)
+    )
+  } else {
+    p = plotly::layout(
+      p,
+      title = iteration.algorithm,
+      yaxis = list(title = measure),
+      xaxis = list(title = parameter)
+    )
+  }
   return(p)
 }
 
@@ -91,10 +109,7 @@ createIterationDualParameterPlot = function(dt,
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
   }
-  checkmate::assert_string(iteration.algorithm)
-  checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
-  # Filter data table
-  dt = dt[dt$algorithm == iteration.algorithm, ]
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(parameter)
@@ -182,7 +197,7 @@ createIterationDualParameterPlot = function(dt,
 #' @param dt compatible data table
 #' @param measure the column name containing the results of a measure
 #' @param cumulative.function the cumulative function to use for the measure values (default: "min")
-#' @param show.histogram shows the histogram of the measure values in the background (default: TRZUE)
+#' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @param parameter the algorithm parameter
@@ -193,17 +208,14 @@ createIterationDualParameterPlot = function(dt,
 createIterationLinePlot = function(dt,
   measure,
   cumulative.function = "min",
-  show.histogram = TRUE,
+  show.histogram = FALSE,
   iteration.algorithm = "default",
   parameter = "None") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
   }
-  checkmate::assert_string(iteration.algorithm)
-  checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
-  # Filter data table
-  dt = dt[dt$algorithm == iteration.algorithm, ]
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
@@ -247,12 +259,14 @@ createIterationLinePlot = function(dt,
     type = "scatter",
     mode = "lines+markers"
   )
+  # Plot optional histogram
   if (show.histogram) {
     p = plotly::add_histogram(p,
       y = ~ measure,
       alpha = 0.4,
       name = "Measure distribution")
   }
+  # Plot optional parameter scatters
   if (parameter != "None") {
     p = plotly::add_trace(
       p,
@@ -279,4 +293,13 @@ createIterationLinePlot = function(dt,
     )
   }
   return(p)
+}
+
+# Hepler method to get only the data table rows which contain the iteration algorithm.
+filterTableForIterationAlgorithm = function(dt, iteration.algorithm) {
+  checkmate::assert_string(iteration.algorithm)
+  checkmate::assert_true(iteration.algorithm %in% getIterationAlgorithms(dt))
+  # Filter data table
+  dt = dt[dt$algorithm == iteration.algorithm, ]
+  return(dt)
 }

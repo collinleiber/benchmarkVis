@@ -62,6 +62,7 @@ getPrettyPlotList = function(input.list) {
       "createRankPlot" = "Measure: Rank Plot",
       "createScatterPlot" = "Measure: Scatter Plot",
       "createSummaryPlot" = "Measure: Summary Plot",
+      "createDensityPlot" = "Measure: Density Plot",
       x
     )
   })
