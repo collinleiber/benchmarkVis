@@ -61,6 +61,48 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
   return(p)
 }
 
+#' @title Create a list line plot with a measure on x and y aixs
+#'
+#' @description
+#' Create a plotly line plot out of a benchmarkVis compatible data table.
+#' The created line chart shows the change within the specified list measures
+#'
+#' @param dt campatible data table
+#' @param list.measure1 the list measure on the x axis
+#' @param list.measure2 the list measure on the y axis
+#' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @return a plotly line plot
+#' @export
+#' @examples
+#' createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber")
+createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE) {
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(list.measure1)
+  checkmate::assert_string(list.measure2)
+  checkmate::assert_true(list.measure1 %in% getLists(dt))
+  checkmate::assert_true(list.measure2 %in% getLists(dt))
+  # Get maximum amount of lists
+  times = sapply(dt[[list.measure1]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure1 = unlist(dt[[list.measure1]]),
+    measure2 = unlist(dt[[list.measure2]]),
+    problem = rep(dt$problem, times),
+    algorithm = rep(dt$algorithm, times),
+    iteration = unlist(lapply(times, seq))
+  )
+  # Create plot
+  if (draw.lines) {
+  p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, linetype = ~problem, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "lines+markers")
+  } else {
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "markers")
+  }
+  p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
+  return(p)
+}
+
 #' @title Create a list rank matrix bar plot
 #'
 #' @description

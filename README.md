@@ -61,6 +61,6 @@ listPlots()
 Create Plots
 
 ```
-createBarPlot(table, measure)
-createListLinePlot(table, "list.values", "min", TRUE)
+createBarPlot(table, "measure")
+createListLinePlot(table, "list", "min", TRUE)
 ```

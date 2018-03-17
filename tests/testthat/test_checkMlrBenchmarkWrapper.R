@@ -26,6 +26,5 @@ test_that("MlrBenchmarkWrapper Test", {
   dt2 = subset(mlr.benchmark.example,
     select = -c(measure.timetrain.test.mean, list.timetrain))
   # Identical?
-  skip_on_travis()
   expect_identical(dt, dt2)
 })

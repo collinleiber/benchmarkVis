@@ -295,6 +295,61 @@ createIterationLinePlot = function(dt,
   return(p)
 }
 
+#' @title Create a iteration line plot with a measure on x and y aixs
+#'
+#' @description
+#' Create a plotly line plot out of a benchmarkVis compatible data table.
+#' The created line chart shows the change within the specified list measures.
+#'
+#' @param dt campatible data table
+#' @param measure1 the measure on the x axis
+#' @param measure2 the measure on the y axis
+#' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+#' (default: "default" - would take the first from getIterationAlgorithms())
+#' @return a plotly line plot
+#' @export
+#' @examples
+#' createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd")
+createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = FALSE, iteration.algorithm = "default") {
+  # Get first iteration algorithm
+  if (iteration.algorithm == "default") {
+    iteration.algorithm = getIterationAlgorithms(dt)[1]
+  }
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
+  # Checks
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(measure1)
+  checkmate::assert_string(measure2)
+  checkmate::assert_true(measure1 %in% getMeasures(dt))
+  checkmate::assert_true(measure2 %in% getMeasures(dt))
+  # Get iteration
+  iter = sapply(dt$algorithm.parameter, function(x) {
+    return(x$iteration)
+  })
+  param.text = sapply(dt$algorithm.parameter, function(x) {
+    # Get index of iteration in algorithm.paramter
+    return(toString(paste(names(x), x, sep = " = ")))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure1 = dt[[measure1]],
+    measure2 = dt[[measure2]],
+    problem = dt$problem,
+    algorithm = dt$algorithm,
+    iteration = iter,
+    text = param.text
+  )
+  # Create plot
+  if (draw.lines) {
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, linetype = ~problem, text = ~text, type = "scatter", mode = "lines+markers")
+  } else {
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, text = ~text, type = "scatter", mode = "markers")
+  }
+  p = plotly::layout(p, xaxis = list(title = measure1), yaxis = list(title = measure2))
+  return(p)
+}
+
 # Hepler method to get only the data table rows which contain the iteration algorithm.
 filterTableForIterationAlgorithm = function(dt, iteration.algorithm) {
   checkmate::assert_string(iteration.algorithm)

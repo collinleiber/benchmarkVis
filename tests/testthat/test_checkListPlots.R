@@ -47,3 +47,15 @@ test_that("createListRankMatrixBarPlot Test microbenchmark", {
   p = createListRankMatrixBarPlot(microbenchmark.example, "list.values")
   expect_true(is.list(p))
 })
+
+# Check if creating a list dual measure plot throws an error
+test_that("createListDualMeasurePlot Test mlr benchmark", {
+  p = createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.timetrain")
+  expect_true(is.list(p))
+})
+
+# Check if creating a list dual measure plot with lines throws an error
+test_that("createListDualMeasurePlot Test with lines mlr benchmark", {
+  p = createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber", TRUE)
+  expect_true(is.list(p))
+})

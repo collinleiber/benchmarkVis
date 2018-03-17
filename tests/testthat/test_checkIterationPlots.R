@@ -35,3 +35,15 @@ test_that("createIterationLinePlot with parameter Test", {
   p = createIterationLinePlot(mlr.tuning.example, "measure.acc.test.mean", "mean", TRUE, "classif.ksvm", "C")
   expect_true(is.list(p))
 })
+
+# Check if creating a iteration dual measure plot throws an error
+test_that("createIterationDualMeasurePlot Test mlr tuning", {
+  p = createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd")
+  expect_true(is.list(p))
+})
+
+# Check if creating a iteration dual measure plot with lines throws an error
+test_that("createIterationDualMeasurePlot Test with lines mlr tuning", {
+  p = createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd", TRUE)
+  expect_true(is.list(p))
+})

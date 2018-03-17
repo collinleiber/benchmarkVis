@@ -63,6 +63,8 @@ getPrettyPlotList = function(input.list) {
       "createScatterPlot" = "Measure: Scatter Plot",
       "createSummaryPlot" = "Measure: Summary Plot",
       "createDensityPlot" = "Measure: Density Plot",
+      "createListDualMeasurePlot" = "List: Dual Measure Plot",
+      "createIterationDualMeasurePlot" = "Iteration: Dual Measure Plot",
       x
     )
   })
