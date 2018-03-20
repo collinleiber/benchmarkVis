@@ -51,7 +51,7 @@ getPrettyPlotList = function(input.list) {
       "createBoxPlot" = "Measure: Box Plot",
       "createIterationDualParameterPlot" = "Iteration: Dual Parameter Plot",
       "createIterationParameterPlot" = "Iteration: Parameter Plot",
-      "createIterationPlot" = "Iteration: Plot",
+      "createIterationLinePlot" = "Iteration: Line Plot",
       "createListDensityPlot" = "List: Density Plot",
       "createListDensityRankPlot" = "List: Density Rank Plot",
       "createListLinePlot" = "List: Line Plot",
@@ -62,8 +62,39 @@ getPrettyPlotList = function(input.list) {
       "createRankPlot" = "Measure: Rank Plot",
       "createScatterPlot" = "Measure: Scatter Plot",
       "createSummaryPlot" = "Measure: Summary Plot",
+      "createDensityPlot" = "Measure: Density Plot",
+      "createListDualMeasurePlot" = "List: Dual Measure Plot",
+      "createIterationDualMeasurePlot" = "Iteration: Dual Measure Plot",
       x
     )
   })
   return(pretty.list)
 }
+
+#' @title Get list of all plots useable with the data table
+#'
+#' @description
+#' Get a complete list of all plots implemented within the benchmarkVis application which are combinable with the input data table.
+#' (depends on the presence/absence of measures, iteration and list data)
+#'
+#' @param dt input data table
+#' @return Return a list of plots suitable for the given data
+#' @export
+getValidPlots = function(dt) {
+  all.plots = listPlots() #all plots available in the package
+  valid.plots = list()
+  if (getMeasuresCount(dt) > 0) {
+    measures.plots = sapply(all.plots, function(plot) {!grepl("Iteration", plot) && !grepl("List", plot)})
+    valid.plots = c(all.plots[measures.plots])
+  }
+  if (getIterationAlgorithmsCount(dt) > 0) {
+    iteration.plots = sapply(all.plots, function(plot) {grepl("Iteration", plot)})
+    valid.plots = c(valid.plots, all.plots[iteration.plots])
+  }
+  if (getListsCount(dt) > 0) {
+    list.plots = sapply(all.plots, function(plot) {grepl("List", plot)})
+    valid.plots = c(valid.plots, all.plots[list.plots])
+  }
+  return(valid.plots)
+}
+

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/collinleiber/benchmarkVis.svg?branch=master)](https://travis-ci.org/collinleiber/benchmarkVis) [![codecov](https://codecov.io/github/collinleiber/benchmarkVis/branch/master/graphs/badge.svg)](https://codecov.io/github/collinleiber/benchmarkVis) 
 
-benchmarkVis is a R package to visualize benchmark results in different ways. It is working with standard csv files and can also be combined with several benchmark R packages like [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) , [rbenchmark](https://github.com/eddelbuettel/rbenchmark) or [mlr](https://github.com/mlr-org/mlr). 
+benchmarkVis is a R package to visualize benchmark results in different ways. It is working with standard csv and json files and can also be combined with several benchmark R packages like [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) , [rbenchmark](https://github.com/eddelbuettel/rbenchmark) or [mlr](https://github.com/mlr-org/mlr). 
 
 # Getting Started
 
@@ -10,8 +10,7 @@ benchmarkVis is a R package to visualize benchmark results in different ways. It
     ```splus
     devtools::install_github("collinleiber/benchmarkVis")
     ```
-* Take a look into the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for more information
-* Continous Integration by [Travis](https://travis-ci.org/collinleiber/benchmarkVis)
+* Take a look into the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for a full tutorial
 	
 # Description
 
@@ -28,3 +27,40 @@ As you can see, each column has a fixed name and data type. Also some of the col
 The table can contain any number of measures and lists. It is just important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
 
 One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the specified algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
+
+# Quick Start
+
+Load CSV file
+
+```
+table = csvImport("PATH.TO.FILE")
+```
+
+or load json file
+
+```
+table = jsonImport("PATH.TO.FILE")
+```
+
+or use one of the provided wrappers (in this example microbenchmark)
+
+```
+library(microbenchmark)
+x = runif(100)
+benchmark = microbenchmark(sqrt(x), x ^ 0.5)
+
+table = useMicrobenchmarkWrapper(benchmark)
+```
+
+See a list with all possible visualizations
+
+```
+listPlots()
+```
+
+Create Plots
+
+```
+createBarPlot(table, "measure")
+createListLinePlot(table, "list", "min", TRUE)
+```

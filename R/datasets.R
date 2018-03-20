@@ -53,6 +53,17 @@ NULL
 #' It can be loaded into the benchmarkVis application through the csvImport method.
 #' @name ml.example
 #' @docType data
-#' @references See \url{data/ml.example.csv}
+#' @references See \url{extdata/ml.example.csv}
+#' @keywords data
+NULL
+
+#' Example Json file
+#'
+#' Contains the same data table as (\code{mlr.benchmark.example}).
+#' This file is an example of how a useable json file should be structured.
+#' It can be loaded into the benchmarkVis application through the jsonImport method.
+#' @name ml.example2
+#' @docType data
+#' @references See \url{extdata/ml.example2.json}
 #' @keywords data
 NULL

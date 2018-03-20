@@ -5,7 +5,7 @@
 \title{Create a scatter plot}
 \usage{
 createScatterPlot(dt, measure1, measure2, color.algorithm.only = TRUE,
-  pointsize = 4L, jitter = 1)
+  pointsize = 4L, jitter = 0)
 }
 \arguments{
 \item{dt}{compatible data table}

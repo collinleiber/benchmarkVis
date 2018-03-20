@@ -18,7 +18,8 @@ Imports:
 	plotly,
 	data.table,
 	ggplot2,
-	radarchart
+	radarchart,
+	jsonlite
 Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),

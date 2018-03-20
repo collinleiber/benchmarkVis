@@ -5,7 +5,8 @@
 \title{Create a iteration dual parameter scatter plot}
 \usage{
 createIterationDualParameterPlot(dt, measure, parameter,
-  parameter2 = "iteration", iteration.algorithm = "default")
+  parameter2 = "iteration", plot.area = FALSE,
+  iteration.algorithm = "default")
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -15,6 +16,8 @@ createIterationDualParameterPlot(dt, measure, parameter,
 \item{parameter}{the first parameter you want to examine}
 
 \item{parameter2}{the second parameter you want to examine (default: "iteration")}
+
+\item{plot.area}{plot the measure as an area instead of scatters (default: FALSE)}
 
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}

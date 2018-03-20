@@ -10,6 +10,6 @@ This file is an example of how a useable csv file should be structured.
 It can be loaded into the benchmarkVis application through the csvImport method.
 }
 \references{
-See \url{data/ml.example.csv}
+See \url{extdata/ml.example.csv}
 }
 \keyword{data}
