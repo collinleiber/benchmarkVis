@@ -20,17 +20,6 @@ test_that("listWrappers test", {
   })))
 })
 
-# Check if getPrettyPlotList() is working correctly
-test_that("getPrettyPlotList test", {
-  plots = getPrettyPlotList(listPlots())
-  expect_true(is.vector(plots))
-  expect_true(length(plots) > 0)
-  expect_true(all(sapply(plots, function(x) {
-    startsWith(x, "Measure: ") ||
-      startsWith(x, "List: ") || startsWith(x, "Iteration: ")
-  })))
-})
-
 # Check if getValidPlots() for mlr benchmark and microbenchmark is working correctly
 test_that("getValidPlots for mlr benchmark compared to microbenchmark", {
   plots = getValidPlots(mlr.benchmark.example)

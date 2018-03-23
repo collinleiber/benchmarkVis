@@ -17,11 +17,25 @@ Benchmarking is a good way to compare the performances of different algorithms. 
 
 The package offers several differant plots which range from simple bar charts to complex parallel coordinates plots. All the functionalities are also provided from an interactive shiny application to simplify the workflow even more. This includes comprehensive methods to manipulate the input benchmark data. 
 
-The benchmarks themselves are not generated with this package. They have to be imported from other tools. But no problem, the benchmarkVis package offers several easy ways to integrate benchmark results from your favorite software. Therefore a clearly structured input data format has been defined which is combinable with csv files, R [data.table](https://github.com/Rdatatable/data.table) or directly with R benchmark packages like [mlr](https://github.com/mlr-org/mlr), [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) or [rbenchmark](https://github.com/eddelbuettel/rbenchmark) through different wrappers.
+The benchmarks themselves are not generated with this package. They have to be imported from other tools. But no problem, the benchmarkVis package offers several easy ways to integrate benchmark results from your favorite software. Therefore a clearly structured input data format has been defined which is combinable with csv and json files, R [data.table](https://github.com/Rdatatable/data.table) or directly with R benchmark packages like [mlr](https://github.com/mlr-org/mlr), [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) or [rbenchmark](https://github.com/eddelbuettel/rbenchmark) through different wrappers.
 
-# Input data structure
+# Install the package
 
-In this section we will describe the input data structure for the benchmarkVis package. It consists of a table of the following structure:
+To install the package simply type:
+
+```r
+devtools::install_github("collinleiber/benchmarkVis")
+```
+
+Afterwards it can be loaded:
+
+```{r}
+library(benchmarkVis)
+```
+
+# Data Structure
+
+In this section we will describe the input data structure of the benchmarkVis package. It consists of a table of the following structure:
 
 | problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.1 | measure.2 | list.1 | list.2 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -33,54 +47,171 @@ The table can contain any number of measures and lists. It is just important tha
 
 One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the specified algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
 
-# Import data
+## Input Data Types
 
-As stated before, there are several ways to use your data in the benchmarkVis package.
+There are several ways to load your benchmark data into the benchmarkVis application. These are:
 
-### Use a csv file 
+1. Create the table directly with R
+2. Use csv file
+3. Use json file
+4. Use a provided wrapper
 
-The most flexible way is to create your benchmark result as a csv file and import the csv file direclty into the package. This is done through:
+### 1. Create table directly with R
 
-``` 
-csvImport(PATH.TO.CSV.File)
+You can create the [data table](https://cran.r-project.org/web/packages/data.table/index.html) directly in R:
+
+```{r}
+library(data.table)
+problem = c("Problem A", "Problem B", "Problem C")
+problem.parameter = list(list(parameter.a = 2, parameter.b = "xyz"), list(parameter.a = 4), list())
+algorithm = c("algorithm1", "algorithm2", "algorithm3")
+algorithm.parameter = list(list(), list(parameter = "test"), list())
+replication = c("none", "none", "none")
+replication.parameter = list(list(), list(), list())
+measure.abc = c(16, 23, 52)
+list.measure = list(c(1, 2, 3), c(1, 2, 5), c(3, 5, 3))
+dt = data.table(problem, problem.parameter, algorithm, algorithm.parameter, replication, replication.parameter, measure.abc, list.measure, stringsAsFactors = TRUE)
+
+dt
 ```
 
-There are just a few rules if you choose this import possibility.
+To check if your created data table is really compatible with the benchmarkVis package it is recommended to use following method:
+
+```{r}
+checkStructure(dt)
+```
+
+If it returnes `TRUE` everything is fine else it will result in an error. For all other input strategies this structure check is executed automatically.
+
+You can use the created data table with the shiny application by saving it as a csv or json file. Just use:
+
+```r
+csvExport(dt)
+```
+
+or
+
+```r
+jsonExport(dt)
+```
+
+### 2. Use csv file
+
+A second option is to create your input benchmark result as a csv file. This is a very flexible way to use your benchmark result with the benchmarkVis package. If you choose this there are two things you have to consider:
 
 * For the parameter lists your input has to be of following structure:
   ```
   "list(numeric.field = variable, character.field = 'example.string')"
   ```
-  Beware that a character input in the list needs a extra single quotation! 
+  The list entry has to start and end with a double quotation. Beware that a character input in the list needs a extra single quotation!
 * For the vector columns the input needs to look like:
   ```
   "c(value1, value2, value3)"
   ```
+  It also has to start and end with double quotation.
 
-If you are still not exactly sure how to design a compatible csv file take a look at the example file `ml.example.csv` at [Link](https://github.com/collinleiber/benchmarkVis/blob/lkl_new_feature/data/ml.example.csv).
-After the import a structure check will be run to see if everything is correct.
-
-### Use a wrapper
-
-Another simple way to use your benchmark data is to create your benchmarks with a R package for which a wrapper is contained in the benchmarkVis package. To see a fill list of compatible wrappers use following function:
+An example input line would look as follows:
 
 ```
+"problemA","list(para1= 'xyz', para2 = 15)","algorithm1","list(para1 = 'test')","none","list()",12,"c(1,2,3)"
+```
+
+If you are still not exactly sure how to design a compatible csv file take a look at the example file `ml.example.csv` at [Link](https://github.com/collinleiber/benchmarkVis/blob/master/inst/extdata/ml.example.csv).
+
+### 3. Use json file
+
+Using a json file works similar to a csv file. One difference is that vectors can direclty be defined as json arrays instead of a string. The input parameter lists still have to be desinged as stated in "#2. Use csv file".
+
+An example json entry would be (notice that all entries have to be inside a json array):
+
+```
+{
+    "problem": "problemA",
+    "problem.parameter": "list(para1= 'xyz', para2 = 15)",
+    "algorithm": "algorithm1",
+    "algorithm.parameter": "list(para1 = 'test')",
+    "replication": "none",
+    "replication.parameter": "list()",
+    "measure.abc": 12,
+    "list.measure": [1, 2, 3]
+  }
+```
+
+You can find a complete json example at `ml.example2.json` at [Link](https://github.com/collinleiber/benchmarkVis/blob/master/inst/extdata/ml.example2.json).
+
+### 4. Use a provided wrapper
+
+The last option is to use a R benchmark package for which a wrapper is provided. The wrappers will automatically transform a regular result of the specified package into the desired data table form. To see a full list of compatible wrappers use following function:
+
+```{r}
 listWrappers()
 ```
 
-Also for this approach a structure check will run to see if everything is working as intended.
+If you want to use a benchmark result with the shiny application, you have to save the unwrapped result as a "RDS" file first.
 
-### Use a R data.table
-
-The third option is to create your data.table directly with R. To see if your table is compatible with the benchmarkVis package it is recommended to run a structure check:
-
-```
-checkStructure(data.table)
+```r
+saveRDS(table, file = "PATH/file.rds")
 ```
 
-This way you can be certain all methods are working properly.
+Then it can later be loaded with a file wrapper.
 
-# Create plots
+Alternatvily you could use the wrapper and save the created table as a json or csv file.
+
+# Load Benchmark
+
+As stated before, there are several ways to load your data into the benchmarkVis package.
+
+## Use a csv or json file 
+
+If you have a csv/json file which is structured as stated in "Data Structure" you can simply use following command to load your benchmark result:
+
+``` r
+csvImport(PATH.TO.CSV.File)
+```
+
+or
+
+```r
+jsonImport(PATH.TO.CSV.File)
+```
+
+After the import a structure check will be run to see if everything is correct.
+
+## Use a wrapper
+
+To import a benchmark result created with a package for which a wrapper is provided you can simply use the corresponding method. One example (in this case the microbenchmark wrapper) would be:
+
+```{r}
+library(microbenchmark)
+x = runif(100)
+benchmark = microbenchmark(sqrt(x), x ^ 0.5)
+
+table = useMicrobenchmarkWrapper(benchmark)
+
+table
+```
+
+You can get a full list of all wrappers with:
+
+```{r}
+listWrappers()
+```
+
+All the *FileWrapper methods are used with an RDS file.
+
+Also for this import strategy a structure check will be executed.
+
+## Use a R data.table
+
+If you created your data table directly in R and already checked the structure with
+
+```{r}
+checkStructure(dt)
+```
+
+you are ready to go.
+
+# Create Plots
 
 The main feature of the package is to create different kinds of plots. These can roughly be devided into three groups:
 
@@ -88,13 +219,44 @@ The main feature of the package is to create different kinds of plots. These can
 * List plots
 * Iteration plots
 
-To see a list with all possible charts use the method:
+Following list gives an overview about all implemented plots and their corresponding group.
 
-```
+| Measure Plot | List Plot | Iteration Plot |
+|---|---|---|
+| Dual Measure Plot | Dual Measure Plot | Dual Measure Plot |
+| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
+| Density Plot | Density Plot | Dual Parameter Plot |
+| Summary Plot | Line Plot | Line Plot |
+| Bar Plot | Density Rank Plot | |
+| Scatter Plot |
+| Parallel Coordinates Plot | | |
+| Radar Plot | | |
+| Rank Plot | | |
+| Box Plot | | |
+
+There is no guarantee that the list provided above is up to date. 
+To see a full list with all possible charts use the method:
+
+```{r}
 listPlots()
 ```
 
-If you don't know the needed arguments of a special plot, take a look into the package documentation.
+If you just want to get a list with the plots that are usable with your input data table use:
+
+```{r}
+getValidPlots(dt)
+```
+
+## Create Plot
+
+The creation of a benchmark visualization is pretty simple. Examples:
+
+```{r, fig.width = 5, fig.height = 5}
+createBarPlot(microbenchmark.example, "measure.mean")
+createListLinePlot(microbenchmark.example, "list.values")
+```
+
+If you don't know the needed arguments of a specific plot, take a look into the package documentation. As most of the plots are created with plotly you can interactivly change the visualization.
 
 # Shiny application
 
@@ -106,5 +268,5 @@ Next you need to switch to the `Plots` menu, where you can create all kinds of c
 
 # Wiki
 
-If there are questions left, take a look into our [Wiki](https://github.com/collinleiber/benchmarkVis/wiki). There you can find more tips to simplify the usage of the benchmarkVis package.
+If there are questions left, take a look into our [Wiki](https://github.com/collinleiber/benchmarkVis/wiki). There you can find more tips to work with the benchmarkVis package.
 Should there be no answer to your question or do you find any errors in the software feel free to open an [Issue](https://github.com/collinleiber/benchmarkVis/issues).
