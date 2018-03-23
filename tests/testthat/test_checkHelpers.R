@@ -59,3 +59,14 @@ test_that("getCumulativeValues  mean", {
   values = getCumulativeValues(c(2, 4, 3, 3, 8), "mean")
   expect_equal(values, c(2, 3, 3, 3, 4))
 })
+
+# Check if getPrettyPlotList() is working correctly
+test_that("getPrettyPlotList test", {
+  plots = getPrettyPlotList(listPlots())
+  expect_true(is.vector(plots))
+  expect_true(length(plots) > 0)
+  expect_true(all(sapply(plots, function(x) {
+    startsWith(x, "Measure: ") ||
+      startsWith(x, "List: ") || startsWith(x, "Iteration: ")
+  })))
+})

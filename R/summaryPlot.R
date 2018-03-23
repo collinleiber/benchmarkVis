@@ -28,7 +28,9 @@ createSummaryPlot = function(dt, measure){
     ggplot2::geom_bar(ggplot2::aes(y = copy$Nor), stat = "identity", position = ggplot2::position_nudge(y = copy$Pos)) +
     ggplot2::geom_col(ggplot2::aes(y = 1), alpha = .1, data = dt) +
     ggplot2::labs(title = "Summary Plot",
-                  y = "mmce proportional to best performance")
+                  y = "mmce proportional to best performance",
+                  x = "problems",
+      fill = "algorithms")
   p = p + ggplot2::coord_flip()
   #there may be some bug about the ggplot2, so be sure you have installed 'hadley/ggplot2'.
   #otherwise, there some may get a unexpected polt.
