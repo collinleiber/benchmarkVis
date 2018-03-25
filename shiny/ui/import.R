@@ -8,7 +8,8 @@ tabpanel.import =  list(
                         multiple = FALSE,
                         accept = c("text/csv",
                                    ".csv",
-                                   ".Rds"),
+                                   ".Rds",
+                                   ".json"),
                         placeholder = "No file selected"),
               conditionalPanel("output.fileUploaded == true && input.Submit == false",
                 actionButton("Submit", "Submit", icon = icon("check"))

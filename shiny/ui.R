@@ -11,14 +11,13 @@ for (i in seq_along(ui.files)) {
 }
 
 dashboardPage(
-  dashboardHeader(title = "Benchmark Visualization"),
+  dashboardHeader(title = "benchmarkVis"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Import", tabName = "import", icon = icon("file-excel-o")),
       menuItem("Data table", tabName = "table", icon = icon("table")),
       menuItem("Plots", tabName = "plots", icon = icon("line-chart"))      
-    )
-     
+    )     
   ),
   dashboardBody(
     tabItems(

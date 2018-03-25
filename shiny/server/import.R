@@ -39,7 +39,7 @@ output$fileUploaded = reactive({
 outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
 
 output$data.format = renderUI({
-  data.types = c('csv', 'microbenchmark', 'mlr', 'mlr tuning', 'rbenchmark')
+  data.types = c('csv', 'microbenchmark', 'mlr', 'mlr tuning', 'rbenchmark', 'json')
   column(6,
          selectInput('dataformat', 'Choose your data type', data.types, selected = 'csv'))
 })
@@ -47,5 +47,4 @@ output$data.format = renderUI({
 output$accepted = renderImage({
   list(src = './images/accepted.png',
        alt = paste("Submit was successful"))
-
 }, deleteFile = FALSE)
