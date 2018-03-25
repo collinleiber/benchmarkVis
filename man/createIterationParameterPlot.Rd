@@ -4,7 +4,7 @@
 \alias{createIterationParameterPlot}
 \title{Create a iteration parameter scatter plot}
 \usage{
-createIterationParameterPlot(dt, measure, parameter,
+createIterationParameterPlot(dt, measure, parameter, show.histogram = FALSE,
   iteration.algorithm = "default")
 }
 \arguments{
@@ -13,6 +13,8 @@ createIterationParameterPlot(dt, measure, parameter,
 \item{measure}{the column name containing the results of a measure}
 
 \item{parameter}{the algorithm parameter you want to examine}
+
+\item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
 
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}
@@ -28,5 +30,5 @@ x-Axis: the algorithm parameter.
 y-Axis: the measure.
 }
 \examples{
-createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C")
+createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", TRUE)
 }

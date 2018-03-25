@@ -9,11 +9,12 @@
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
 #' @param cumulative.function the cumulative function to use for the list measure (default: "id")
+#' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @return a plotly line plot
 #' @export
 #' @examples
-#' createListLinePlot(microbenchmark.example, "list.values")
-createListLinePlot = function(dt, list.measure, cumulative.function = "id") {
+#' createListLinePlot(microbenchmark.example, "list.values", "id", TRUE)
+createListLinePlot = function(dt, list.measure, cumulative.function = "id", show.histogram = FALSE) {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
   checkmate::assert_string(cumulative.function)
@@ -39,9 +40,66 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id") {
     algorithm = rep(dt$algorithm, rep(max.iterations, nrow(dt)))
   )
   # Create plot
-  p = plotly::plot_ly(new.df, x = ~iteration, y = ~measure, color = ~algorithm, linetype = ~problem, type = "scatter", mode = "lines+markers")
-  # Convert plot to plotly
+  p = plotly::plot_ly(new.df)
+  p = plotly::add_trace(p, x = ~iteration, y = ~measure, color = ~algorithm, linetype = ~problem, type = "scatter", mode = "lines+markers")
+  if (show.histogram) {
+  p = plotly::add_histogram(p,
+    y = ~ measure,
+    alpha = 0.4,
+    name = "Measure distribution",
+    xaxis = "x2")
+  p = plotly::layout(
+    p,
+    yaxis = list(title = list.measure),
+    xaxis = list(overlaying = "x2"),
+    xaxis2 = list(side = "top", title = "Count"),
+    margin = list(t = 130)
+  )
+  } else {
   p = plotly::layout(p, yaxis = list(title = list.measure))
+}
+  return(p)
+}
+
+#' @title Create a list line plot with a measure on x and y aixs
+#'
+#' @description
+#' Create a plotly line plot out of a benchmarkVis compatible data table.
+#' The created line chart shows the change within the specified list measures
+#'
+#' @param dt campatible data table
+#' @param list.measure1 the list measure on the x axis
+#' @param list.measure2 the list measure on the y axis
+#' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @return a plotly line plot
+#' @export
+#' @examples
+#' createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber")
+createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE) {
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(list.measure1)
+  checkmate::assert_string(list.measure2)
+  checkmate::assert_true(list.measure1 %in% getLists(dt))
+  checkmate::assert_true(list.measure2 %in% getLists(dt))
+  # Get maximum amount of lists
+  times = sapply(dt[[list.measure1]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure1 = unlist(dt[[list.measure1]]),
+    measure2 = unlist(dt[[list.measure2]]),
+    problem = rep(dt$problem, times),
+    algorithm = rep(dt$algorithm, times),
+    iteration = unlist(lapply(times, seq))
+  )
+  # Create plot
+  if (draw.lines) {
+  p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, linetype = ~problem, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "lines+markers")
+  } else {
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "markers")
+  }
+  p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
   return(p)
 }
 
@@ -141,6 +199,7 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   checkmate::assert_string(list.measure)
   checkmate::assert_logical(stack.plots)
   checkmate::assert_true(list.measure %in% getLists(dt))
+  # Give each value of the list measure its own row
   combined.df = data.frame()
   for (row in seq(nrow(dt))) {
     list.length = length(dt[[row, list.measure]])

@@ -4,32 +4,23 @@
 \alias{createScatterPlot}
 \title{Create a scatter plot}
 \usage{
-createScatterPlot(dt, measure1, measure2, color.algorithm.only = TRUE,
-  pointsize = 4L, jitter = 1)
+createScatterPlot(dt, measure)
 }
 \arguments{
 \item{dt}{compatible data table}
 
-\item{measure1}{the first measure for comparison}
-
-\item{measure2}{the second measure  for comparison}
-
-\item{color.algorithm.only}{if set to true, each color corresponds to an algorithm, otherwise to algorithm and problem}
-
-\item{pointsize}{the size of ploted point}
-
-\item{jitter}{small vertical jitter to deal with overplotting in case of equal scores}
+\item{measure}{the measure to plot}
 }
 \value{
 a scatter plot
 }
 \description{
 Create a scatter plot out of a benchmarkVis compatible data table.
-The created scatter plot allows to compare the performance of interaction(algorithm and task) based on two giving performance measures for different datasets.
-x-Axis: measure1.
-y-Axis: measure2.
-color: the interaction of algorithm and problem.
+The created scatter plot allows to compare the performances different algorithms based on the giving performance measure.
+x-Axis: problems.
+y-Axis: measure.
+color: the algorithm.
 }
 \examples{
-createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')
+createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
 }

@@ -9,11 +9,11 @@
 #' @return a rank plot
 #' @export
 #' @examples
-#' createRankPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
+#' createRankPlot(mlr.benchmark.example, "measure.mmce.test.mean")
 createRankPlot = function(dt, measure) {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
-  checkmate::assert_true(startsWith(measure, "measure."))
+  checkmate::assert_true(measure %in% getMeasures(dt))
   if (length(dt[, measure])) {
 
     `%>%` = magrittr::`%>%`
@@ -28,7 +28,8 @@ createRankPlot = function(dt, measure) {
       ggplot2::geom_tile() +
       ggplot2::labs(title = "Rank Plot",
                     x = "Rank",
-                    y = "Task.id")
+                    y = "Problem")
+    p = plotly::ggplotly(p)
     return(p)
   }
 }
