@@ -26,10 +26,12 @@ observeEvent(input$createtab, {
 })
 
 output$plotselection = renderUI({
+    valid = getValidPlots(current.data$data)
     selectInput(
         'plotchoice',
         'Choose a plot',
-        choices = getValidPlots(current.data$data),
+        #choices = getPrettyPlotList(valid),
+        choices = valid,
         selected = FALSE,
         multiple = FALSE
     )
@@ -60,7 +62,12 @@ output$plot = renderPlotly({
     plot.function = eval(parse(text=current.plot$func))
     current.plot$parameter$dt = isolate(current.data$data)
     plot.param = isolate(current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))])
+    print(plot.param)
     do.call(plot.function, plot.param)
+})
+
+output$radar = radarchart::renderChartJSRadar({
+    createRadarPlot(isolate(current.data$data))
 })
 
 getValidParameterUI = function(param) {
