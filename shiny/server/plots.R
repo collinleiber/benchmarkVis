@@ -61,7 +61,6 @@ output$plot = renderPlotly({
     plot.function = eval(parse(text=current.plot$func))
     current.plot$parameter$dt = isolate(current.data$data)
     plot.param = isolate(current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))])
-    print(plot.param)
     do.call(plot.function, plot.param)
 })
 

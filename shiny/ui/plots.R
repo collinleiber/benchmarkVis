@@ -20,12 +20,12 @@ tabpanel.plots =  list(
             )
         ),
         conditionalPanel("input.createplot > 0",
-            if ("input.plotchoice == createRadarPlot"==TRUE) {
-                radarchart::chartJSRadarOutput("radar", width = "450", height = "300")
-            }            
-            else {
-                plotlyOutput("plot")
-            }
+            conditionalPanel("input.plotchoice == 'Measure: Radar Plot'",
+                 radarchart::chartJSRadarOutput("radar", width = "450", height = "300")
+            ),
+            conditionalPanel("input.plotchoice != 'Measure: Radar Plot'",
+                 plotlyOutput("plot")
+            )    
         ) 
     )
 )
