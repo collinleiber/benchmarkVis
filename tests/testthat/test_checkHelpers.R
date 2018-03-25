@@ -70,3 +70,21 @@ test_that("getPrettyPlotList test", {
       startsWith(x, "List: ") || startsWith(x, "Iteration: ")
   })))
 })
+
+# Check if getPrettyPlotName() is working correctly
+test_that("getPrettyPlotName test", {
+  expect_equal(getPrettyPlotName("createScatterPlot"), "Measure: Scatter Plot")
+  expect_equal(getPrettyPlotName("createIterationDualParameterPlot"), "Iteration: Dual Parameter Plot")
+  expect_equal(getPrettyPlotName("createListLinePlot"), "List: Line Plot")
+  expect_equal(getPrettyPlotName("createListDualMeasurePlot"), "List: Dual Measure Plot")
+  expect_equal(getPrettyPlotName("createIterationDualMeasurePlot"), "Iteration: Dual Measure Plot")
+})
+
+# Check if unprettifyPlotName() is working correctly
+test_that("unprettifyPlotName test", {
+  expect_equal(unprettifyPlotName("Measure: Scatter Plot"), "createScatterPlot")
+  expect_equal(unprettifyPlotName("Iteration: Dual Parameter Plot"), "createIterationDualParameterPlot")
+  expect_equal(unprettifyPlotName("List: Line Plot"), "createListLinePlot")
+  expect_equal(unprettifyPlotName("List: Dual Measure Plot"), "createListDualMeasurePlot")
+  expect_equal(unprettifyPlotName("Iteration: Dual Measure Plot"), "createIterationDualMeasurePlot")
+})

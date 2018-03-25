@@ -102,30 +102,48 @@ getCumulativeValues = function(list, cumulative.function) {
 #' @param input.list the plot list you want to beautify
 #' @return vector containing all plots in a readable format
 getPrettyPlotList = function(input.list) {
-  pretty.list = sapply(input.list, function(x) {
-    switch(
-      x,
-      "createBarPlot" = "Measure: Bar Plot",
-      "createBoxPlot" = "Measure: Box Plot",
-      "createIterationDualParameterPlot" = "Iteration: Dual Parameter Plot",
-      "createIterationParameterPlot" = "Iteration: Parameter Plot",
-      "createIterationLinePlot" = "Iteration: Line Plot",
-      "createListDensityPlot" = "List: Density Plot",
-      "createListDensityRankPlot" = "List: Density Rank Plot",
-      "createListLinePlot" = "List: Line Plot",
-      "createListRankMatrixBarPlot" = "List: Rank Matrix Bar Plot",
-      "createParallelCoordinatesPlot" = "Measure: Parallel Coordinates Plot",
-      "createRadarPlot" = "Measure: Radar Plot",
-      "createRankMatrixBarPlot" = "Measure: Rank Matrix Bar Plot",
-      "createRankPlot" = "Measure: Rank Plot",
-      "createScatterPlot" = "Measure: Scatter Plot",
-      "createSummaryPlot" = "Measure: Summary Plot",
-      "createDensityPlot" = "Measure: Density Plot",
-      "createListDualMeasurePlot" = "List: Dual Measure Plot",
-      "createIterationDualMeasurePlot" = "Iteration: Dual Measure Plot",
-      "createDualMeasurePlot" = "Measure: Dual Measure Plot",
-      x
-    )
-  })
+  pretty.list = sapply(input.list, getPrettyPlotName)
   return(pretty.list)
+}
+
+#' @title Get name of a plot in a readable format: "Type: Name"
+#'
+#' @description
+#' Get a prettified name of a plot implemented within the benchmarkVis application.
+#'
+#' @param plot.name the plot you want to beautify
+#' @return name of the plot in a readable format
+getPrettyPlotName = function(plot.name) {
+  plot.name = strsplit(plot.name, "create")[[1]][2]
+  if (startsWith(plot.name, "Iteration")) {
+    plot.type = "Iteration"
+    plot.name = strsplit(plot.name, "Iteration")[[1]][2]
+  }
+  else if (startsWith(plot.name, "List")) {
+    plot.type = "List"
+    plot.name = strsplit(plot.name, "List")[[1]][2]
+  }
+  else {
+    plot.type = "Measure"
+  }
+  pretty.plot.name = paste0(plot.type, ":", gsub("([[:upper:]])", " \\1", plot.name))
+  return(pretty.plot.name)
+}
+
+#' @title Get name of a plot in the benchmarkVis format: "createTypeName"
+#'
+#' @description
+#' Get the benchmarkVis name version of a plot.
+#'
+#' @param plot.name the plot you want to unbeautify
+#' @return name of the plot in the benchmarkVis format
+unprettifyPlotName = function(plot.name) {
+  plot.type = strsplit(plot.name, ":")[[1]][1]
+  if (plot.type == "Measure") {
+    plot.type = ""
+  }
+  plot.name = strsplit(plot.name, ":")[[1]][2]
+  plot.name = gsub(" ", "", plot.name)
+  unprettified.plot.name = paste0("create", plot.type, plot.name)
+  return(unprettified.plot.name)
 }

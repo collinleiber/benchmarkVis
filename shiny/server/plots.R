@@ -14,7 +14,7 @@ observeEvent(input$current.data, {
 
 observeEvent(input$plotchoice, {
     #DEBUG()
-    plot.func = isolate(input$plotchoice)
+    plot.func = unprettifyPlotName(isolate(input$plotchoice))
     if (plot.func!=""){
         current.plot$func = plot.func
         current.plot$parameter = as.list(args(plot.func)) 
@@ -30,8 +30,7 @@ output$plotselection = renderUI({
     selectInput(
         'plotchoice',
         'Choose a plot',
-        #choices = getPrettyPlotList(valid),
-        choices = valid,
+        choices = unname(getPrettyPlotList(valid)),
         selected = FALSE,
         multiple = FALSE
     )
