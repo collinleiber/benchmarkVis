@@ -1,19 +1,39 @@
-saved.plots.list = list()
-current.saved.length = 0
+saved.plots = reactiveValues(plotlist = list()) 
+plot.to.rerender = reactiveValues(plot = NULL) 
+
+output$plotsSaved = reactive({
+    return(length(saved.plots$plotlist) > 0)
+ })
+
+outputOptions(output, 'plotsSaved', suspendWhenHidden = FALSE)
 
 observeEvent(input$createtab, {
     name = isolate(input$newtabname)
-    saved.plots.list[[name]] = current.plot$plot
+    saved.plots$plotlist[[name]] = isolate(current.plot$plot)
 })
 
-output$newPlotSaved = reactive({
-    if (saved.plots.list != current.saved.length) {
-        current.saved.length = length(saved.plots.list)
-        return(TRUE)
-    }
-    else{
-        return(FALSE)
-    }
+observeEvent(input$savedPlot, {
+    name = isolate(input$savedPlot)
+    plot.to.rerender$plot = saved.plots$plotlist[[name]]
 })
 
-outputOptions(output, 'newPlotSaved', suspendWhenHidden = FALSE)
+output$savedPlotSelection = renderUI({
+    selectInput(
+        'savedPlot',
+        'Choose one of your saved plots',
+        choices = names(saved.plots$plotlist),
+        selected = FALSE,
+        multiple = FALSE
+    )
+})
+
+output$rerenderPlot = renderUI({
+    plot.type = class(plot.to.rerender$plot)[1]
+    uiplot = switch(plot.type,
+        'plotly' = renderPlotly({plot.to.rerender$plot}),
+        'chartJSRadar' = radarchart::chartJSRadarOutput(radarchart::renderChartJSRadar({plot.to.rerender$plot}), width = "450", height = "300"),
+        renderText({"unknown plot format"})
+    )    
+    do.call(tagList, c(uiplot))
+})
+
