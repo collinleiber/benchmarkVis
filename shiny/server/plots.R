@@ -61,6 +61,6 @@ output$newtab = renderUI({
     textInput(
         'newtabname',
         'Select the name for the new tab with this plot',
-        isolate(input$plotchoice)
+        input$plotchoice
     )
 })

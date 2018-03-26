@@ -4,8 +4,8 @@ tabpanel.plots =  list(
         fluidRow(
             column(4,
                 radioButtons("current.data", "Choose type of data to work with:",
-                           choices = c('submitted data', 'aggregated data'),
-                           selected = "submitted data"),
+                           choices = c('original data', 'aggregated data'),
+                           selected = "original data"),
                 uiOutput("plotselection")
             ),
             column(4,

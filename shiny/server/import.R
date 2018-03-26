@@ -49,3 +49,8 @@ output$accepted = renderImage({
   list(src = './images/accepted.png',
        alt = paste("Submit was successful"))
 }, deleteFile = FALSE)
+
+output$help = renderImage({
+  style="width: 30 px; height: 30px;"
+  list(src = './images/help.svg', width="30px", height="30px")
+}, deleteFile = FALSE)

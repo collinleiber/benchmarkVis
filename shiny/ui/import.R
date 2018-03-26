@@ -2,8 +2,10 @@ tabpanel.import =  list(
     shinyjs::useShinyjs(), 
     shinyjs::extendShinyjs(text = jsResetCode),
        h3("Import the file with benchmark results"),    
-       div(id="importtab",    
+       div(id="importtab",           
               uiOutput("data.format"),
+              get.help('data.format', 'right'),           
+     
               fileInput("file", "Choose File",
                         multiple = FALSE,
                         accept = c("text/csv",
@@ -22,3 +24,4 @@ tabpanel.import =  list(
               )
        )
 )
+
