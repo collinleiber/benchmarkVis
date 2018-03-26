@@ -1,0 +1,3 @@
+tabpanel.compareplots =  list(
+    
+)

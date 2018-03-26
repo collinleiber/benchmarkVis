@@ -23,14 +23,18 @@ dashboardPage(
     sidebarMenu(
       menuItem("Import", tabName = "import", icon = icon("file-excel-o")),
       menuItem("Data table", tabName = "table", icon = icon("table")),
-      menuItem("Plots", tabName = "plots", icon = icon("line-chart"))      
-    )     
+      menuItem("Plots", tabName = "plots", icon = icon("line-chart")),      
+      menuItem("Saved Plots", tabName = "savedplots", icon = icon("line-chart")),
+      menuItem("Compare Plots", tabName = "compareplots", icon = icon("line-chart"))
+    )
   ),
   dashboardBody(
     tabItems(
       tabItem(tabName = "import", tabpanel.import),
       tabItem(tabName = "table", tabpanel.table),
-      tabItem(tabName = "plots", tabpanel.plots)
+      tabItem(tabName = "plots", tabpanel.plots),
+      tabItem(tabName = "savedplots", tabpanel.savedplots),
+      tabItem(tabName = "compareplots", tabpanel.compareplots)
     )
   )
 )

@@ -15,7 +15,7 @@ tabpanel.plots =  list(
             column(3,
                 conditionalPanel("input.createplot > 0",
                     uiOutput("newtab"),
-                    actionButton("createtab", "Create a new tab for this plot", icon = icon("check"))
+                    actionButton("createtab", "Save this plot in 'Saved Plots'", icon = icon("check"))
                 )          
             )
         ),
