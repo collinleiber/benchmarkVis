@@ -1,6 +1,13 @@
 ## ui.R ##
 library(shinydashboard)
 library(plotly)
+library(shinyjs)
+library(V8)
+
+#needed for shinyapps.io
+library(devtools)
+#devtools::install_github("collinleiber/benchmarkVis")
+library(benchmarkVis)
 
 jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page                                             
 ui.files = list.files(path = "./ui", pattern = "*.R")

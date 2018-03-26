@@ -10,7 +10,8 @@ data = reactive({
     "microbenchmark" = useMicrobenchmarkFileWrapper,
     "mlr" = useMlrBenchmarkFileWrapper,
     "mlr tuning" = useMlrTuningFileWrapper,
-    "rbenchmark" = useRbenchmarkFileWrapper
+    "rbenchmark" = useRbenchmarkFileWrapper,
+    "json" = jsonImport
   )
   dt = wrapper(input$file$datapath)
   if (checkStructure(dt)) {

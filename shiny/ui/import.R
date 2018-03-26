@@ -1,6 +1,6 @@
 tabpanel.import =  list(
     shinyjs::useShinyjs(), 
-     extendShinyjs(text = jsResetCode),
+    shinyjs::extendShinyjs(text = jsResetCode),
        h3("Import the file with benchmark results"),    
        div(id="importtab",    
               uiOutput("data.format"),
