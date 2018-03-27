@@ -17,6 +17,12 @@ observeEvent(input$savedPlot, {
     plot.to.rerender$plot = saved.plots$plotlist[[name]]
 })
 
+observeEvent(input$deletePlot, {
+    name = isolate(input$savedPlot)
+    saved.plots$plotlist[[name]] = NULL
+    plot.to.rerender$plot = NULL 
+})
+
 output$savedPlotSelection = renderUI({
     selectInput(
         'savedPlot',
