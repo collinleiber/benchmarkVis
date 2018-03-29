@@ -2,7 +2,7 @@
 % Please edit documentation in R/tableOps.R
 \name{get.num.columns.name}
 \alias{get.num.columns.name}
-\title{do aggregation result}
+\title{get numeric columns' names for a dataframe}
 \usage{
 get.num.columns.name(data)
 }
@@ -10,9 +10,9 @@ get.num.columns.name(data)
 \item{data}{a dataframe}
 }
 \value{
-list of the nummeric column names
+list of the numeric column names
 }
 \description{
-do aggregation and return a new data table.
-the aggcol must include problem and algorithm
+detects numeric columns' names for a dataframe
+for numeric values as well as lists of numeric values
 }

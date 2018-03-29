@@ -1,46 +1,63 @@
 context("Transformation")
 
 test_that("transformation function value-to-value is valid", {
-  test.fun.1 = function(x) { x * 2 }
-  test.fun.2 = function(x) 1
-  test.fun.3 = function(x) "test"
-  test.fun.4 = function(x) c(x, x * 2)
+  test.fun.1 = function(x) {
+    x * 2
+  }
+  test.fun.2 = function(x)
+    1
+  test.fun.3 = function(x)
+    "test"
+  test.fun.4 = function(x)
+    c(x, x * 2)
   transform.fun.list = list(log, test.fun.1, test.fun.2)
   no.transform.fun.list = list(test.fun.3, test.fun.4)
-  for (fun in transform.fun.list){
+  for (fun in transform.fun.list) {
     expect_true(check.transform.value.to.value(fun))
   }
-  for (fun in no.transform.fun.list){
+  for (fun in no.transform.fun.list) {
     expect_false(check.transform.value.to.value(fun))
   }
 })
 
 test_that("transformation function list-to-value is valid", {
-  test.fun.1 = function(x) { mean(x) }
-  test.fun.2 = function(x) { sum(x) }
-  test.fun.3 = function(x) "test"
-  test.fun.4 = function(x) { x * 2 }
+  test.fun.1 = function(x) {
+    mean(x)
+  }
+  test.fun.2 = function(x) {
+    sum(x)
+  }
+  test.fun.3 = function(x)
+    "test"
+  test.fun.4 = function(x) {
+    x * 2
+  }
   transform.fun.list = list(test.fun.1, test.fun.2)
   no.transform.fun.list = list(test.fun.3, test.fun.4)
-  for (fun in transform.fun.list){
+  for (fun in transform.fun.list) {
     expect_true(check.transform.list.to.value(fun))
   }
-  for (fun in no.transform.fun.list){
+  for (fun in no.transform.fun.list) {
     expect_false(check.transform.list.to.value(fun))
   }
 })
 
 test_that("transformation function list-to-list is valid", {
-  test.fun.1 = function(x) { x * 2 }
-  test.fun.2 = function(x) 1
-  test.fun.3 = function(x) "test"
-  test.fun.4 = function(x) c(x, x * 2)
+  test.fun.1 = function(x) {
+    x * 2
+  }
+  test.fun.2 = function(x)
+    1
+  test.fun.3 = function(x)
+    "test"
+  test.fun.4 = function(x)
+    c(x, x * 2)
   transform.fun.list = list(log, test.fun.1, test.fun.2)
   no.transform.fun.list = list(test.fun.3, test.fun.4)
-  for (fun in transform.fun.list){
+  for (fun in transform.fun.list) {
     expect_true(check.transform.list.to.list(fun))
   }
-  for (fun in no.transform.fun.list){
+  for (fun in no.transform.fun.list) {
     expect_false(check.transform.list.to.list(fun))
   }
 })
@@ -52,8 +69,10 @@ test_that("Do rank and log2 transformation for mlr benchmark", {
     transformation.functions = c("rank", "log2")
   )
   size.expected = ncol(mlr.benchmark.example) + 4L
-  expect_true(is.data.frame(result) && ncol(result) == size.expected)
-  expect_true(is.numeric(result[, size.expected - 1L]) && is.numeric(result[, size.expected]))
+  expect_true(is.data.frame(result) &&
+                ncol(result) == size.expected)
+  expect_true(is.numeric(result[, size.expected - 1L]) &&
+                is.numeric(result[, size.expected]))
 })
 
 test_that("Do log2 transformation value-to-value", {
@@ -80,7 +99,11 @@ test_that("Do rank transformation value-to-value", {
 
 test_that("Do mean transformation list-to-value", {
   result = transformation.apply(
-    original.data = data.table::data.table(measure = c(list(c(1, 2, 3)), list(c(4, 5, 6)))),
+    original.data = data.table::data.table(measure = c(list(c(
+      1, 2, 3
+    )), list(c(
+      4, 5, 6
+    )))),
     columns.to.transform = "measure",
     transformation.functions = "mean"
   )
@@ -91,7 +114,11 @@ test_that("Do mean transformation list-to-value", {
 
 test_that("Do log2 transformation list-to-list", {
   result = transformation.apply(
-    original.data = data.table::data.table(measure = c(list(c(2, 4, 8)), list(c(16, 32, 64)))),
+    original.data = data.table::data.table(measure = c(list(c(
+      2, 4, 8
+    )), list(c(
+      16, 32, 64
+    )))),
     columns.to.transform = "measure",
     transformation.functions = "log2"
   )
@@ -102,7 +129,11 @@ test_that("Do log2 transformation list-to-list", {
 
 test_that("Do rank transformation list-to-list", {
   result = transformation.apply(
-    original.data = data.table::data.table(measure = c(list(c(2, 4, 1)), list(c(5, 1, 67)))),
+    original.data = data.table::data.table(measure = c(list(c(
+      2, 4, 1
+    )), list(c(
+      5, 1, 67
+    )))),
     columns.to.transform = "measure",
     transformation.functions = "rank"
   )

@@ -9,19 +9,20 @@
 #' @param aggcol the list of columns name that will be aggregated
 #' @param dt the input dataframe
 #' @return a dataframe with aggregated column
-get.agg.result = function(fun, prefix_str, groupby, aggcol, dt){
+get.agg.result = function(fun, prefix_str, groupby, aggcol, dt) {
   newtable = aggregate(x = dt[aggcol],
-                         by = dt[groupby],
-                         FUN = eval(parse(text = fun)))
-  colnames(newtable) = lapply(colnames(newtable),
-                       FUN = function(colname) {
-                         if (colname %in% aggcol) {
-                            newname = paste(prefix_str, "_", colname, "", sep  = "")
-                         }
-                         else {
-                           colname
-                         }
-                       }
+                       by = dt[groupby],
+                       FUN = eval(parse(text = fun)))
+  colnames(newtable) = lapply(
+    colnames(newtable),
+    FUN = function(colname) {
+      if (colname %in% aggcol) {
+        newname = paste(prefix_str, "_", colname, "", sep  = "")
+      }
+      else {
+        colname
+      }
+    }
   )
   return(newtable)
 }
@@ -41,7 +42,7 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, dt){
 #' aggregation.apply(groupby= c("problem", "algorithm"), aggfun= c("mean"), aggcol= c("measure.mmce.test.mean", "measure.ber.test.mean"), dt= mlr.benchmark.example)
 aggregation.apply = function(groupby, aggfun, aggcol, dt) {
   checkmate::assert_data_table(dt)
-  for (x in aggfun){
+  for (x in aggfun) {
     if (check.aggregation.valid(x)) {
       result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
@@ -56,7 +57,8 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
 #' @param agg.fun aggregation function
 #' @return boolean
 check.aggregation.valid = function(agg.fun) {
-  if (is.character(agg.fun)) agg.fun = eval(parse(text = agg.fun))
+  if (is.character(agg.fun))
+    agg.fun = eval(parse(text = agg.fun))
   result = do.call(agg.fun, list(c(1, 2, 3, 4)))
   is.numeric(result) && length(result) == 1
 }
@@ -72,32 +74,45 @@ check.aggregation.valid = function(agg.fun) {
 #' @export
 #' @examples
 #' transformation.apply(original.data = mlr.benchmark.example, columns.to.transform = c("measure.mmce.test.mean", "measure.ber.test.mean"), transformation.functions = c("log2"))
-transformation.apply = function(original.data, columns.to.transform, transformation.functions) {
+transformation.apply = function(original.data,
+                                columns.to.transform,
+                                transformation.functions) {
   checkmate::assert_data_frame(original.data)
   result = original.data
   for (transform.func in transformation.functions) {
-        transform.function = eval.function(transform.func) 
-        for (column in columns.to.transform){
-          if ((column.type(original.data[,column]) == "values" && check.transform.value.to.value(transform.function)) ||
-            (column.type(original.data[,column]) == "vector" && check.transform.list.to.value(transform.function))) {
-                if (transform.func == "rank") transformed.column = rank(original.data[, column])                
-                else transformed.column = unlist(lapply(original.data[, column], transform.function))
-            }
-          else if (column.type(original.data[,column]) == "vector" && check.transform.list.to.list(transform.function)) {
-              if (transform.func == "rank") transformed.column = lapply(original.data[,column], rank)
-              else transformed.column = lapply(original.data[,column], function(x) { 
-                                                  unlist(lapply(x, transform.function)) 
-                                                  })              
-          }
-          else {
-              transformed.column = NULL
-          }          
-          result$transformed.column = transformed.column 
-          new.column.name = paste(transform.func, "_", column, "", sep  = "")
-          data.table::setnames(result, "transformed.column", new.column.name)
+    transform.function = eval.function(transform.func)
+    for (column in columns.to.transform) {
+      if ((
+        column.type(original.data[, column]) == "values" &&
+        check.transform.value.to.value(transform.function)
+      ) ||
+      (
+        column.type(original.data[, column]) == "vector" &&
+        check.transform.list.to.value(transform.function)
+      )) {
+        if (transform.func == "rank")
+          transformed.column = rank(original.data[, column])
+        else
+          transformed.column = unlist(lapply(original.data[, column], transform.function))
       }
-    }   
-  
+      else if (column.type(original.data[, column]) == "vector" &&
+               check.transform.list.to.list(transform.function)) {
+        if (transform.func == "rank")
+          transformed.column = lapply(original.data[, column], rank)
+        else
+          transformed.column = lapply(original.data[, column], function(x) {
+            unlist(lapply(x, transform.function))
+          })
+      }
+      else {
+        transformed.column = NULL
+      }
+      result$transformed.column = transformed.column
+      new.column.name = paste(transform.func, "_", column, "", sep  = "")
+      data.table::setnames(result, "transformed.column", new.column.name)
+    }
+  }
+
   return(result)
 }
 
@@ -117,8 +132,8 @@ check.transform.value.to.value = function(transform.fun) {
   test.list = c(1, 2, 3, 4)
   result.list = lapply(test.list, transform.fun)
   is.list.of.values = is.list(result.list) &&
-                      !(FALSE %in% lapply(result.list, is.numeric)) &&
-                      length(result.list) == length(test.list)
+    !(FALSE %in% lapply(result.list, is.numeric)) &&
+    length(result.list) == length(test.list)
 
   return(is.value && is.list.of.values)
 }
@@ -139,10 +154,11 @@ check.transform.list.to.value = function(transform.fun) {
 
   test.list.column = c(list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)))
   result.list = lapply(test.list.column, transform.fun)
-  is.list.of.values = is.list(result.list) && 
-                      !(FALSE %in% lapply(result.list, is.numeric)) &&
-                      !(FALSE %in% lapply(result.list, function(x) length(x)==1L)) &&
-                      length(result.list) == length(test.list)
+  is.list.of.values = is.list(result.list) &&
+    !(FALSE %in% lapply(result.list, is.numeric)) &&
+    !(FALSE %in% lapply(result.list, function(x)
+      length(x) == 1L)) &&
+    length(result.list) == length(test.list)
 
   return(is.value && is.list.of.values)
 }
@@ -159,17 +175,26 @@ check.transform.list.to.value = function(transform.fun) {
 check.transform.list.to.list = function(transform.fun) {
   test.list = c(1, 2, 3, 4)
   result.list = lapply(test.list, transform.fun)
-  is.list.of.values = is.vector(result.list) && length(result.list) == length(test.list) &&
-                    !(FALSE %in% lapply(result.list, is.numeric))
+  is.list.of.values = is.vector(result.list) &&
+    length(result.list) == length(test.list) &&
+    !(FALSE %in% lapply(result.list, is.numeric))
 
   test.list.column = c(list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)))
-  result.list.of.lists = lapply(test.list.column, function(x) { unlist(lapply(x, transform.fun)) })
-  is.list.of.lists = is.vector(result.list.of.lists) && 
-                    !(FALSE %in% unlist(lapply(result.list.of.lists, function(x) { lapply(x, is.numeric) }))) &&
-                    !(FALSE %in% lapply(result.list.of.lists, is.vector)) &&
-                    !(FALSE %in% lapply(result.list.of.lists, function(x) length(x)==4L)) &&
-                    !(FALSE %in% lapply(result.list.of.lists, function(x) { lapply(x, function(x) length(x)==1L) })) &&
-                    length(result.list.of.lists) == length(test.list.column)
+  result.list.of.lists = lapply(test.list.column, function(x) {
+    unlist(lapply(x, transform.fun))
+  })
+  is.list.of.lists = is.vector(result.list.of.lists) &&
+    !(FALSE %in% unlist(lapply(result.list.of.lists, function(x) {
+      lapply(x, is.numeric)
+    }))) &&
+    !(FALSE %in% lapply(result.list.of.lists, is.vector)) &&
+    !(FALSE %in% lapply(result.list.of.lists, function(x)
+      length(x) == 4L)) &&
+    !(FALSE %in% lapply(result.list.of.lists, function(x) {
+      lapply(x, function(x)
+        length(x) == 1L)
+    })) &&
+    length(result.list.of.lists) == length(test.list.column)
 
   return(is.list.of.values && is.list.of.lists)
 }
@@ -177,13 +202,15 @@ check.transform.list.to.list = function(transform.fun) {
 #' @title get type of values of a column (numeric values, vector or other)
 #'
 #' @description
-#' check if a data frame's column contains numeric values, 
+#' check if a data frame's column contains numeric values,
 #' vectors or is of other type
 #' @param column column of a data frame to check
 #' @return string description of values' type
 column.type = function(column) {
-  if (is.numeric(column)) return("values")
-  if (!(FALSE %in% lapply(column, is.vector))) return("vector")
+  if (is.numeric(column))
+    return("values")
+  if (!(FALSE %in% lapply(column, is.vector)))
+    return("vector")
   return("other")
 }
 
@@ -214,7 +241,8 @@ get.num.columns.name = function(data) {
     if (is.numeric(data[, col_name])) {
       colnames = c(colnames, col_name)
     }
-    else if (is.vector(data[, col_name]) && !(FALSE %in% lapply(data[, col_name], is.numeric))) {
+    else if (is.vector(data[, col_name]) &&
+             !(FALSE %in% lapply(data[, col_name], is.numeric))) {
       colnames = c(colnames, col_name)
     }
   }
