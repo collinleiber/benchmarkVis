@@ -13,6 +13,6 @@ column.type(column)
 string description of values' type
 }
 \description{
-check if a data frame's column contains numeric values, 
+check if a data frame's column contains numeric values,
 vectors or is of other type
 }

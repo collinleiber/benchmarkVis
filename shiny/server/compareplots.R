@@ -31,7 +31,7 @@ output$selectPlot2 = renderUI({
 })
 
 output$rerenderPlot1 = renderUI({
-    plot = isolate(plots.to.rerender$plot1)
+    plot = plots.to.rerender$plot1
     plot.type = class(plot)[1]
     uiplot = switch(plot.type,
         'plotly' = renderPlotly({plot}),
@@ -42,7 +42,7 @@ output$rerenderPlot1 = renderUI({
 })
 
 output$rerenderPlot2 = renderUI({
-    plot = isolate(plots.to.rerender$plot2)
+    plot = plots.to.rerender$plot2
     plot.type = class(plot)[1]
     uiplot = switch(plot.type,
         'plotly' = renderPlotly({plot}),

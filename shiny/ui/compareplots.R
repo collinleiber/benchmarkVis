@@ -12,10 +12,10 @@ tabpanel.compareplots =  list(
             ),
             fluidRow(
                 column(6,
-                    uiOutput("renderPlot1") 
+                    uiOutput("rerenderPlot1", width = "20%") 
                 ),
                 column(6,
-                    uiOutput("renderPlot2")  
+                    uiOutput("rerenderPlot2", width = "20%")  
                 )
             )                  
         ) 

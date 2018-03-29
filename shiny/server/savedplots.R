@@ -34,10 +34,11 @@ output$savedPlotSelection = renderUI({
 })
 
 output$rerenderPlot = renderUI({
-    plot.type = class(plot.to.rerender$plot)[1]
+    plot = plot.to.rerender$plot
+    plot.type = class(plot)[1]
     uiplot = switch(plot.type,
-        'plotly' = renderPlotly({plot.to.rerender$plot}),
-        'chartJSRadar' = radarchart::chartJSRadarOutput(radarchart::renderChartJSRadar({plot.to.rerender$plot}), width = "450", height = "300"),
+        'plotly' = renderPlotly({plot}),
+        'chartJSRadar' = radarchart::chartJSRadarOutput(radarchart::renderChartJSRadar({plot}), width = "450", height = "300"),
         renderText({"unknown plot format"})
     )    
     do.call(tagList, c(uiplot))
