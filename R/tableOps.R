@@ -42,13 +42,24 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, dt){
 aggregation.apply = function(groupby, aggfun, aggcol, dt) {
   checkmate::assert_data_table(dt)
   for (x in aggfun){
-    if (check.agg.valid(x)) {
+    if (check.aggregation.valid(x)) {
       result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
   }
   return(result)
 }
 
+#' @title check if the input function is a valid aggregation function
+#'
+#' @description
+#' check if the input function is a valid aggregation function (i.e., returns a single numeric value)
+#' @param agg.fun aggregation function
+#' @return boolean
+check.aggregation.valid = function(agg.fun) {
+  if (is.character(agg.fun)) agg.fun = eval(parse(text = agg.fun))
+  result = do.call(agg.fun, list(c(1, 2, 3, 4)))
+  is.numeric(result) && length(result) == 1
+}
 
 #' @title apply transformation functions
 #'
@@ -64,46 +75,151 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
 transformation.apply = function(original.data, columns.to.transform, transformation.functions) {
   checkmate::assert_data_frame(original.data)
   result = original.data
-  for (transform.func in transformation.functions) { #TODO replace for-loops ?
-      if (check.transform.valid(transform.func)) {
+  for (transform.func in transformation.functions) {
+        transform.function = eval.function(transform.func) 
         for (column in columns.to.transform){
-          if (transform.func == "rank") {
-            transformed.column = rank(original.data[, column])
+          if ((column.type(original.data[,column]) == "values" && check.transform.value.to.value(transform.function)) ||
+            (column.type(original.data[,column]) == "vector" && check.transform.list.to.value(transform.function))) {
+                if (transform.func == "rank") transformed.column = rank(original.data[, column])                
+                else transformed.column = unlist(lapply(original.data[, column], transform.function))
+            }
+          else if (column.type(original.data[,column]) == "vector" && check.transform.list.to.list(transform.function)) {
+              if (transform.func == "rank") transformed.column = lapply(original.data[,column], rank)
+              else transformed.column = lapply(original.data[,column], function(x) { 
+                                                  unlist(lapply(x, transform.function)) 
+                                                  })              
           }
           else {
-            transformed.column = unlist(lapply(original.data[, column], transform.func))
-          }
-          result = cbind(result, transformed.column) #TODO: is it efficient?
+              transformed.column = NULL
+          }          
+          result$transformed.column = transformed.column 
           new.column.name = paste(transform.func, "_", column, "", sep  = "")
           data.table::setnames(result, "transformed.column", new.column.name)
       }
-    }
-  }
+    }   
+  
   return(result)
 }
 
-
-
-#' @title do aggregation result
+#' @title check if the input function is a valid value-to-value transformation function
 #'
 #' @description
-#' do aggregation and return a new data table.
-#' the aggcol must include problem and algorithm
+#' check if the input function is a valid value-to-value transformation function
+#' (i.e., applied to a list of numeric values
+#' returns a list of numeric values of the same length)
+#' [transformation R^n => R^n]
+#' @param transform.fun transformation function
+#' @return boolean
+check.transform.value.to.value = function(transform.fun) {
+  result.num = transform.fun(1)
+  is.value = is.numeric(result.num) && length(result.num) == 1
+
+  test.list = c(1, 2, 3, 4)
+  result.list = lapply(test.list, transform.fun)
+  is.list.of.values = is.list(result.list) &&
+                      !(FALSE %in% lapply(result.list, is.numeric)) &&
+                      length(result.list) == length(test.list)
+
+  return(is.value && is.list.of.values)
+}
+
+#' @title check if the input function is a valid list-to-value transformation function
+#'
+#' @description
+#' check if the input function is a valid list-to-value transformation function
+#' (i.e., applied to a list of lists of numeric values
+#' returns a list of numeric values of the same length)
+#' [transformation R^n x R^m => R^n]
+#' @param transform.fun transformation function
+#' @return boolean
+check.transform.list.to.value = function(transform.fun) {
+  test.list = c(1, 2, 3, 4)
+  result.num = transform.fun(test.list)
+  is.value = is.numeric(result.num) && length(result.num) == 1
+
+  test.list.column = c(list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)))
+  result.list = lapply(test.list.column, transform.fun)
+  is.list.of.values = is.list(result.list) && 
+                      !(FALSE %in% lapply(result.list, is.numeric)) &&
+                      !(FALSE %in% lapply(result.list, function(x) length(x)==1L)) &&
+                      length(result.list) == length(test.list)
+
+  return(is.value && is.list.of.values)
+}
+
+#' @title check if the input function is a valid list-to-list transformation function
+#'
+#' @description
+#' check if the input function is a valid list-to-list transformation function
+#' (i.e., applied to a list of lists of numeric values
+#' returns a list of lists of numeric values of the same length)
+#' [transformation R^n x R^m => R^n x R^m]
+#' @param transform.fun transformation function
+#' @return boolean
+check.transform.list.to.list = function(transform.fun) {
+  test.list = c(1, 2, 3, 4)
+  result.list = lapply(test.list, transform.fun)
+  is.list.of.values = is.vector(result.list) && length(result.list) == length(test.list) &&
+                    !(FALSE %in% lapply(result.list, is.numeric))
+
+  test.list.column = c(list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)), list(c(1, 2, 3, 4)))
+  result.list.of.lists = lapply(test.list.column, function(x) { unlist(lapply(x, transform.fun)) })
+  is.list.of.lists = is.vector(result.list.of.lists) && 
+                    !(FALSE %in% unlist(lapply(result.list.of.lists, function(x) { lapply(x, is.numeric) }))) &&
+                    !(FALSE %in% lapply(result.list.of.lists, is.vector)) &&
+                    !(FALSE %in% lapply(result.list.of.lists, function(x) length(x)==4L)) &&
+                    !(FALSE %in% lapply(result.list.of.lists, function(x) { lapply(x, function(x) length(x)==1L) })) &&
+                    length(result.list.of.lists) == length(test.list.column)
+
+  return(is.list.of.values && is.list.of.lists)
+}
+
+#' @title get type of values of a column (numeric values, vector or other)
+#'
+#' @description
+#' check if a data frame's column contains numeric values, 
+#' vectors or is of other type
+#' @param column column of a data frame to check
+#' @return string description of values' type
+column.type = function(column) {
+  if (is.numeric(column)) return("values")
+  if (!(FALSE %in% lapply(column, is.vector))) return("vector")
+  return("other")
+}
+
+#' @title evaluate the input function
+#'
+#' @description
+#' if the input is a string parses and evaluates the function contained
+#' @param fun input function (string or function)
+#' @return function
+eval.function = function(fun) {
+  if (is.character(fun)) {
+    fun = eval(parse(text = fun))
+  }
+  return(fun)
+}
+
+#' @title get numeric columns' names for a dataframe
+#'
+#' @description
+#' detects numeric columns' names for a dataframe
+#' for numeric values as well as lists of numeric values
 #'
 #' @param data a dataframe
-#' @return list of the nummeric column names
+#' @return list of the numeric column names
 get.num.columns.name = function(data) {
   colnames = list()
-  for (col_name in names(data))
-  {
-    if (is.numeric(data[, col_name]))
-    {
+  for (col_name in names(data)) {
+    if (is.numeric(data[, col_name])) {
+      colnames = c(colnames, col_name)
+    }
+    else if (is.vector(data[, col_name]) && !(FALSE %in% lapply(data[, col_name], is.numeric))) {
       colnames = c(colnames, col_name)
     }
   }
-  colnames
+  return(colnames)
 }
-
 
 #' @title parse the text input of a list of functions
 #'
@@ -115,30 +231,4 @@ parser.function.list = function(function.list) {
   function.list = strsplit(function.list, ",")
   function.list = unlist(function.list, use.names = FALSE)
   return(function.list)
-}
-
-#' @title check if the input function is a valid aggregation function
-#'
-#' @description
-#' check if the input function is a valid aggregation function (i.e., returns a single numeric value)
-#' @param agg.fun aggregation function
-#' @return boolean
-check.agg.valid = function(agg.fun) {
-  if (is.character(agg.fun)) agg.fun = eval(parse(text = agg.fun))
-  result = do.call(agg.fun, list(c(1, 2, 3, 4)))
-  is.numeric(result) && length(result) == 1
-}
-
-#' @title check if the input function is a valid transformation function
-#'
-#' @description
-#' check if the input function is a valid transformation function (i.e., applied to a list
-#' of numeric values returns a list of numeric values of the same length)
-#' @param transform.fun transformation function
-#' @return boolean
-check.transform.valid = function(transform.fun) {
-  if (is.character(transform.fun)) transform.fun = eval(parse(text = transform.fun))
-  result.num = transform.fun(1)
-  result.list = lapply(c(1, 2, 3, 4), transform.fun)
-  is.numeric(result.num) && length(result.num) == 1 && is.list(result.list) && length(result.list) == 4
 }

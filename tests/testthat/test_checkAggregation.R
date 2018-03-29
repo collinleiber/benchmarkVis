@@ -7,10 +7,10 @@ test_that("aggregation function is valid", {
   aggfun.list = list(max, min, mean, sd, median, IQR, var, test.fun.1)
   no.aggfun.list = list(rank, quantile, range, test.fun.2, test.fun.3)
   for (fun in aggfun.list){
-    expect_true(check.agg.valid(fun))
+    expect_true(check.aggregation.valid(fun))
   }
   for (fun in no.aggfun.list){
-    expect_false(check.agg.valid(fun))
+    expect_false(check.aggregation.valid(fun))
   }
 })
 
