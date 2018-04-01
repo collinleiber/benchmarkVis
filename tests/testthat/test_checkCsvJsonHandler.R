@@ -5,7 +5,7 @@ test_that("CSV Export/Import Test", {
   csvExport(mlr.benchmark.example, "test.csv")
   dt = csvImport("test.csv")
   file.remove("test.csv")
-  # Workarount to avoid difference between named empty list and list()
+  # Workaround to avoid difference between named empty list and list()
   dt2 = cbind(mlr.benchmark.example)
   dt2$algorithm.parameter = sapply(mlr.benchmark.example$algorithm.parameter, function(x) {
     # Check if list is empty
@@ -22,7 +22,7 @@ test_that("Json Export/Import Test", {
   jsonExport(mlr.benchmark.example, "test.json")
   dt = jsonImport("test.json")
   file.remove("test.json")
-  # Workarount to avoid difference between named empty list and list()
+  # Workaround to avoid difference between named empty list and list()
   dt2 = cbind(mlr.benchmark.example)
   dt2$algorithm.parameter = sapply(mlr.benchmark.example$algorithm.parameter, function(x) {
     # Check if list is empty

@@ -21,16 +21,6 @@ jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js metho
 ui.files = list.files(path = "./ui", pattern = "*.R")
 ui.files = paste0("ui/", ui.files)
 
-get.help = function(question, placement='bottom') {
-   div(style="width: 50 px; height: 30px;",
-      popify(imageOutput("help", width = "30px", height="30px"), 
-        title = shiny.help[question][[1]][1],
-        content = shiny.help[question][[1]][2], 
-        placement = placement
-      )
-   )
-}
-
 for (i in seq_along(ui.files)) {
   source(ui.files[i], local = TRUE)
 }
