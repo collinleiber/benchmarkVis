@@ -22,5 +22,9 @@ on_failure: always
 r_packages:
   - covr
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libv8-3.14-dev
+  
 after_success:
   - Rscript -e 'library(covr); codecov()'
