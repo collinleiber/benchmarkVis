@@ -24,6 +24,30 @@ test_that("getListsCount for microbenchmark", {
   expect_equal(count, 1)
 })
 
+# Check if getMainColumns() for mlr benchmark is working correctly
+test_that("getMainColumns for mlr benchmark", {
+  main.columns = getMainColumns(mlr.benchmark.example)
+  expect_identical(main.columns, c("problem", "algorithm", "replication"))
+})
+
+# Check if getMainColumnsCount() for microbenchmark is working correctly
+test_that("getMainColumnsCount for microbenchmark", {
+  count = getMainColumnsCount(microbenchmark.example)
+  expect_equal(count, 3)
+})
+
+# Check if getParameterColumns() for mlr benchmark is working correctly
+test_that("getParameterColumns for mlr benchmark", {
+  parameter.columns = getParameterColumns(mlr.benchmark.example)
+  expect_identical(parameter.columns, c("problem.parameter", "algorithm.parameter", "replication.parameter"))
+})
+
+# Check if getParameterColumnsCount() for microbenchmark is working correctly
+test_that("getParameterColumnsCount for microbenchmark", {
+  count = getParameterColumnsCount(microbenchmark.example)
+  expect_equal(count, 3)
+})
+
 # Check if getIterationAlgorithms() for mlr tuning is working correctly
 test_that("getIterationAlgorithms for mlr tuning", {
   measures = getIterationAlgorithms(mlr.tuning.example)

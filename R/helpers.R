@@ -22,6 +22,32 @@ getListsCount = function(dt) {
   return(length(getLists(dt)))
 }
 
+# Get the names of main columns within the data table
+# Can be "problem", "algorithm", "replication". Problem and Algorithm are mandatory
+getMainColumns = function(dt) {
+  main.columns = c("problem", "algorithm", "replication")
+  return(intersect(names(dt), main.columns))
+}
+
+# Get the number of main columns within the data table
+# Can be "problem", "algorithm", "replication". Problem and Algorithm are mandatory
+getMainColumnsCount = function(dt) {
+  return(length(getMainColumns(dt)))
+}
+
+# Get the names of parameter columns within the data table
+# Can be "problem.parameter", "algorithm.parameter", "replication.parameter"
+getParameterColumns = function(dt) {
+  main.columns = c("problem.parameter", "algorithm.parameter", "replication.parameter")
+  return(intersect(names(dt), main.columns))
+}
+
+# Get the number of parameter columns within the data table
+# Can be "problem.parameter", "algorithm.parameter", "replication.parameter"
+getParameterColumnsCount = function(dt) {
+  return(length(getParameterColumns(dt)))
+}
+
 # Get the names of algorithms with multiple iterations within the data table
 # Algorithms for which the parameters contain "iteration" field
 getIterationAlgorithms = function(dt) {
