@@ -106,6 +106,7 @@ transformation.apply = function(original.data,
       }
       else {
         transformed.column = NULL
+        next
       }
       result$transformed.column = transformed.column
       new.column.name = paste(transform.func, "_", column, "", sep  = "")

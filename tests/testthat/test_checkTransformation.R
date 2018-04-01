@@ -141,3 +141,32 @@ test_that("Do rank transformation list-to-list", {
   expect_true(all(unlist(result[1, 2L]) == c(2, 3, 1)))
   expect_true(all(unlist(result[2, 2L]) == c(2, 1, 3)))
 })
+
+test_that("Transformation only works with compatible columns", {
+  result = transformation.apply(
+    original.data = mlr.benchmark.example,
+    columns.to.transform = "problem",
+    transformation.functions = c("rank", "log2")
+  )
+  expect_equal(mlr.benchmark.example, result)
+})
+
+test_that("Column type detection works properly", {
+  data = mlr.benchmark.example
+  expect_equal(column.type(data$measure.mmce.test.mean), "values")
+  expect_equal(column.type(data$list.mmce), "vector")
+  expect_equal(column.type(data$problem), "other")
+})
+
+test_that("Numeric column names detection works properly", {
+  data = mlr.benchmark.example
+  column.names.to.be = list("measure.mmce.test.mean", "measure.ber.test.mean", "measure.timetrain.test.mean", "list.mmce", "list.ber", "list.timetrain")
+  column.names.detected = get.num.columns.name(data)
+  expect_equal(column.names.detected, column.names.to.be)
+})
+
+test_that("Parsing of a list of functions works properly", {
+  functions = "mean,sd,rank"
+  functions.parsed = parser.function.list(functions)
+  expect_equal(functions.parsed, c("mean", "sd", "rank"))
+})
