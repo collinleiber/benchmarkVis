@@ -10,13 +10,10 @@
 #' @examples
 #' checkColumnNames(microbenchmark.example)
 checkColumnNames = function(dt) {
-  checkmate::assert_true(6 + getMeasuresCount(dt) + getListsCount(dt) == ncol(dt))
+  checkmate::assert_true(getMainColumnsCount(dt) + getParameterColumnsCount(dt) +
+      getMeasuresCount(dt) + getListsCount(dt) == ncol(dt))
   checkmate::assert_true("problem" %in% colnames(dt))
-  checkmate::assert_true("problem.parameter" %in% colnames(dt))
   checkmate::assert_true("algorithm" %in% colnames(dt))
-  checkmate::assert_true("algorithm.parameter" %in% colnames(dt))
-  checkmate::assert_true("replication" %in% colnames(dt))
-  checkmate::assert_true("replication.parameter" %in% colnames(dt))
   return(TRUE)
 }
 
@@ -36,18 +33,18 @@ checkStructure = function(dt) {
   checkmate::assert_data_table(dt,
     any.missing = TRUE,
     min.rows = 1,
-    min.cols = 7)
+    min.cols = 3)
   # Check measure count + list count (must be >1)
   checkmate::assert_true(getMeasuresCount(dt) + getListsCount(dt) > 0)
   # Check if data table contains not allowed columns
   checkmate::assert_true(checkColumnNames(dt))
   # Check basic structure
-  checkmate::assert_true(is.factor(dt$problem))
-  checkmate::assert_true(is.list(dt$problem.parameter))
-  checkmate::assert_true(is.factor(dt$algorithm))
-  checkmate::assert_true(is.list(dt$algorithm.parameter))
-  checkmate::assert_true(is.factor(dt$replication))
-  checkmate::assert_true(is.list(dt$replication.parameter))
+  for (x in getMainColumns(dt)) {
+    checkmate::assert_true(is.factor(dt[[x]]))
+  }
+  for (x in getParameterColumns(dt)) {
+    checkmate::assert_true(is.list(dt[[x]]))
+  }
   # Check measures and list measures
   for (x in getMeasures(dt)) {
     checkmate::assert_true(is.numeric(dt[[x]]))
