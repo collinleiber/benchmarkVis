@@ -7,6 +7,8 @@ data = reactive({
   wrapper = switch(
     input$dataformat,
     "csv" = csvImport,
+    "rds" = rdsImport,
+    "json" = jsonImport,
     "microbenchmark" = useMicrobenchmarkFileWrapper,
     "mlr" = useMlrBenchmarkFileWrapper,
     "mlr tuning" = useMlrTuningFileWrapper,
@@ -39,13 +41,16 @@ output$fileUploaded = reactive({
 outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
 
 output$data.format = renderUI({
-  data.types = c('csv', 'microbenchmark', 'mlr', 'mlr tuning', 'rbenchmark')
+  data.types = c('csv', 'rds',  'json', 'microbenchmark', 'mlr', 'mlr tuning', 'rbenchmark')
   column(6,
          selectInput('dataformat', 'Choose your data type', data.types, selected = 'csv'))
 })
 
 output$accepted = renderImage({
-  list(src = './images/accepted.png',
+  list(src = './images/accepted.png', width="50px", height="50px",
        alt = paste("Submit was successful"))
+}, deleteFile = FALSE)
 
+output$help = renderImage({
+  list(src = './images/help.svg', width="30px", height="30px")
 }, deleteFile = FALSE)
