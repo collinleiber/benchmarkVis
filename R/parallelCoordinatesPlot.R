@@ -14,6 +14,7 @@ createParallelCoordinatesPlot = function(dt) {
   # options(viewer = NULL)
   # ========================================================
   # Add algorithm and problem coordinates
+  dim.default = 2
   dim = list(
     list(
       range = c(1, length(unique(dt$problem))),
@@ -34,6 +35,19 @@ createParallelCoordinatesPlot = function(dt) {
       ticktext = unique(dt$algorithm)
     )
   )
+  # Add replication if it is in dataset
+  if ("replication" %in% getMainColumns(dt)) {
+    dim.default = 3
+    dim[[3]] = list(
+      range = c(1, length(unique(dt$replication))),
+      tickvals = seq(length(unique(dt$replication))),
+      label = "replication",
+      values = sapply(dt$replication, function(x) {
+        return(which(unique(dt$replication) == x))
+      }),
+      ticktext = unique(dt$replication)
+    )
+  }
   # Add measure coordinates
   for (i in 1:getMeasuresCount(dt)) {
     measure = getMeasures(dt)[i]
@@ -41,7 +55,7 @@ createParallelCoordinatesPlot = function(dt) {
     tmp = list(range = c(min(dt[[measure]]), max(dt[[measure]])),
       label = measure,
       values = dt[[measure]])
-    dim[[i + 2]] = tmp
+    dim[[i + dim.default]] = tmp
   }
   # Create plot
   p = plotly::plot_ly(
@@ -51,7 +65,7 @@ createParallelCoordinatesPlot = function(dt) {
       color = sapply(dt$algorithm, function(x) {
         return(which(unique(dt$algorithm) == x))
       }),
-      colorscale = list(c(0, "red"), c(0.5, "green"), c(1, "blue"))
+      colorscale = "Jet"
     ),
     dimensions = dim
   )

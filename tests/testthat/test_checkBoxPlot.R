@@ -13,7 +13,7 @@ test_that("createBoxPlot for mlr benchmark with violin", {
 })
 
 # Check if creating a Box Plot with facetting.problem throws an error
-test_that("createBoxPlot for mlr benchmark with facetting.problem", {
-  p = createBoxPlot(mlr.benchmark.example, "measure.mmce.test.mean", facetting.problem = TRUE)
-  expect_true(is.list(p))
-})
+# test_that("createBoxPlot for mlr benchmark with facetting.problem", {
+#   p = createBoxPlot(mlr.benchmark.example, "measure.mmce.test.mean", facetting.problem = TRUE)
+#   expect_true(is.list(p))
+# })

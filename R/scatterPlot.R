@@ -2,30 +2,35 @@
 #'
 #' @description
 #' Create a scatter plot out of a benchmarkVis compatible data table.
-#' The created scatter plot allows to compare the performances different algorithms based on the giving performance measure.
-#' x-Axis: problems.
+#' The created scatter plot allows to compare the performances based on the giving performance measure.
+#' x-Axis: the groups.
 #' y-Axis: measure.
-#' color: the algorithm.
 #'
 #' @param dt compatible data table
 #' @param measure the measure to plot
+#' @param color.by the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
+#' @param group.by the column to group the markers by. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a scatter plot
 #' @export
 #' @examples
-#' createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
-createScatterPlot = function(dt, measure) {
+#' createScatterPlot(mlr.benchmark.example, "measure.mmce.test.mean")
+createScatterPlot = function(dt, measure, color.by = "algorithm", group.by = "problem") {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
+  checkmate::assert_string(color.by)
+  checkmate::assert_string(group.by)
   checkmate::assert_true(measure %in% getMeasures(dt))
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
+  checkmate::assert_true(group.by %in% getMainColumns(dt))
   # Create new data frame
   new.df = data.frame(
     measure = dt[[measure]],
-    problem = dt$problem,
-    algorithm = dt$algorithm
+    group = dt[[group.by]],
+    color = dt[[color.by]]
   )
   # Create Plot
-  p = plotly::plot_ly(new.df, x = ~problem, y = ~ measure, color = ~algorithm, type = "scatter", mode = "markers", marker = list(size = 10))
-  p = plotly::layout(p, xaxis = list(title = "problem"), yaxis = list(title = measure), margin = list(b = 100))
+  p = plotly::plot_ly(new.df, x = ~group, y = ~ measure, color = ~color, type = "scatter", mode = "markers", marker = list(size = 10))
+  p = plotly::layout(p, xaxis = list(title = group.by), yaxis = list(title = measure), margin = list(b = 100))
   return(p)
 }

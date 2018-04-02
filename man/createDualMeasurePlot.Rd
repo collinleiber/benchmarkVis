@@ -4,8 +4,8 @@
 \alias{createDualMeasurePlot}
 \title{Create a Dual Measure plot}
 \usage{
-createDualMeasurePlot(dt, measure1, measure2, color.algorithm.only = TRUE,
-  pointsize = 4L, jitter = 0)
+createDualMeasurePlot(dt, measure1, measure2, color.by = "algorithm",
+  interaction.column = "none", pointsize = 4L, jitter = 0)
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -14,7 +14,9 @@ createDualMeasurePlot(dt, measure1, measure2, color.algorithm.only = TRUE,
 
 \item{measure2}{the second measure  for comparison}
 
-\item{color.algorithm.only}{if set to true, each color corresponds to an algorithm, otherwise to algorithm and problem}
+\item{color.by}{the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{interaction.column}{will result in colors being an interaction of color.by and this value. Possibilities: "algorithm", "problem", "replication", "none" (default: "none")}
 
 \item{pointsize}{the size of ploted point}
 
@@ -25,10 +27,9 @@ a dual measure plot
 }
 \description{
 Create a Dual Measure plot out of a benchmarkVis compatible data table.
-The created Dual Measure plot allows to compare the performance of interaction(algorithm and problem) based on two giving performance measures.
+The created Dual Measure plot allows to compare the performance of the color.by input based on two giving performance measures.
 x-Axis: measure1.
 y-Axis: measure2.
-color: the interaction of algorithm and problem.
 }
 \examples{
 createDualMeasurePlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')

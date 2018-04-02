@@ -5,7 +5,7 @@
 \title{Create a list line plot}
 \usage{
 createListLinePlot(dt, list.measure, cumulative.function = "id",
-  show.histogram = FALSE)
+  show.histogram = FALSE, color.by = "algorithm", style.by = "problem")
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -15,6 +15,10 @@ createListLinePlot(dt, list.measure, cumulative.function = "id",
 \item{cumulative.function}{the cumulative function to use for the list measure (default: "id")}
 
 \item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
+
+\item{color.by}{defines the color of the line. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{style.by}{defines the style of the line. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
 }
 \value{
 a plotly line plot

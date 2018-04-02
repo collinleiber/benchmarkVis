@@ -8,41 +8,66 @@
 #'
 #' @param dt compatible data table
 #' @param measure the column name containing the results of a measure
-#' @param group.problems if true group results by problem (default: FALSE)
+#' @param color.by the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
+#' @param group.color instead of coloring the column specified by color.by it will be grouped. Color will be chosen from the remaining main columns instead (default: FALSE)
 #' @return a plotly bar plot
 #' @export
 #' @examples
-#' createBarPlot(mlr.benchmark.example, "measure.mmce.test.mean", FALSE)
-createBarPlot = function(dt, measure, group.problems = FALSE) {
+#' createBarPlot(mlr.benchmark.example, "measure.mmce.test.mean")
+createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALSE) {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
-  checkmate::assert_logical(group.problems)
   checkmate::assert_true(measure %in% getMeasures(dt))
+  checkmate::assert_logical(group.color)
+  checkmate::assert_string(color.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
   # Create new data frame
   new.df = data.frame(
     measure = dt[[measure]],
-    problem = dt$problem,
-    algorithm = dt$algorithm
+    color = dt[[color.by]]
   )
-  # Create plot
-  if (group.problems) {
+  #Group the color
+  if (group.color) {
+    # Pick color by remaining main columns
+    if ("replication" %in% getMainColumns(dt)) {
+      if (color.by == "algorithm") {
+        new.df$inter = interaction(dt$problem, dt$replication)
+      } else if (color.by == "problem") {
+        new.df$inter = interaction(dt$algorithm, dt$replication)
+      } else if (color.by == "replication") {
+        new.df$inter = interaction(dt$algorithm, dt$problem)
+      }
+    } else if (color.by == "problem") {
+      new.df$inter = dt$algorithm
+    } else if (color.by == "algorithm") {
+      new.df$inter = dt$problem
+    }
+    # Create plot
     p = plotly::plot_ly(
       new.df,
       x = ~ measure,
-      y = ~ problem,
+      y = ~ color,
       type = "bar",
       orientation = "h",
-      color = ~ algorithm
+      color = ~ inter
     )
+  # Do not group colors
   } else {
+    # Interact all main columns
+    if ("replication" %in% getMainColumns(dt)) {
+      new.df$inter = interaction(dt$problem, dt$algorithm, dt$replication)
+    } else {
+      inter = interaction(dt$problem, dt$algorithm)
+    }
+    # Create plot
     p = plotly::plot_ly(
       new.df,
       x = ~ measure,
-      y = ~ reorder(interaction(problem, algorithm), measure),
+      y = ~ reorder(inter, measure),
       type = "bar",
       orientation = "h",
-      color = ~ algorithm
+      color = ~ color
     )
   }
   p = plotly::layout(
@@ -58,44 +83,51 @@ createBarPlot = function(dt, measure, group.problems = FALSE) {
 #'
 #' @description
 #' Create a plotly rank matrix bar plot out of a benchmarkVis compatible data table.
-#' The created bar plot shows the frequency of the ranks each algorithm achieves depending on problem and measure.
+#' The created bar plot shows the frequency of the ranks each input achieves depending on a group and measures.
 #' x-Axis: the ranks.
 #' y-Axis: the frequency.
 #'
 #' @param dt compatible data table
 #' @param ignore.measures a vector of strings describing which measures to leave out of the plot (default: empty)
+#' @param color.by the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
+#' @param group.by the column to group the bars by. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a plotly rank matrix bar plot
 #' @export
 #' @examples
 #' createRankMatrixBarPlot(mlr.benchmark.example, c("measure.timetrain.test.mean","measure.mmce.test.mean"))
-createRankMatrixBarPlot = function(dt, ignore.measures = vector()) {
+createRankMatrixBarPlot = function(dt, ignore.measures = vector(), color.by = "algorithm", group.by = "problem") {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_character(ignore.measures)
+  checkmate::assert_true(all(ignore.measures %in% getMeasures(dt)))
+  checkmate::assert_string(color.by)
+  checkmate::assert_string(group.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
+  checkmate::assert_true(group.by %in% getMainColumns(dt))
   # Create new data frame with all ranks
-  new.df = data.frame(algorithm = dt$algorithm)
-  # Get ranks for each measure and each problem
+  new.df = data.frame(color = dt[[color.by]])
+  # Get ranks for each measure and each group
   for (measure in getMeasures(dt)) {
     if (!measure %in% ignore.measures) {
       tmp = vector()
-      for (p in levels(dt$problem)) {
-        tmp = c(tmp, rank(dt[dt$problem == p, ][[measure]], ties.method = "min"))
+      for (p in levels(dt[[group.by]])) {
+        tmp = c(tmp, rank(dt[dt[[group.by]] == p, ][[measure]], ties.method = "min"))
       }
       new.df[[measure]] = tmp
     }
   }
   # Create final data frame
-  algo.count = length(levels(new.df$algorithm))
-  compact.df = data.frame(algorithm = rep(levels(new.df$algorithm), rep(algo.count, algo.count)),
-    rank = as.factor(rep(seq(algo.count), algo.count)))
+  color.count = length(levels(new.df$color))
+  compact.df = data.frame(color = rep(levels(new.df$color), rep(color.count, color.count)),
+    rank = as.factor(rep(seq(color.count), color.count)))
   # Count ranks
   counter = vector()
-  for (algo in levels(new.df$algorithm)) {
-    for (i in seq(algo.count)) {
+  for (color in levels(new.df$color)) {
+    for (i in seq(color.count)) {
       count = 0
       for (measure in getMeasures(new.df)) {
         count = count + nrow(new.df[new.df[[measure]] == i &
-            new.df$algorithm == algo, ])
+            new.df$color == color, ])
       }
       counter = c(counter, count)
     }
@@ -107,7 +139,7 @@ createRankMatrixBarPlot = function(dt, ignore.measures = vector()) {
     x = ~ rank,
     y = ~ count,
     type = "bar",
-    color = ~ algorithm,
+    color = ~ color,
     marker = list(line = list(color = "gray", width = 2))
   )
   p = plotly::layout(

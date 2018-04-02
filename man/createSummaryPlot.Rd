@@ -4,23 +4,26 @@
 \alias{createSummaryPlot}
 \title{Create a summary plot}
 \usage{
-createSummaryPlot(dt, measure)
+createSummaryPlot(dt, measure, color.by = "algorithm", group.by = "problem")
 }
 \arguments{
 \item{dt}{compatible data table}
 
 \item{measure}{measure for comparison}
+
+\item{color.by}{the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{group.by}{the column to group the bars by. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
 }
 \value{
 a summary plot
 }
 \description{
 Create a partially filled bar charts plot out of a benchmarkVis compatible data table.
-each line refers to a task, On that line the aggregated scores for all learners are plotted.
-The created partially bar charts allow to compare the performance of every combination of task and learner
+Each line refers to a group specified by group.by. On that line the aggregated scores for the color.by inputs are plotted.
+The created partially bar charts allow to compare the performance of every combination.
 x-Axis: the measure.
-y-Axis: the problem.
-color: the algorithem.
+y-Axis: the groups.
 }
 \examples{
 createSummaryPlot(mlr.benchmark.example, 'measure.mmce.test.mean')

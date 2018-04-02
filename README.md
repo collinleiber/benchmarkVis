@@ -7,7 +7,7 @@ benchmarkVis is a R package to visualize benchmark results in different ways. It
 # Getting Started
 
 * Install the development version
-    ```splus
+    ```r
     devtools::install_github("collinleiber/benchmarkVis")
     ```
 * Take a look into the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for a full tutorial
@@ -32,19 +32,19 @@ One special case occurs if you change algorithm parameters through multiple iter
 
 Load CSV file
 
-```
+``` r
 table = csvImport("PATH.TO.FILE")
 ```
 
 or load json file
 
-```
+``` r
 table = jsonImport("PATH.TO.FILE")
 ```
 
 or use one of the provided wrappers (in this example microbenchmark)
 
-```
+``` r
 library(microbenchmark)
 x = runif(100)
 benchmark = microbenchmark(sqrt(x), x ^ 0.5)
@@ -54,13 +54,13 @@ table = useMicrobenchmarkWrapper(benchmark)
 
 See a list with all possible visualizations
 
-```
+``` r
 listPlots()
 ```
 
 Create Plots
 
-```
+``` r
 createBarPlot(table, "measure")
 createListLinePlot(table, "list", "min", TRUE)
 ```
