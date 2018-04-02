@@ -8,6 +8,6 @@ test_that("createDualMeasurePlot for mlr benchmark", {
 
 # Check if creating a Dual Measure Plot throws an error
 test_that("createDualMeasurePlot for microbenchmark", {
-  p = createDualMeasurePlot(microbenchmark.example, "measure.mean", "measure.median", FALSE)
+  p = createDualMeasurePlot(microbenchmark.example, "measure.mean", "measure.median", interaction.column = "problem")
   expect_true(is.list(p))
 })

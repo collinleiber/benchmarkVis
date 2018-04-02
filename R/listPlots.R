@@ -10,16 +10,22 @@
 #' @param list.measure the column name containing the list of a specific measure
 #' @param cumulative.function the cumulative function to use for the list measure (default: "id")
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
+#' @param color.by defines the color of the line. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
+#' @param style.by defines the style of the line. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createListLinePlot(microbenchmark.example, "list.values", "id", TRUE)
-createListLinePlot = function(dt, list.measure, cumulative.function = "id", show.histogram = FALSE) {
+createListLinePlot = function(dt, list.measure, cumulative.function = "id", show.histogram = FALSE, color.by = "algorithm", style.by = "problem") {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
   checkmate::assert_string(cumulative.function)
   checkmate::assert_true(cumulative.function %in% c("id", "max", "min", "mean"))
   checkmate::assert_true(list.measure %in% getLists(dt))
+  checkmate::assert_string(color.by)
+  checkmate::assert_string(style.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
+  checkmate::assert_true(style.by %in% getMainColumns(dt))
   # Get maximum amount of lists
   max.iterations = max(sapply(dt[[list.measure]], function(x) {
     return(length(x))
@@ -36,12 +42,18 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
   new.df = data.frame(
     iteration = rep(1:max.iterations, nrow(dt)),
     measure = unlist(replications),
-    problem = rep(dt$problem, rep(max.iterations, nrow(dt))),
-    algorithm = rep(dt$algorithm, rep(max.iterations, nrow(dt)))
+    style = rep(dt[[style.by]], rep(max.iterations, nrow(dt))),
+    color = rep(dt[[color.by]], rep(max.iterations, nrow(dt)))
   )
+  # Get text
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, rep(max.iterations, nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(max.iterations, nrow(dt))), "<br>replication: ", rep(dt$replication, rep(max.iterations, nrow(dt))), sep = "")
+  } else {
+    new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, rep(max.iterations, nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(max.iterations, nrow(dt))), sep = "")
+  }
   # Create plot
   p = plotly::plot_ly(new.df)
-  p = plotly::add_trace(p, x = ~iteration, y = ~measure, color = ~algorithm, linetype = ~problem, type = "scatter", mode = "lines+markers")
+  p = plotly::add_trace(p, x = ~iteration, y = ~measure, color = ~color, linetype = ~style, type = "scatter", mode = "lines+markers", text = ~text)
   if (show.histogram) {
   p = plotly::add_histogram(p,
     y = ~ measure,
@@ -71,16 +83,22 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
 #' @param list.measure1 the list measure on the x axis
 #' @param list.measure2 the list measure on the y axis
 #' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @param color.by defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
+#' @param style.by defines the style of the line. Just working with 'draw.lines' = TRUE. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber")
-createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE) {
+createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE, color.by = "algorithm", style.by = "problem") {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure1)
   checkmate::assert_string(list.measure2)
   checkmate::assert_true(list.measure1 %in% getLists(dt))
   checkmate::assert_true(list.measure2 %in% getLists(dt))
+  checkmate::assert_string(color.by)
+  checkmate::assert_string(style.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
+  checkmate::assert_true(style.by %in% getMainColumns(dt))
   # Get maximum amount of lists
   times = sapply(dt[[list.measure1]], function(x) {
     return(length(x))
@@ -89,15 +107,21 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
   new.df = data.frame(
     measure1 = unlist(dt[[list.measure1]]),
     measure2 = unlist(dt[[list.measure2]]),
-    problem = rep(dt$problem, times),
-    algorithm = rep(dt$algorithm, times),
+    style = rep(dt[[style.by]], times),
+    color = rep(dt[[color.by]], times),
     iteration = unlist(lapply(times, seq))
   )
+  # Get text
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), "<br>replication: ", rep(dt$replication, times), sep = "")
+  } else {
+    new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), sep = "")
+  }
   # Create plot
   if (draw.lines) {
-  p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, linetype = ~problem, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "lines+markers")
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, linetype = ~style, text = ~text, type = "scatter", mode = "lines+markers")
   } else {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~algorithm, text = ~paste("iteration: ", iteration, "<br>problem: ", problem, "<br>algorithm: ", algorithm, sep = ""), type = "scatter", mode = "markers")
+    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, text = ~text, type = "scatter", mode = "markers")
   }
   p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
   return(p)
@@ -140,11 +164,16 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     }
   }
   # Create new dataframe
-  new.df = data.table::data.table(algorithm = rep(interaction(dt$problem, dt$algorithm),
-    rep(nrow(dt), nrow(dt))),
-    rank = as.factor(rep(seq(nrow(
-      dt
-    )), nrow(dt))))
+  new.df = data.table::data.table(rank = as.factor(rep(seq(nrow(
+    dt
+  )), nrow(dt))))
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$inter = rep(interaction(dt$problem, dt$algorithm, dt$replication),
+      rep(nrow(dt), nrow(dt)))
+  } else {
+    new.df$inter = rep(interaction(dt$problem, dt$algorithm),
+      rep(nrow(dt), nrow(dt)))
+  }
   # Count ranks
   counter = vector()
   for (row in seq(nrow(dt))) {
@@ -161,15 +190,20 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     }
   }
   new.df$count = counter
-  # Aggregate
-  #new.df = new.df[, .( count = sum(count)), by = .(algorithm, rank)]
+  # Get text
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), "<br>replication: ", rep(dt$replication, rep(nrow(dt), nrow(dt))), sep = "")
+  } else {
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), sep = "")
+  }
   # Create plot
   p = plotly::plot_ly(
     new.df,
     x = ~ rank,
     y = ~ count,
     type = "bar",
-    color = ~ algorithm,
+    color = ~ inter,
+    text = ~ text,
     marker = list(line = list(color = "gray", width = 2))
   )
   p = plotly::layout(
@@ -203,13 +237,19 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   combined.df = data.frame()
   for (row in seq(nrow(dt))) {
     list.length = length(dt[[row, list.measure]])
-    df = data.frame(problem.algorithm = paste(rep(dt[[row, "problem"]], list.length),
-      rep(dt[[row, "algorithm"]], list.length), sep = "."),
-      measure = dt[[row, list.measure]])
+    df = data.frame(measure = dt[[row, list.measure]])
+    if ("replication" %in% getMainColumns(dt)) {
+      df$entry = paste(rep(dt[[row, "problem"]], list.length),
+        rep(dt[[row, "algorithm"]], list.length),
+        rep(dt[[row, "replication"]], list.length), sep = ".")
+    } else {
+      df$entry = paste(rep(dt[[row, "problem"]], list.length),
+        rep(dt[[row, "algorithm"]], list.length), sep = ".")
+    }
     combined.df = rbind(combined.df, df)
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm))  + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = entry)) + ggplot2::theme_bw()
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
@@ -263,14 +303,20 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
   combined.df = data.frame()
   for (row in seq(nrow(dt))) {
     df = data.frame(
-      problem.algorithm = paste(rep(dt[[row, "problem"]], min.iterations),
-        rep(dt[[row, "algorithm"]], min.iterations), sep = "."),
       measure = unlist(rank.measure[[row]])
     )
+    if ("replication" %in% getMainColumns(dt)) {
+      df$entry = paste(rep(dt[[row, "problem"]], min.iterations),
+        rep(dt[[row, "algorithm"]], min.iterations),
+        rep(dt[[row, "replication"]], min.iterations), sep = ".")
+    } else {
+      df$entry = paste(rep(dt[[row, "problem"]], min.iterations),
+        rep(dt[[row, "algorithm"]], min.iterations), sep = ".")
+    }
     combined.df = rbind(combined.df, df)
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = problem.algorithm))  + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = entry))  + ggplot2::theme_bw()
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {

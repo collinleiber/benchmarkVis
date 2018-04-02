@@ -4,7 +4,7 @@
 \alias{createDensityPlot}
 \title{Create a density plot}
 \usage{
-createDensityPlot(dt, measure, stack.plots = FALSE)
+createDensityPlot(dt, measure, stack.plots = FALSE, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -12,13 +12,15 @@ createDensityPlot(dt, measure, stack.plots = FALSE)
 \item{measure}{the column name of the measure}
 
 \item{stack.plots}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
+
+\item{color.by}{the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
 \value{
 a plotly density plot
 }
 \description{
 Create a plotly density plot out of a benchmarkVis compatible data table.
-The created density chart shows the distribution of the specified measure for each algorithm
+The created density chart shows the distribution of the specified measure for color.by input
 }
 \examples{
 createDensityPlot(mlr.benchmark.example, "measure.mmce.test.mean", TRUE)

@@ -2,13 +2,13 @@ context("Bar Plots")
 
 # Check if creating a Bar Plot throws an error
 test_that("createBarPlot for mlr benchmark", {
-  p = createBarPlot(mlr.benchmark.example, "measure.ber.test.mean", TRUE)
+  p = createBarPlot(mlr.benchmark.example, "measure.ber.test.mean", "algorithm", TRUE)
   expect_true(is.list(p))
 })
 
 # Check if creating a Bar Plot throws an error
 test_that("createBarPlot for microbenchmark", {
-  p = createBarPlot(microbenchmark.example, "measure.mean", FALSE)
+  p = createBarPlot(microbenchmark.example, "measure.mean", "problem", FALSE)
   expect_true(is.list(p))
 })
 

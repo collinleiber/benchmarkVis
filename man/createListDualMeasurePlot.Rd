@@ -5,7 +5,7 @@
 \title{Create a list line plot with a measure on x and y aixs}
 \usage{
 createListDualMeasurePlot(dt, list.measure1, list.measure2,
-  draw.lines = FALSE)
+  draw.lines = FALSE, color.by = "algorithm", style.by = "problem")
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -15,6 +15,10 @@ createListDualMeasurePlot(dt, list.measure1, list.measure2,
 \item{list.measure2}{the list measure on the y axis}
 
 \item{draw.lines}{draw a line between the points in the original order (default: FALSE)}
+
+\item{color.by}{defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{style.by}{defines the style of the line. Just working with 'draw.lines' = TRUE. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
 }
 \value{
 a plotly line plot

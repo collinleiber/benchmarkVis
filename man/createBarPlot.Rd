@@ -4,14 +4,16 @@
 \alias{createBarPlot}
 \title{Create a bar plot}
 \usage{
-createBarPlot(dt, measure, group.problems = FALSE)
+createBarPlot(dt, measure, color.by = "algorithm", group.color = FALSE)
 }
 \arguments{
 \item{dt}{compatible data table}
 
 \item{measure}{the column name containing the results of a measure}
 
-\item{group.problems}{if true group results by problem (default: FALSE)}
+\item{color.by}{the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{group.color}{instead of coloring the column specified by color.by it will be grouped. Color will be chosen from the remaining main columns instead (default: FALSE)}
 }
 \value{
 a plotly bar plot
@@ -23,5 +25,5 @@ x-Axis: the measure.
 y-Axis: the benchmark entries.
 }
 \examples{
-createBarPlot(mlr.benchmark.example, "measure.mmce.test.mean", FALSE)
+createBarPlot(mlr.benchmark.example, "measure.mmce.test.mean")
 }

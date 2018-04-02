@@ -4,19 +4,23 @@
 \alias{createRankPlot}
 \title{Create a rank plot}
 \usage{
-createRankPlot(dt, measure)
+createRankPlot(dt, measure, color.by = "algorithm", group.by = "problem")
 }
 \arguments{
 \item{dt}{compatible data table}
 
 \item{measure}{measure for Ranking}
+
+\item{color.by}{the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{group.by}{the column to group the markers by. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
 }
 \value{
 a rank plot
 }
 \description{
 Create a plotly rank plot out of a benchmarkVis compatible data table.
-The created rank plot allows for Ranking of algorithms based on a given performance measure for different datasets
+The created rank plot allows for Ranking of the by color.by specified input based on a given performance measure
 }
 \examples{
 createRankPlot(mlr.benchmark.example, "measure.mmce.test.mean")
