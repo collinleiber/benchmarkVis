@@ -1,6 +1,9 @@
 tabpanel.compareplots =  list(
     conditionalPanel("output.fileUploaded == true && input.Submit == true",
-        h3("Here you can compare two of your saved plots"),
+        fluidRow(
+            column(5, h3("Compare two of your saved plots")),
+            column(3, uiOutput("help.compare.plots"))              
+        ), 
         conditionalPanel("output.plotsSaved == true",
             fluidRow(
                 column(6,
