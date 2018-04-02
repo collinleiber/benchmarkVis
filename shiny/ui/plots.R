@@ -12,6 +12,7 @@ tabpanel.plots =  list(
                 uiOutput("plotselection")
             ),
             column(4,
+                h5("Choose parameters for the plot"),
                 uiOutput("plot.parameter.selection"),
                 actionButton("createplot", "Create plot", icon = icon("check"))  
             ),
