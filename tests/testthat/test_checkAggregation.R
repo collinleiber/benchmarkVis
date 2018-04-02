@@ -29,8 +29,8 @@ test_that("Do aggregation for mlr benchmark", {
     c(
       "problem",
       "algorithm",
-      "mean_measure.mmce.test.mean",
-      "mean_measure.ber.test.mean"
+      "measure.mmce.test.mean_mean",
+      "measure.ber.test.mean_mean"
     )
   )
 })
@@ -50,8 +50,8 @@ test_that("Do aggregation for microbenchmark", {
     c(
       "problem",
       "algorithm",
-      "mean_measure.mean",
-      "mean_measure.median"
+      "measure.mean_mean",
+      "measure.median_mean"
     )
   )
 })
@@ -71,8 +71,8 @@ test_that("Do aggregation for microbenchmark", {
     c(
       "problem",
       "algorithm",
-      "function(x) 1_measure.mean",
-      "function(x) 1_measure.median"
+      "measure.mean_function(x) 1",
+      "measure.median_function(x) 1"
     )
   )
 })
