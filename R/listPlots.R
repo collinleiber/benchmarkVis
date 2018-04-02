@@ -99,7 +99,7 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
   checkmate::assert_string(style.by)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
   checkmate::assert_true(style.by %in% getMainColumns(dt))
-  # Get maximum amount of lists
+  # Get length of lists
   times = sapply(dt[[list.measure1]], function(x) {
     return(length(x))
   })
@@ -170,7 +170,9 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
   if ("replication" %in% getMainColumns(dt)) {
     new.df$inter = rep(interaction(dt$problem, dt$algorithm, dt$replication),
       rep(nrow(dt), nrow(dt)))
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), "<br>replication: ", rep(dt$replication, rep(nrow(dt), nrow(dt))), sep = "")
   } else {
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), sep = "")
     new.df$inter = rep(interaction(dt$problem, dt$algorithm),
       rep(nrow(dt), nrow(dt)))
   }
@@ -190,12 +192,6 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     }
   }
   new.df$count = counter
-  # Get text
-  if ("replication" %in% getMainColumns(dt)) {
-    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), "<br>replication: ", rep(dt$replication, rep(nrow(dt), nrow(dt))), sep = "")
-  } else {
-    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), sep = "")
-  }
   # Create plot
   p = plotly::plot_ly(
     new.df,
@@ -233,23 +229,21 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   checkmate::assert_string(list.measure)
   checkmate::assert_logical(stack.plots)
   checkmate::assert_true(list.measure %in% getLists(dt))
-  # Give each value of the list measure its own row
-  combined.df = data.frame()
-  for (row in seq(nrow(dt))) {
-    list.length = length(dt[[row, list.measure]])
-    df = data.frame(measure = dt[[row, list.measure]])
-    if ("replication" %in% getMainColumns(dt)) {
-      df$entry = paste(rep(dt[[row, "problem"]], list.length),
-        rep(dt[[row, "algorithm"]], list.length),
-        rep(dt[[row, "replication"]], list.length), sep = ".")
-    } else {
-      df$entry = paste(rep(dt[[row, "problem"]], list.length),
-        rep(dt[[row, "algorithm"]], list.length), sep = ".")
-    }
-    combined.df = rbind(combined.df, df)
+  # Get length of lists
+  times = sapply(dt[[list.measure]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure = unlist(dt[[list.measure]])
+  )
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
+  } else {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm), times)
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = entry)) + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = new.df, ggplot2::aes(measure, fill = entry)) + ggplot2::theme_bw() + ggplot2::labs(fill = "benchmark entry")
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
@@ -299,24 +293,17 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
       rank.measure[[row]][i] = rank(tmp, ties.method = "min")[row]
     }
   }
-  # Create new dataframe
-  combined.df = data.frame()
-  for (row in seq(nrow(dt))) {
-    df = data.frame(
-      measure = unlist(rank.measure[[row]])
-    )
-    if ("replication" %in% getMainColumns(dt)) {
-      df$entry = paste(rep(dt[[row, "problem"]], min.iterations),
-        rep(dt[[row, "algorithm"]], min.iterations),
-        rep(dt[[row, "replication"]], min.iterations), sep = ".")
-    } else {
-      df$entry = paste(rep(dt[[row, "problem"]], min.iterations),
-        rep(dt[[row, "algorithm"]], min.iterations), sep = ".")
-    }
-    combined.df = rbind(combined.df, df)
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure = unlist(rank.measure)
+  )
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), rep(min.iterations, nrow(dt)))
+  } else {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm), rep(min.iterations, nrow(dt)))
   }
   # Create plot
-  p = ggplot2::ggplot(data = combined.df, ggplot2::aes(measure, fill = entry))  + ggplot2::theme_bw()
+  p = ggplot2::ggplot(data = new.df, ggplot2::aes(measure, fill = entry))  + ggplot2::theme_bw() + ggplot2::labs(fill = "benchmark entry")
   if (stack.plots) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
@@ -325,5 +312,96 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
   # Convert plot to plotly
   p = plotly::ggplotly(p)
   p = plotly::layout(p, xaxis = list(title = "ranks"))
+  return(p)
+}
+
+#' @title Create a list scatter plot
+#'
+#' @description
+#' Create a plotly scatter plot out of a benchmarkVis compatible data table.
+#' The created scatter plot allows to compare the performances based on the giving performance measure.
+#' x-Axis: the benchmark entries.
+#' y-Axis: measure.
+#'
+#' @param dt campatible data table
+#' @param list.measure the column name containing the list of a specific measure
+#' @return a plotly scatter plot
+#' @export
+#' @examples
+#' createListScatterPlot(microbenchmark.example, "list.values")
+createListScatterPlot = function(dt, list.measure) {
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(list.measure)
+  checkmate::assert_true(list.measure %in% getLists(dt))
+  # Get length of lists
+  times = sapply(dt[[list.measure]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure = unlist(dt[[list.measure]])
+  )
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
+    new.df$text = paste("problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), "<br>replication: ", rep(dt$replication, times), sep = "")
+  } else {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm), times)
+    new.df$text = paste("problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), sep = "")
+  }
+  # Create plot
+  p = plotly::plot_ly(new.df, x = ~ entry, y = ~ measure, type = "scatter", mode = "markers", marker = list(size = 10), text = ~ text)
+  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = list.measure), margin = list(b = 120))
+  return(p)
+}
+
+#' @title Create a list box plot
+#'
+#' @description
+#' Create a plotly box plot out of a benchmarkVis compatible data table.
+#' The created box plot allows for comparison of the benchmark entries based on a given performance measure
+#' x-Axis: the benchmark entries.
+#' y-Axis: measure.
+#'
+#' @param dt campatible data table
+#' @param list.measure the column name containing the list of a specific measure
+#' @param violin if set to TRUE a violin plot instead of boxplot is produced (default: FALSE)
+#' @return a plotly box plot
+#' @export
+#' @examples
+#' createListBoxPlot(microbenchmark.example, "list.values")
+createListBoxPlot = function(dt, list.measure, violin = FALSE) {
+  # Checks
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(list.measure)
+  checkmate::assert_logical(violin)
+  checkmate::assert_true(list.measure %in% getLists(dt))
+  # Get length of lists
+  times = sapply(dt[[list.measure]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(
+    measure = unlist(dt[[list.measure]])
+  )
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
+  } else {
+    new.df$entry = rep(interaction(dt$problem, dt$algorithm), times)
+  }
+  # Options
+  if (violin) {
+    geometry = ggplot2::geom_violin()
+  } else {
+    geometry = ggplot2::geom_boxplot()
+  }
+  # Create Plot
+  p = ggplot2::ggplot(new.df, ggplot2::aes(x = entry, y = measure, fill = entry, colour = entry)) +
+    geometry + ggplot2::labs(fill = "benchmark entry", col = "benchmark entry") + ggplot2::theme_bw()
+  p = plotly::ggplotly(p)
+  p = plotly::layout(
+    p,
+    xaxis = list(title = "benchmark entry"),
+    yaxis = list(title = list.measure)
+  )
   return(p)
 }

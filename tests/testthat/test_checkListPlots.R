@@ -69,3 +69,31 @@ test_that("createListDualMeasurePlot Test with lines mlr benchmark", {
   p = createListDualMeasurePlot(tmp, "list.mmce", "list.ber", TRUE)
   expect_true(is.list(p))
 })
+
+# Check if creating a list scatter plot throws an error
+test_that("createListScatterPlot Test mlr benchmark", {
+  p = createListScatterPlot(mlr.benchmark.example, "list.mmce")
+  expect_true(is.list(p))
+})
+
+# Check if creating a list scatter plot throws an error
+test_that("createListScatterPlot Test microbenchmark", {
+  tmp = microbenchmark.example
+  tmp$replication = NULL
+  p = createListScatterPlot(tmp, "list.values")
+  expect_true(is.list(p))
+})
+
+# Check if creating a list box plot throws an error
+test_that("createListBoxPlot Test mlr benchmark", {
+  p = createListBoxPlot(mlr.benchmark.example, "list.mmce")
+  expect_true(is.list(p))
+})
+
+# Check if creating a list box plot throws an error
+test_that("createListBoxPlot Test microbenchmark with violin", {
+  tmp = microbenchmark.example
+  tmp$replication = NULL
+  p = createListBoxPlot(tmp, "list.values", TRUE)
+  expect_true(is.list(p))
+})

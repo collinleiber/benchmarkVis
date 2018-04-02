@@ -20,13 +20,13 @@ createBoxPlot = function(dt, measure, violin = FALSE, color.by = "algorithm") {
   checkmate::assert_string(measure)
   checkmate::assert_logical(violin)
   # checkmate::assert_logical(facetting.problem)
-  checkmate::assert_true(startsWith(measure, "measure."))
+  checkmate::assert_true(measure %in% getMeasures(dt))
   checkmate::assert_string(color.by)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
   # if (violin) checkmate::assert_false(facetting.problem)
   # if (facetting.problem) checkmate::assert_false(violin)
   # Create Plot
-  measure.short = strsplit(measure, "measure.")[[1]][2]
+  # measure.short = strsplit(measure, "measure.")[[1]][2]
   if (violin) {
     geometry = ggplot2::geom_violin()
   } else {
@@ -41,7 +41,7 @@ createBoxPlot = function(dt, measure, violin = FALSE, color.by = "algorithm") {
   p = plotly::layout(
     p,
     xaxis = list(title = color.by),
-    yaxis = list(title = measure.short)
+    yaxis = list(title = measure)
   )
   return(p)
 }
