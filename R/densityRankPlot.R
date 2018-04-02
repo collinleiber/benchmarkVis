@@ -43,6 +43,7 @@ createDensityRankPlot = function(dt, ignore.measures = vector(), stack.plots = F
   } else {
     p = p + ggplot2::geom_density(alpha = 0.4)
   }
+  p = p + ggplot2::labs(fill = color.by)
   # Convert plot to plotly
   p = plotly::ggplotly(p)
   p = plotly::layout(p, xaxis = list(title = "ranks"))
