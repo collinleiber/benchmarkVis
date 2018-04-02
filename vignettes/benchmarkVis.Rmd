@@ -40,7 +40,7 @@ In this section we will describe the input data structure of the benchmarkVis pa
 | problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.1 | measure.2 | list.1 | list.2 |
 |---|---|---|---|---|---|---|---|---|---|
 | factor | list | factor | list | factor | list | numeric | numeric | vector | vector |
-| mandatory | mandatory | mandatory | mandatory | mandatory | mandatory | optional | optional | optional | optional |
+| mandatory | optional | mandatory | optional | optional | optional | optional | optional | optional | optional |
 
 As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
 The table can contain any number of measures and lists. It is just important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".

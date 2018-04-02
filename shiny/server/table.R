@@ -84,7 +84,6 @@ observeEvent(input$Transformation, {
 
 get.transform.data = function() {
   original.data = isolate(mvalues$matrix)
-  print(typeof(original.data))
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
