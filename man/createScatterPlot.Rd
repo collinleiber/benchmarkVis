@@ -4,23 +4,26 @@
 \alias{createScatterPlot}
 \title{Create a scatter plot}
 \usage{
-createScatterPlot(dt, measure)
+createScatterPlot(dt, measure, color.by = "algorithm", group.by = "problem")
 }
 \arguments{
 \item{dt}{compatible data table}
 
 \item{measure}{the measure to plot}
+
+\item{color.by}{the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
+
+\item{group.by}{the column to group the markers by. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
 }
 \value{
 a scatter plot
 }
 \description{
 Create a scatter plot out of a benchmarkVis compatible data table.
-The created scatter plot allows to compare the performances different algorithms based on the giving performance measure.
-x-Axis: problems.
+The created scatter plot allows to compare the performances based on the giving performance measure.
+x-Axis: the groups.
 y-Axis: measure.
-color: the algorithm.
 }
 \examples{
-createScatterPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
+createScatterPlot(mlr.benchmark.example, "measure.mmce.test.mean")
 }

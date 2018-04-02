@@ -4,26 +4,25 @@
 \alias{createBoxPlot}
 \title{Create a box plot}
 \usage{
-createBoxPlot(dt, measure, violin = FALSE, facetting.problem = FALSE)
+createBoxPlot(dt, measure, violin = FALSE, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{compatible data table}
 
 \item{measure}{measure for comparison}
 
-\item{violin}{if set to TRUE a violin plot instead of boxplot is produced (facetting.problem should be FALSE)}
+\item{violin}{if set to TRUE a violin plot instead of boxplot is produced (default: FALSE)}
 
-\item{facetting.problem}{if set to TRUE boxplot with facet wrap is produced (violin should be FALSE)}
+\item{color.by}{the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
 \value{
 a box plot
 }
 \description{
 Create a plotly box plot out of a benchmarkVis compatible data table.
-The created box plot allows for comparison of algorithms based on a given performance measure for different datasets
+The created box plot allows for comparison of the by color.by specified input based on a given performance measure
 }
 \examples{
 createBoxPlot(mlr.benchmark.example, 'measure.mmce.test.mean')
 createBoxPlot(mlr.benchmark.example, 'measure.mmce.test.mean', violin = TRUE)
-createBoxPlot(mlr.benchmark.example, 'measure.mmce.test.mean', facetting.problem = TRUE)
 }
