@@ -40,7 +40,11 @@ output$plot.parameter.selection = renderUI({
             uilist = c(uilist,ui.elem)            
         }        
     } 
-    do.call(tagList, uilist)  
+    uilist = lapply(uilist, function(item) {
+        item = item[item != "div"]
+        item = item[item != "form-group shiny-input-container"]   
+    })
+    uilist
 })
 
 output$plot = renderPlotly({

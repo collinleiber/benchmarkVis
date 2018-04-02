@@ -17,7 +17,7 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, dt) {
     colnames(newtable),
     FUN = function(colname) {
       if (colname %in% aggcol) {
-        newname = paste(prefix_str, "_", colname, "", sep  = "")
+        newname = paste(colname, "_", prefix_str, "", sep  = "")
       }
       else {
         colname

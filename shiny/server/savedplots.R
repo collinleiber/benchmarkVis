@@ -38,7 +38,7 @@ output$rerenderPlot = renderUI({
     plot.type = class(plot)[1]
     uiplot = switch(plot.type,
         'plotly' = renderPlotly({plot}),
-        'chartJSRadar' = radarchart::chartJSRadarOutput(radarchart::renderChartJSRadar({plot}), width = "450", height = "300"),
+        'chartJSRadar' = radarchart::renderChartJSRadar({plot}),
         renderText({"unknown plot format"})
     )    
     do.call(tagList, c(uiplot))
