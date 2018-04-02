@@ -45,4 +45,3 @@ createBoxPlot = function(dt, measure, violin = FALSE, color.by = "algorithm") {
   )
   return(p)
 }
-
