@@ -24,7 +24,7 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, dt) {
       }
     }
   )
-  return(as.data.table(newtable))
+  return(data.table::as.data.table(newtable))
 }
 
 #' @title apply aggregation function
@@ -114,7 +114,7 @@ transformation.apply = function(original.data,
     }
   }
 
-  return(as.data.table(result))
+  return(data.table::as.data.table(result))
 }
 
 #' @title check if the input function is a valid value-to-value transformation function
