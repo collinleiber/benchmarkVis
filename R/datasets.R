@@ -67,3 +67,17 @@ NULL
 #' @references See \url{extdata/ml.example2.json}
 #' @keywords data
 NULL
+
+#' Large benchmark
+#'
+#' A large example of a benchmark created with mlr. It was converted to the benchmarkVis table structure by the mlrBenchmarkWrapper.
+#' The table consists of 18 columns and 210 rows.
+#' Problems: iris, sonar, pid, ring, wave, breast.cancer.
+#' Algorithms: lda, rpart, xgboost, randomForest, naiveBayes, ksvm, knn.
+#' Replications: Subsample, Holdout, CV 5, LOO, Bootstrap.
+#' The file is accessible through "large.benchmark".
+#' @name large.benchmark
+#' @docType data
+#' @references See \url{data/large.benchmark.RData}
+#' @keywords data
+NULL
