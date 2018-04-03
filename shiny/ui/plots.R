@@ -11,19 +11,19 @@ tabpanel.plots =  list(
                            selected = "original data"),
                 uiOutput("plotselection")
             ),
-            column(4,
-                h5("Choose parameters for the plot"),
-                uiOutput("plot.parameter.selection"),
-                actionButton("createplot", "Create plot", icon = icon("check"))  
-            ),
-            column(3,
-                conditionalPanel("input.createplot > 0",
+            conditionalPanel("output.plotSelected == true",
+                column(4,
+                    h4("Choose parameters for the plot"),
+                    uiOutput("plot.parameter.selection"),
+                    actionButton("createplot", "Create plot", icon = icon("check"))  
+                ),
+                column(4,                
                     uiOutput("newtab"),
                     actionButton("createtab", "Save this plot in 'Saved Plots'", icon = icon("check"))
                 )          
             )
         ),
-        conditionalPanel("input.createplot > 0",
+        conditionalPanel("input.createplot > 0 && output.plotSelected == true",
             conditionalPanel("input.plotchoice == 'Measure: Radar Plot'",
                  radarchart::chartJSRadarOutput("radar", width = "450", height = "300")
             ),

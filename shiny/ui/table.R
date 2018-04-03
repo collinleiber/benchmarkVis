@@ -5,12 +5,12 @@ tabpanel.table =  list(
             column(3, uiOutput("help.table"))              
         ),
         fluidRow(
-            column(3,
+            column(6,
                 uiOutput("table.aggregation"),
                 actionButton("Aggregation", "Aggregation", icon = icon("check")),
                 actionButton("Reset", "Reset", icon = icon("check"))
             ),
-            column(3,
+            column(6,
                 uiOutput("table.transformation"),
                 actionButton("Transformation", "Transformation", icon = icon("check")),
                 actionButton("DeleteSelectedRows", "DeleteSelectedRows", icon = icon("check"))                
