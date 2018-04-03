@@ -155,7 +155,7 @@ saveRDS(table, file = "PATH/file.rds")
 
 Then it can later be loaded with a file wrapper.
 
-Alternatvily you could use the wrapper and save the created table as a json or csv file.
+Alternatively you could use the wrapper and save the created table as a json or csv file.
 
 # Load Benchmark
 
@@ -227,12 +227,13 @@ Following list gives an overview about all implemented plots and their correspon
 | Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
 | Density Plot | Density Plot | Dual Parameter Plot |
 | Summary Plot | Line Plot | Line Plot |
-| Bar Plot | Density Rank Plot | |
-| Scatter Plot |
+| Density Rank Plot | Density Rank Plot | |
+| Box Plot | Box Plot | |
+| Scatter Plot | Scatter Plot | |
 | Parallel Coordinates Plot | | |
 | Radar Plot | | |
 | Rank Plot | | |
-| Box Plot | | |
+| Bar Plot | | |
 
 There is no guarantee that the list provided above is up to date. 
 To see a full list with all possible charts use the method:
