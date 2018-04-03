@@ -33,7 +33,7 @@ useMicrobenchmarkWrapper = function(benchmark) {
     measure.uq = summary$uq,
     measure.max = summary$max,
     # Get the replication values out of the benchmark result
-    list.values = lapply(seq(summary$expr), function(x) benchmark[benchmark$expr == benchmark$expr[x], ]$time),
+    list.values = lapply(summary$expr, function(x) benchmark[benchmark$expr == x, ]$time),
     stringsAsFactors = TRUE
   )
   # Check structure

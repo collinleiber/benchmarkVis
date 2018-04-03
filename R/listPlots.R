@@ -167,15 +167,6 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
   new.df = data.table::data.table(rank = as.factor(rep(seq(nrow(
     dt
   )), nrow(dt))))
-  if ("replication" %in% getMainColumns(dt)) {
-    new.df$inter = rep(interaction(dt$problem, dt$algorithm, dt$replication),
-      rep(nrow(dt), nrow(dt)))
-    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), "<br>replication: ", rep(dt$replication, rep(nrow(dt), nrow(dt))), sep = "")
-  } else {
-    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), sep = "")
-    new.df$inter = rep(interaction(dt$problem, dt$algorithm),
-      rep(nrow(dt), nrow(dt)))
-  }
   # Count ranks
   counter = vector()
   for (row in seq(nrow(dt))) {
@@ -192,6 +183,15 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     }
   }
   new.df$count = counter
+  if ("replication" %in% getMainColumns(dt)) {
+    new.df$inter = rep(interaction(dt$problem, dt$algorithm, dt$replication),
+      rep(nrow(dt), nrow(dt)))
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), "<br>replication: ", rep(dt$replication, rep(nrow(dt), nrow(dt))), sep = "")
+  } else {
+    new.df$text = paste("rank: ", new.df$rank, "<br>count: ", new.df$count, "<br>problem: ", rep(dt$problem, rep(nrow(dt), nrow(dt))), "<br>algorithm: ", rep(dt$algorithm, rep(nrow(dt), nrow(dt))), sep = "")
+    new.df$inter = rep(interaction(dt$problem, dt$algorithm),
+      rep(nrow(dt), nrow(dt)))
+  }
   # Create plot
   p = plotly::plot_ly(
     new.df,
@@ -325,13 +325,16 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
 #'
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
+#' @param color.by defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @return a plotly scatter plot
 #' @export
 #' @examples
 #' createListScatterPlot(microbenchmark.example, "list.values")
-createListScatterPlot = function(dt, list.measure) {
+createListScatterPlot = function(dt, list.measure, color.by = "algorithm") {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
+  checkmate::assert_string(color.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
   checkmate::assert_true(list.measure %in% getLists(dt))
   # Get length of lists
   times = sapply(dt[[list.measure]], function(x) {
@@ -339,7 +342,8 @@ createListScatterPlot = function(dt, list.measure) {
   })
   # Create new plotly compatible data table
   new.df = data.frame(
-    measure = unlist(dt[[list.measure]])
+    measure = unlist(dt[[list.measure]]),
+    color = rep(dt[[color.by]], times)
   )
   if ("replication" %in% getMainColumns(dt)) {
     new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
@@ -349,8 +353,8 @@ createListScatterPlot = function(dt, list.measure) {
     new.df$text = paste("problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), sep = "")
   }
   # Create plot
-  p = plotly::plot_ly(new.df, x = ~ entry, y = ~ measure, type = "scatter", mode = "markers", marker = list(size = 10), text = ~ text)
-  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = list.measure), margin = list(b = 120))
+  p = plotly::plot_ly(new.df, x = ~ entry, y = ~ measure, type = "scatter", mode = "markers", color = ~ color, marker = list(size = 10), text = ~ text)
+  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = list.measure), margin = list(b = 150))
   return(p)
 }
 
@@ -365,23 +369,27 @@ createListScatterPlot = function(dt, list.measure) {
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
 #' @param violin if set to TRUE a violin plot instead of boxplot is produced (default: FALSE)
+#' @param color.by defines the color of the boxes. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @return a plotly box plot
 #' @export
 #' @examples
 #' createListBoxPlot(microbenchmark.example, "list.values")
-createListBoxPlot = function(dt, list.measure, violin = FALSE) {
+createListBoxPlot = function(dt, list.measure, violin = FALSE, color.by = "algorithm") {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
   checkmate::assert_logical(violin)
   checkmate::assert_true(list.measure %in% getLists(dt))
+  checkmate::assert_string(color.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
   # Get length of lists
   times = sapply(dt[[list.measure]], function(x) {
     return(length(x))
   })
   # Create new plotly compatible data table
   new.df = data.frame(
-    measure = unlist(dt[[list.measure]])
+    measure = unlist(dt[[list.measure]]),
+    color = rep(dt[[color.by]], times)
   )
   if ("replication" %in% getMainColumns(dt)) {
     new.df$entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
@@ -395,13 +403,15 @@ createListBoxPlot = function(dt, list.measure, violin = FALSE) {
     geometry = ggplot2::geom_boxplot()
   }
   # Create Plot
-  p = ggplot2::ggplot(new.df, ggplot2::aes(x = entry, y = measure, fill = entry, colour = entry)) +
-    geometry + ggplot2::labs(fill = "benchmark entry", col = "benchmark entry") + ggplot2::theme_bw()
+  p = ggplot2::ggplot(new.df, ggplot2::aes(x = entry, y = measure, fill = color, colour = color)) +
+    geometry + ggplot2::labs(fill = "benchmark entry", col = "benchmark entry") + ggplot2::theme_bw() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45, hjust = 0))
   p = plotly::ggplotly(p)
   p = plotly::layout(
     p,
     xaxis = list(title = "benchmark entry"),
-    yaxis = list(title = list.measure)
+    yaxis = list(title = list.measure),
+    margin = list(b = 150)
   )
   return(p)
 }

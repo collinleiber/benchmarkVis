@@ -4,12 +4,14 @@
 \alias{createListScatterPlot}
 \title{Create a list scatter plot}
 \usage{
-createListScatterPlot(dt, list.measure)
+createListScatterPlot(dt, list.measure, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{campatible data table}
 
 \item{list.measure}{the column name containing the list of a specific measure}
+
+\item{color.by}{defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
 \value{
 a plotly scatter plot
