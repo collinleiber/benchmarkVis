@@ -4,7 +4,7 @@
 \alias{createListBoxPlot}
 \title{Create a list box plot}
 \usage{
-createListBoxPlot(dt, list.measure, violin = FALSE)
+createListBoxPlot(dt, list.measure, violin = FALSE, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -12,6 +12,8 @@ createListBoxPlot(dt, list.measure, violin = FALSE)
 \item{list.measure}{the column name containing the list of a specific measure}
 
 \item{violin}{if set to TRUE a violin plot instead of boxplot is produced (default: FALSE)}
+
+\item{color.by}{defines the color of the boxes. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
 \value{
 a plotly box plot
