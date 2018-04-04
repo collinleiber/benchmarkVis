@@ -1,14 +1,16 @@
-require(data.table)
 tabpanel.table =  list(
     conditionalPanel("output.fileUploaded == true && input.Submit == true",
-        h3("Here you can aggregate and play with a table"),
         fluidRow(
-            column(3,
+            column(5, h3("Aggregate and transform your benchmark results")),
+            column(3, uiOutput("help.table"))              
+        ),
+        fluidRow(
+            column(6,
                 uiOutput("table.aggregation"),
                 actionButton("Aggregation", "Aggregation", icon = icon("check")),
                 actionButton("Reset", "Reset", icon = icon("check"))
             ),
-            column(3,
+            column(6,
                 uiOutput("table.transformation"),
                 actionButton("Transformation", "Transformation", icon = icon("check")),
                 actionButton("DeleteSelectedRows", "DeleteSelectedRows", icon = icon("check"))                

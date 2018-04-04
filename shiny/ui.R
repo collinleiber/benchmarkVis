@@ -1,5 +1,6 @@
 ## ui.R ##
 library(shinydashboard)
+library(data.table)
 library(plotly)
 library(shinyjs)
 library(V8)
@@ -18,6 +19,9 @@ css.errors = "
             "
 
 jsResetCode = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page                                             
+shinyjs::useShinyjs()
+shinyjs::extendShinyjs(text = jsResetCode)
+
 ui.files = list.files(path = "./ui", pattern = "*.R")
 ui.files = paste0("ui/", ui.files)
 

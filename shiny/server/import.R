@@ -47,10 +47,6 @@ output$data.format = renderUI({
 })
 
 output$accepted = renderImage({
-  list(src = './images/accepted.png', width="50px", height="50px",
+  list(src = './www/accepted.png', width="50px", height="50px",
        alt = paste("Submit was successful"))
-}, deleteFile = FALSE)
-
-output$help = renderImage({
-  list(src = './images/help.svg', width="30px", height="30px")
 }, deleteFile = FALSE)

@@ -17,14 +17,14 @@ get.agg.result = function(fun, prefix_str, groupby, aggcol, dt) {
     colnames(newtable),
     FUN = function(colname) {
       if (colname %in% aggcol) {
-        newname = paste(prefix_str, "_", colname, "", sep  = "")
+        newname = paste(colname, "_", prefix_str, "", sep  = "")
       }
       else {
         colname
       }
     }
   )
-  return(newtable)
+  return(data.table::as.data.table(newtable))
 }
 
 #' @title apply aggregation function
@@ -109,12 +109,12 @@ transformation.apply = function(original.data,
         next
       }
       result$transformed.column = transformed.column
-      new.column.name = paste(transform.func, "_", column, "", sep  = "")
+      new.column.name = paste(column, "_", transform.func, "", sep  = "")
       data.table::setnames(result, "transformed.column", new.column.name)
     }
   }
 
-  return(result)
+  return(data.table::as.data.table(result))
 }
 
 #' @title check if the input function is a valid value-to-value transformation function
