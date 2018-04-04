@@ -46,6 +46,8 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
     if (check.aggregation.valid(x)) {
       result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
+    else
+      result = dt
   }
   return(result)
 }
