@@ -3,29 +3,49 @@ current.plot = reactiveValues(func = NULL, parameter = list(), plot = NULL)
 
 observeEvent(input$current.data, {
     if(input$current.data == 'submitted data') {        
-        current.data$data = isolate(table$data)
-    }
-    else {
-        current.data$data = isolate(mvalues$matrix)
-    }
-    current.plot$func = NULL
-    current.plot$parameter = NULL
+        current.data$data = table$data
+        }
+    else if(input$current.data == 'aggregated data'){
+        current.data$data = aggregated.data$dt        
+    }     
+    updateSelectInput(session, "plotchoice",
+      selected = "none (choose a plot)"
+    )
 })
 
 observeEvent(input$plotchoice, {
-    plot.func = unprettifyPlotName(isolate(input$plotchoice))
-    if (plot.func!=""){
-        current.plot$func = plot.func
-        current.plot$parameter = as.list(args(plot.func)) 
-    }    
+    if (input$plotchoice!="none (choose a plot)"){ 
+        plot.func = unprettifyPlotName(input$plotchoice)
+        if (plot.func!=""){
+            current.plot$func = plot.func
+            current.plot$parameter = as.list(args(plot.func)) 
+        } 
+    }  
+    else {
+        current.plot$func = NULL
+        current.plot$parameter = list()
+    }     
 })
+
+observeEvent(input$createplot, {
+    plot.function = eval(parse(text=current.plot$func))
+    current.plot$parameter$dt = current.data$data
+    plot.param = current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))]
+    current.plot$plot = do.call(plot.function, plot.param)
+})
+
+output$plotSelected = reactive({
+  return(!is.null(current.plot$func))
+})
+
+outputOptions(output, 'plotSelected', suspendWhenHidden = FALSE)
 
 output$plotselection = renderUI({
     valid = getValidPlots(current.data$data)
     selectInput(
         'plotchoice',
         'Choose a plot',
-        choices = unname(getPrettyPlotList(valid)),
+        choices = c("none (choose a plot)", unname(getPrettyPlotList(valid))),
         selected = FALSE,
         multiple = FALSE
     )
@@ -40,19 +60,19 @@ output$plot.parameter.selection = renderUI({
             uilist = c(uilist,ui.elem)            
         }        
     } 
-    do.call(tagList, uilist)  
+    uilist = lapply(uilist, function(item) {
+        item = item[item != "div"]
+        item = item[item != "form-group shiny-input-container"]   
+    })
+    uilist
 })
 
 output$plot = renderPlotly({
-    plot.function = eval(parse(text=current.plot$func))
-    current.plot$parameter$dt = isolate(current.data$data)
-    plot.param = isolate(current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))])
-    current.plot$plot = do.call(plot.function, plot.param)
-    current.plot$plot
+    current.plot$plot    
 })
 
 output$radar = radarchart::renderChartJSRadar({
-    current.plot$plot = createRadarPlot(isolate(current.data$data))
+    current.plot$plot = createRadarPlot(current.data$data)
     current.plot$plot
 })
 

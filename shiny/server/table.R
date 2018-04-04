@@ -4,23 +4,17 @@ aggregated.data = reactiveValues(dt = NULL, aggcol = NULL, plot = NULL, trancol 
 observeEvent(input$Submit, {
     req(data()) #only execute the rest, if dataframe is available
     req(input$Submit) #only show the content if user has submitted
-    mvalues$matrix = data()
+    aggregated.data$dt = data()
 })
 
 observeEvent(input$Reset, {
   aggregated.data$trancol = NULL
   aggregated.data$dt = NULL
-  mvalues$matrix = table$data
 })
 
 observeEvent(input$Aggregation, {
     req(data())
-    #if (!is.null(aggregated.data$dt)) {
-    #  mvalues$matrix = aggregated.data$dt
-    #}
-    #else {
-      mvalues$matrix = get.aggr.data()
-    #}
+    aggregated.data$dt = get.aggr.data()
 })
 
 observeEvent(input$DataTable_rows_selected, {
@@ -31,10 +25,7 @@ observeEvent(input$DeleteSelectedRows, {
   selected.rows = isolate(aggregated.data$rows.selected)
   req(data())
   if (!is.null(selected.rows)) {
-    mvalues$matrix = mvalues$matrix[-as.numeric(selected.rows),]
-  }
-  else {
-    mvalues$matrix = get.aggr.data()
+    aggregated.data$dt = aggregated.data$dt[-as.numeric(selected.rows),]
   }
 })
 
@@ -42,13 +33,9 @@ get.aggr.data = function() {
   groupby = isolate(input$gcolumns)
   aggfun.list = isolate(input$aggrf)
   aggcol = isolate(input$aggrcol)
-  df = data()
   aggfun = parser.function.list(aggfun.list)
-  aggregated.data$dt = aggregation.apply(groupby, aggfun, aggcol, df)
-  #aggregated.data$trancol = get.num.columns.name(aggregated.data$dt)
-  #aggregated.data$aggcol = aggregated.data$trancol
-  result = aggregated.data$dt
-  result
+  result = aggregation.apply(groupby, aggfun, aggcol, aggregated.data$dt)
+  return(result)
 }
 
 output$table.aggregation = renderUI({
@@ -59,7 +46,7 @@ output$table.aggregation = renderUI({
     selectInput(
       'gcolumns',
       'GroupBy Columns',
-      colnames(mvalues$matrix),
+      colnames(aggregated.data$dt),
       selected = FALSE,
       multiple = TRUE
     ),
@@ -71,7 +58,7 @@ output$table.aggregation = renderUI({
     selectInput(
       'aggrcol',
       'Aggregated Column',
-      get.num.columns.name(mvalues$matrix),
+      get.num.columns.name(aggregated.data$dt),
       selected = FALSE,
       multiple = TRUE
     )
@@ -79,28 +66,20 @@ output$table.aggregation = renderUI({
 })
 
 observeEvent(input$Transformation, {
-   mvalues$matrix = get.transform.data()
+   aggregated.data$dt = get.transform.data()
 })
 
 get.transform.data = function() {
-  original.data = isolate(mvalues$matrix)
+  original.data = isolate(aggregated.data$dt)
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
-  aggregated.data$dt = transformation.apply(original.data, columns.to.transform, transformation.functions)
-  aggregated.data$dt
+  result = transformation.apply(original.data, columns.to.transform, transformation.functions)
+  return(result)
 }
 
 output$table.transformation = renderUI({
-  req(data()) #only execute the rest, if dataframe is available
-  req(input$Submit) #only show the content if user has submitted
-  data = data()
-  #if (!is.null(aggregated.data$trancol)) {
-  #  trancols = aggregated.data$trancol
-  #}
-  #else {
-    trancols = get.num.columns.name(mvalues$matrix)
-  #}
+  trancols = get.num.columns.name(aggregated.data$dt)
   list(
     selectInput(
       'trancols',
@@ -119,7 +98,7 @@ output$table.transformation = renderUI({
 
 
 output$DataTable = DT::renderDataTable(
-  mvalues$matrix,
+  aggregated.data$dt,
   filter = 'top',
   extensions = c('Buttons', 'ColReorder', 'FixedColumns'),
   options = list(

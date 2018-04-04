@@ -10,9 +10,34 @@ getValidParameterUI = function(param) {
     }
 
     ui.elem.id = paste0('param_', param.name)
-    ui.elem.text = paste0('Choose ', param.name)
+    ui.elem.text = param.name
+    #ui.elem.text = paste0('Choose ', param.name)
     input.react.name = paste0("input$",ui.elem.id)
-    if (grepl("measure", param.name) && !grepl("measures", param.name)) {
+    if (grepl("measures", param.name)) {
+        ui.elem = selectInput(
+            ui.elem.id,
+            ui.elem.text,
+            choices = getMeasures(isolate(current.data$data)),
+            selected = FALSE,
+            multiple = TRUE
+        )
+        observeEvent(eval(parse(text=input.react.name)), {
+            current.plot$parameter[[param.name]] = eval(parse(text=input.react.name))
+        })
+    }
+    else if (grepl("list.measure", param.name)) {
+        ui.elem = selectInput(
+            ui.elem.id,
+            ui.elem.text,
+            choices = getLists(isolate(current.data$data)),
+            selected = FALSE,
+            multiple = FALSE
+        )
+        observeEvent(eval(parse(text=input.react.name)), {
+            current.plot$parameter[[param.name]] = eval(parse(text=input.react.name))
+        })
+    }
+    else if (grepl("measure", param.name)) {
         ui.elem = selectInput(
             ui.elem.id,
             ui.elem.text,
@@ -24,13 +49,13 @@ getValidParameterUI = function(param) {
             current.plot$parameter[[param.name]] = eval(parse(text=input.react.name))
         })
     }
-    else if (grepl("measures", param.name)) {
+    else if (grepl("color.by", param.name) || grepl("group.by", param.name)) {
         ui.elem = selectInput(
             ui.elem.id,
             ui.elem.text,
-            choices = getMeasures(isolate(current.data$data)),
+            choices = getMainColumns(isolate(current.data$data)),
             selected = FALSE,
-            multiple = TRUE
+            multiple = FALSE
         )
         observeEvent(eval(parse(text=input.react.name)), {
             current.plot$parameter[[param.name]] = eval(parse(text=input.react.name))

@@ -1,6 +1,4 @@
 tabpanel.import =  list(
-    shinyjs::useShinyjs(), 
-    shinyjs::extendShinyjs(text = jsResetCode),
     fluidRow(
       column(5, h3("Import the file with benchmark results")),
       column(3, uiOutput("help.import"))              
