@@ -100,9 +100,9 @@ jsonExport = function(dt, file.path) {
 tableTransformationImport = function(dt, is.csv) {
   checkmate::assert_true(checkColumnNames(dt))
   # Parse the columns containing list strings back to lists
-  dt$problem.parameter = lapply(dt$problem.parameter, stringToList)
-  dt$algorithm.parameter = lapply(dt$algorithm.parameter, stringToList)
-  dt$replication.parameter = lapply(dt$replication.parameter, stringToList)
+  for (column.name in getParameterColumns(dt)) {
+    dt[[column.name]] = lapply(dt[[column.name]], stringToList)
+  }
   # Just for CSV files
   if (is.csv) {
     # Change vector strings back to vectors
@@ -123,9 +123,9 @@ tableTransformationExport = function(dt, is.csv) {
   # Create copy of the original data table
   dt.copy = cbind(dt)
   # Parse the columns containing lists to string
-  dt.copy$problem.parameter = sapply(dt$problem.parameter, listToString)
-  dt.copy$algorithm.parameter = sapply(dt$algorithm.parameter, listToString)
-  dt.copy$replication.parameter = sapply(dt$replication.parameter, listToString)
+  for (column.name in getParameterColumns(dt)) {
+    dt.copy[[column.name]] = sapply(dt[[column.name]], listToString)
+  }
   # Just for CSV files
   if (is.csv) {
     # Change vectors to string

@@ -346,7 +346,7 @@ createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = F
   } else {
     p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, text = ~text, type = "scatter", mode = "markers")
   }
-  p = plotly::layout(p, xaxis = list(title = measure1), yaxis = list(title = measure2))
+  p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = measure1), yaxis = list(title = measure2))
   return(p)
 }
 
