@@ -8,8 +8,7 @@ observeEvent(input$Submit, {
 })
 
 observeEvent(input$Reset, {
-  aggregated.data$trancol = NULL
-  aggregated.data$dt = NULL
+  aggregated.data$dt = table$data
 })
 
 observeEvent(input$Aggregation, {
@@ -46,7 +45,7 @@ output$table.aggregation = renderUI({
     selectInput(
       'gcolumns',
       'GroupBy Columns',
-      colnames(aggregated.data$dt),
+      getMainColumns(aggregated.data$dt), #TEST
       selected = FALSE,
       multiple = TRUE
     ),
