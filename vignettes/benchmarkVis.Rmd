@@ -161,20 +161,25 @@ Alternatively you could use the wrapper and save the created table as a json or 
 
 As stated before, there are several ways to load your data into the benchmarkVis package.
 
-## Use a csv or json file 
+## Use a csv, json or Rds file 
 
-If you have a csv/json file which is structured as stated in "Data Structure" you can simply use following command to load your benchmark result:
+If you have a csv/json/Rds file which is structured as stated in [1. Data Structure](https://github.com/collinleiber/benchmarkVis/wiki/Tutorial:-1.-Data-Structure) you can simply use following command to load your benchmark result:
 
-``` r
-csvImport(PATH.TO.CSV.File)
+```r
+csvImport("PATH.TO.CSV.File")
 ```
 
 or
 
 ```r
-jsonImport(PATH.TO.CSV.File)
+jsonImport("PATH.TO.JSON.File")
 ```
 
+or 
+
+```r
+rdsImport("PATH.TO.RDS.File")
+```
 After the import a structure check will be run to see if everything is correct.
 
 ## Use a wrapper
@@ -261,11 +266,11 @@ If you don't know the needed arguments of a specific plot, take a look into the 
 
 # Shiny application
 
-All the functionalities of the package are also provided from an interactive shiny application. Therefore just open the `ui.R` or `server.ui` file from the shiny directory from RStudio and click the "Run App" button in the upper right. If you do not use RStudio you can load the benchmarkVis package and run the R command `shiny::runApp('shiny')`.
+All the functionalities of the package are also provided from an interactive shiny application. Therefore just open the `ui.R` or `server.ui` file from the shiny directory from within RStudio and click the "Run App" button in the upper right. Alternatively - if you do not use RStudio - you can simply load the benchmarkVis package and run the R command `shiny::runApp('shiny')` in the console.
 
-After the shiny applicaion has been started the first step you need to do is to import your data. First select you import data type and then choose the corresponding csv or Rds file. When the upload is finished you can select the `Manipulate table` entry in the menu on the left. There you can execute aggretaions and transformations to transform the table into the desired structure. The transformed table can be saved as csv file to better share your results. 
+The shiny application is structured with tabs each having its own functionality. After the app has been started, `Import` tab is the first one you see. Here you can import your data. First select your import data type and then choose the corresponding csv, json or Rds file. When the upload is finished you can select the `Data table` tab in the menu on the left. There you can apply aggregation and transformation functions on table columns to transform the table to suit your needs regarding what exactly you want to analyse and plot. The transformed table can be saved as csv or PDF file to better share your results (you can also print out the table directly from the app). 
 
-Next you need to switch to the `Plots` menu, where you can create all kinds of charts. After a plot type has been chosen and all parameters have been defined the plot will be created in the bottom of the screen. Through the usage of the `plotly` package there is a wide range of interaction possibilities. If you want to save a plot for a later comparison you can insert it into the menu on the left by clicking `Save plot`.
+Next you need to switch to the `Plots` tab, where you can create different charts, for both original data and your transformed table. After a plot type has been chosen and all parameters have been defined the plot will be created in the bottom of the screen. Through the usage of the `plotly` package there is a wide range of interaction possibilities. If you want to save a plot for a later comparison in the app you can do so by clicking `Save this plot in 'Saved Plots'`. `Saved Plots` and `Compare Plots` tabs allow for inspection of the pre-selected plots.
 
 # Wiki
 

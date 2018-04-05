@@ -46,6 +46,9 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
     if (check.aggregation.valid(x)) {
       result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
+    else {
+      result = dt
+    }
   }
   return(result)
 }
@@ -94,6 +97,11 @@ transformation.apply = function(original.data,
           transformed.column = rank(original.data[, column])
         else
           transformed.column = unlist(lapply(original.data[, column], transform.function))
+        column.name = column
+        if (grepl("list.", column.name)) {
+          column.name = sub("list.", "measure.from.list.", column.name)
+        }
+        new.column.name = paste(column.name, "_", transform.func, "", sep  = "")
       }
       else if (column.type(original.data[, column]) == "vector" &&
                check.transform.list.to.list(transform.function)) {
@@ -103,13 +111,13 @@ transformation.apply = function(original.data,
           transformed.column = lapply(original.data[, column], function(x) {
             unlist(lapply(x, transform.function))
           })
+        new.column.name = paste(column, "_", transform.func, "", sep  = "")
       }
       else {
         transformed.column = NULL
         next
       }
       result$transformed.column = transformed.column
-      new.column.name = paste(column, "_", transform.func, "", sep  = "")
       data.table::setnames(result, "transformed.column", new.column.name)
     }
   }
