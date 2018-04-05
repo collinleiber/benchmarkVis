@@ -43,9 +43,9 @@ In this section we will describe the input data structure of the benchmarkVis pa
 | mandatory | optional | mandatory | optional | optional | optional | optional | optional | optional | optional |
 
 As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
-The table can contain any number of measures and lists. It is just important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
+The table can contain any number of measures and lists. It is important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
 
-One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the specified algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
+One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the corresponding algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
 
 ## Input Data Types
 
