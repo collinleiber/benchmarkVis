@@ -45,7 +45,7 @@ output$table.aggregation = renderUI({
     selectInput(
       'gcolumns',
       'GroupBy Columns',
-      getMainColumns(aggregated.data$dt), #TEST
+      getMainColumns(aggregated.data$dt),
       selected = FALSE,
       multiple = TRUE
     ),
