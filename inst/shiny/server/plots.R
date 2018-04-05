@@ -55,7 +55,7 @@ output$plotselection = renderUI({
 output$plot.parameter.selection = renderUI({
   parameter = as.list(args(current.plot$func))
   uilist = list()
-  for (i in 1:length(parameter)) {
+  for (i in seq_len(length(parameter))) {
     ui.elem = getValidParameterUI(parameter[i])
     if (!is.null(ui.elem)) {
       uilist = c(uilist, ui.elem)
