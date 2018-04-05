@@ -24,12 +24,12 @@ data = reactive({
 })
 
 observeEvent(input$new.data, {
-      shinyjs::reset("file")
-      shinyjs::reset("importtab")
+  shinyjs::reset("file")
+  shinyjs::reset("importtab")
 })
 
 observeEvent(input$Submit, {
-  table$data = data()  
+  table$data = data()
   current.data$data = table$data
   aggregated.data$dt = table$data
 })
@@ -38,15 +38,25 @@ output$fileUploaded = reactive({
   return(!is.null(data()))
 })
 
-outputOptions(output, 'fileUploaded', suspendWhenHidden = FALSE)
+outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
 
 output$data.format = renderUI({
-  data.types = c('csv', 'rds',  'json', 'microbenchmark', 'mlr', 'mlr tuning', 'rbenchmark')
+  data.types = c("csv",
+                 "rds",
+                 "json",
+                 "microbenchmark",
+                 "mlr",
+                 "mlr tuning",
+                 "rbenchmark")
   column(6,
-         selectInput('dataformat', 'Choose your data type', data.types, selected = 'csv'))
+         selectInput("dataformat", "Choose your data type", data.types, selected = "csv"))
 })
 
 output$accepted = renderImage({
-  list(src = './www/accepted.png', width="50px", height="50px",
-       alt = paste("Submit was successful"))
+  list(
+    src = "./www/accepted.png",
+    width = "50px",
+    height = "50px",
+    alt = paste("Submit was successful")
+  )
 }, deleteFile = FALSE)
