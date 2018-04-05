@@ -81,4 +81,10 @@ RDS:
 table = rdsImport("PATH.TO.RDS.FILE")
 ```
 
+The package functionality can also be reached via a shiny app which you can start with:
+
+```r
+runShinyApp()
+```
+
 Check out our tutorial in the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for detailed information.
