@@ -151,6 +151,16 @@ test_that("Transformation only works with compatible columns", {
   expect_equal(mlr.benchmark.example, result)
 })
 
+test_that("Transformation works properly on list-to-value column of mlr.benchmark.example", {
+  result = transformation.apply(
+    original.data = mlr.benchmark.example,
+    columns.to.transform = "list.ber",
+    transformation.functions = "mean"
+  )
+  expect_true(is.data.frame(result) && ncol(result) == 13L)
+  expect_true("measure.from.list.ber_mean" %in% colnames(result))
+})
+
 test_that("Column type detection works properly", {
   data = mlr.benchmark.example
   expect_equal(column.type(data$measure.mmce.test.mean), "values")

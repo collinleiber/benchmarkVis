@@ -46,8 +46,9 @@ aggregation.apply = function(groupby, aggfun, aggcol, dt) {
     if (check.aggregation.valid(x)) {
       result = get.agg.result(eval(x), x, groupby, aggcol, dt)
     }
-    else
+    else {
       result = dt
+    }
   }
   return(result)
 }
@@ -97,8 +98,9 @@ transformation.apply = function(original.data,
         else
           transformed.column = unlist(lapply(original.data[, column], transform.function))
         column.name = column
-        if (grepl("list.", column.name))
-          column.name = sub("list.", "measure.from.list", column.name)
+        if (grepl("list.", column.name)) {
+          column.name = sub("list.", "measure.from.list.", column.name)
+        }
         new.column.name = paste(column.name, "_", transform.func, "", sep  = "")
       }
       else if (column.type(original.data[, column]) == "vector" &&

@@ -1,4 +1,4 @@
-context("Do Aggregation")
+context("Aggregation")
 
 test_that("aggregation function is valid", {
   test.fun.1 = function(x) 1
@@ -75,4 +75,15 @@ test_that("Do aggregation for microbenchmark", {
       "measure.median_function(x) 1"
     )
   )
+})
+
+# Check if aggregation for microbenchmark with a non valid aggregation function works correctly
+test_that("Do aggregation for microbenchmark with a non valid aggregation function", {
+  result = aggregation.apply(
+    groupby = c("problem", "algorithm"),
+    aggfun = "log2",
+    aggcol = "measure.mean",
+    dt = microbenchmark.example
+  )
+  expect_equal(result, microbenchmark.example)
 })
