@@ -30,21 +30,12 @@ One special case occurs if you change algorithm parameters through multiple iter
 
 # Quick Start
 
-Load CSV file
+In this example we will use one of the provided wrappers (in this case the wrapper for microbenchmarks) as input data and create a bar plot and a list line chart.
+
+Create input data:
 
 ``` r
-table = csvImport("PATH.TO.FILE")
-```
-
-or load json file
-
-``` r
-table = jsonImport("PATH.TO.FILE")
-```
-
-or use one of the provided wrappers (in this example microbenchmark)
-
-``` r
+library(benchmarkVis)
 library(microbenchmark)
 x = runif(100)
 benchmark = microbenchmark(sqrt(x), x ^ 0.5)
@@ -52,15 +43,42 @@ benchmark = microbenchmark(sqrt(x), x ^ 0.5)
 table = useMicrobenchmarkWrapper(benchmark)
 ```
 
-See a list with all possible visualizations
+See a list with all visualizations usable with the input data:
 
 ``` r
-listPlots()
+getValidPlots(table)
 ```
 
-Create Plots
+Create Plots:
 
 ``` r
-createBarPlot(table, "measure")
-createListLinePlot(table, "list", "min", TRUE)
+createBarPlot(table, "measure.mean")
+createListLinePlot(table, "list.values", "mean", TRUE)
 ```
+
+### Next steps
+
+For more complex examples take a look at the [Example Use Cases](https://github.com/collinleiber/benchmarkVis/wiki/Tutorial:-5.-Example-Use-Cases).
+
+
+If you want to use your own data you can import csv, json and rds files:
+
+CSV:
+
+``` r
+table = csvImport("PATH.TO.CSV.FILE")
+```
+
+JSON:
+
+``` r
+table = jsonImport("PATH.TO.JSON.FILE")
+```
+
+RDS:
+
+```r
+table = rdsImport("PATH.TO.RDS.FILE")
+```
+
+Check out our tutorial in the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for detailed information.
