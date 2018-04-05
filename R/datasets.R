@@ -81,3 +81,17 @@ NULL
 #' @references See \url{data/large.benchmark.RData}
 #' @keywords data
 NULL
+
+#' Batch benchmark
+#'
+#' A example of a benchmark created with mlr and batchtools.
+#' The table consists of 11 columns and 12 rows.
+#' Problems: iris, sonar, mlbench.waveform, mlbench.ringnorm
+#' Algorithms: lda, rpart, randomForest
+#' Replications: CV 2.
+#' The file is accessible through "batch.benchmark".
+#' @name batch.benchmark
+#' @docType data
+#' @references See \url{data/batch.benchmark.RData}
+#' @keywords data
+NULL
