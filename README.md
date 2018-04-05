@@ -37,6 +37,7 @@ Create input data:
 ``` r
 library(benchmarkVis)
 library(microbenchmark)
+
 x = runif(100)
 benchmark = microbenchmark(sqrt(x), x ^ 0.5)
 
@@ -54,6 +55,14 @@ Create Plots:
 ``` r
 createBarPlot(table, "measure.mean")
 createListLinePlot(table, "list.values", "mean", TRUE)
+```
+
+### Shiny Application
+
+The package functionality can also be reached via a shiny app which you can start with:
+
+```r
+runShinyApp()
 ```
 
 ### Next steps
@@ -79,12 +88,6 @@ RDS:
 
 ```r
 table = rdsImport("PATH.TO.RDS.FILE")
-```
-
-The package functionality can also be reached via a shiny app which you can start with:
-
-```r
-runShinyApp()
 ```
 
 Check out our tutorial in the [Wiki](https://github.com/collinleiber/benchmarkVis/wiki) for detailed information.
