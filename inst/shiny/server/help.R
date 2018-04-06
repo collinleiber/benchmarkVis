@@ -9,7 +9,7 @@ shiny.help = list(
   ),
   "create.plots" = c(
     "Create plots",
-    "Choose if you would like to use original or aggregated data from the previous tab, then choose a plot and its parameters. If you want to save the plot for the future use in the app, just click on the button on the right (you can also edit the name of the plot)"
+    "Choose if you would like to use original or aggregated data from the previous tab, then choose a plot and its parameters. If you want to save the plot for future use in the app, just click on the button on the right (you can also edit the name of the plot)"
   ),
   "saved.plots" = c(
     "View saved plots",
