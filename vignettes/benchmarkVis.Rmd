@@ -266,7 +266,13 @@ If you don't know the needed arguments of a specific plot, take a look into the 
 
 # Shiny application
 
-All the functionalities of the package are also provided from an interactive shiny application. Therefore just open the `ui.R` or `server.ui` file from the shiny directory from within RStudio and click the "Run App" button in the upper right. Alternatively - if you do not use RStudio - you can simply load the benchmarkVis package and run the R command `shiny::runApp('shiny')` in the console.
+All the functionalities of the package are also provided from an interactive shiny application. Therefore simply load the benchmarkVis package and run the R command:
+
+```r
+runShinyApp()
+```
+
+Alternatively - as a developer - open the ui.R or server.ui file from the shiny directory from within RStudio and click the "Run App" button in the upper right. If you do not use RStudio you can load the benchmarkVis package and run the R command `shiny::runApp('shiny')` in the console.
 
 The shiny application is structured with tabs each having its own functionality. After the app has been started, `Import` tab is the first one you see. Here you can import your data. First select your import data type and then choose the corresponding csv, json or Rds file. When the upload is finished you can select the `Data table` tab in the menu on the left. There you can apply aggregation and transformation functions on table columns to transform the table to suit your needs regarding what exactly you want to analyse and plot. The transformed table can be saved as csv or PDF file to better share your results (you can also print out the table directly from the app). 
 
