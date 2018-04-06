@@ -35,8 +35,8 @@ useMlrTuningWrapper = function(res) {
       }
       return(params)
     }),
-    replication = "unknown",
-    replication.parameter = repList(list(), length(data$data[[1]])),
+    #replication = "unknown",
+    #replication.parameter = repList(list(), length(data$data[[1]])),
     stringsAsFactors = TRUE
   )
   # Add measures

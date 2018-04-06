@@ -21,7 +21,6 @@ useMicrobenchmarkWrapper = function(benchmark) {
   # Create data table
   dt = data.table::data.table(
     problem = "unknown",
-    problem.parameter = repList(list(), nrow(summary)),
     algorithm = summary$expr,
     algorithm.parameter = repList(list(unit = attr(summary, "unit")), nrow(summary)),
     replication = "repitition",

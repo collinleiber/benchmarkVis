@@ -24,9 +24,7 @@ useRbenchmarkWrapper = function(benchmark) {
   # Create data table
   dt = data.table::data.table(
     problem = "unknown",
-    problem.parameter = repList(list(), nrow(benchmark)),
     algorithm = benchmark$test,
-    algorithm.parameter = repList(list(), nrow(benchmark)),
     replication = "repitition",
     replication.parameter = lapply(benchmark$replications, function(x) {
       list(iters = x)

@@ -45,7 +45,7 @@ test_that("getParameterColumns for mlr benchmark", {
 # Check if getParameterColumnsCount() for microbenchmark is working correctly
 test_that("getParameterColumnsCount for microbenchmark", {
   count = getParameterColumnsCount(microbenchmark.example)
-  expect_equal(count, 3)
+  expect_equal(count, 2)
 })
 
 # Check if getIterationAlgorithms() for mlr tuning is working correctly

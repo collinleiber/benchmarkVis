@@ -40,10 +40,13 @@ checkStructure = function(dt) {
   checkmate::assert_true(checkColumnNames(dt))
   # Check basic structure
   for (x in getMainColumns(dt)) {
+    checkmate::assert_false(anyNA(dt[[x]]))
     checkmate::assert_true(is.factor(dt[[x]]))
   }
   for (x in getParameterColumns(dt)) {
+    checkmate::assert_false(anyNA(dt[[x]]))
     checkmate::assert_true(is.list(dt[[x]]))
+    checkmate::assert_true(all(sapply(dt[[x]], is.list)))
   }
   # Check measures and list measures
   for (x in getMeasures(dt)) {
@@ -51,6 +54,7 @@ checkStructure = function(dt) {
   }
   for (x in getLists(dt)) {
     checkmate::assert_true(is.vector(dt[[x]]))
+    checkmate::assert_true(all(sapply(dt[[x]], is.numeric)))
   }
   # Check iteration algorithms. Iteration parameter must be included
   for (x in getIterationAlgorithms(dt)) {
