@@ -25,5 +25,6 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 data/Rds
-shiny/tests
+inst/shiny/tests
+inst/shiny/rsconnect
 inst/doc
