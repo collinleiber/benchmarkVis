@@ -108,6 +108,6 @@ test_that("createListMeasureMatrixPlot Test mlr benchmark", {
 test_that("createListMeasureMatrixPlot Test microbenchmark", {
   tmp = microbenchmark.example
   tmp$replication = NULL
-  p = createListMeasureMatrixPlot(microbenchmark.example)
+  p = createListMeasureMatrixPlot(tmp)
   expect_true(is.list(p))
 })
