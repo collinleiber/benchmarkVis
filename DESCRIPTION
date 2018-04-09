@@ -19,7 +19,10 @@ Imports:
 	data.table,
 	ggplot2,
 	radarchart,
-	jsonlite
+	jsonlite,
+	GGally,
+	magrittr,
+	dplyr
 Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),
@@ -38,8 +41,6 @@ Suggests:
 	DT,
 	ParamHelpers (>= 1.10),
 	kernlab,
-	magrittr,
-	dplyr,
-    knitr,
-    rmarkdown
+  knitr,
+  rmarkdown
 VignetteBuilder: knitr

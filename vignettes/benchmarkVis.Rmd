@@ -235,6 +235,7 @@ Following list gives an overview about all implemented plots and their correspon
 | Density Rank Plot | Density Rank Plot | |
 | Box Plot | Box Plot | |
 | Scatter Plot | Scatter Plot | |
+| Measure Matrix Plot | Measure Matrix Plot | |
 | Parallel Coordinates Plot | | |
 | Radar Plot | | |
 | Rank Plot | | |
