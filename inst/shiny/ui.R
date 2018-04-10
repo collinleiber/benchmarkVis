@@ -5,6 +5,8 @@ library(plotly)
 library(shinyjs)
 library(V8)
 library(shinyBS)
+library(stringi)
+library(BBmisc)
 #needed for shinyapps.io
 #library(devtools)
 #devtools::install_github("collinleiber/benchmarkVis")

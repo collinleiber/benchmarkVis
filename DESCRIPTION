@@ -39,6 +39,8 @@ Suggests:
 	ParamHelpers (>= 1.10),
 	kernlab,
 	magrittr,
+	stringi,
+	BBmisc,
 	dplyr,
     knitr,
     rmarkdown
