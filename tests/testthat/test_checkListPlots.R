@@ -97,3 +97,17 @@ test_that("createListBoxPlot Test microbenchmark with violin", {
   p = createListBoxPlot(tmp, "list.values", TRUE)
   expect_true(is.list(p))
 })
+
+# Check if creating a lsit measure matrix plot throws an error
+test_that("createListMeasureMatrixPlot Test mlr benchmark", {
+  p = createListMeasureMatrixPlot(mlr.benchmark.example)
+  expect_true(is.list(p))
+})
+
+# Check if creating a lsit measure matrix plot throws an error
+test_that("createListMeasureMatrixPlot Test microbenchmark", {
+  tmp = microbenchmark.example
+  tmp$replication = NULL
+  p = createListMeasureMatrixPlot(tmp)
+  expect_true(is.list(p))
+})

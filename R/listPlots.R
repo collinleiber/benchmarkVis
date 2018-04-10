@@ -415,3 +415,40 @@ createListBoxPlot = function(dt, list.measure, violin = FALSE, color.by = "algor
   )
   return(p)
 }
+
+#' @title Create a list measure matrix plot
+#'
+#' @description
+#' Create a list measure matrix plot out of a benchmarkVis compatible data table.
+#' The created matrix plot shows all measure results for each benchmark entry.
+#' BEWARE! All list measures need to have the same length.
+#'
+#' @param dt compatible data table
+#' @return a measure matrix plot
+#' @export
+#' @examples
+#' createListMeasureMatrixPlot(mlr.benchmark.example)
+createListMeasureMatrixPlot = function(dt) {
+  # Checks
+  checkmate::assert_data_table(dt)
+  # Get length of lists
+  times = sapply(dt[[getLists(dt)[[1]]]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  if ("replication" %in% getMainColumns(dt)) {
+    entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
+  } else {
+    entry = rep(interaction(dt$problem, dt$algorithm), times)
+  }
+  new.df = data.frame(
+    entry = entry
+  )
+  for (list in getLists(dt)) {
+    new.df[[list]] = unlist(dt[[list]])
+  }
+  # Create plot
+  p = GGally::ggpairs(new.df, columns = getLists(dt), ggplot2::aes(colour = entry)) + ggplot2::theme_bw()
+  p = plotly::ggplotly(p)
+  return(p)
+}
