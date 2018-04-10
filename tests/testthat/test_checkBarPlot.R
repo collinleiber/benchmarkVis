@@ -18,23 +18,23 @@ test_that("createBarPlot for mlr benchmark", {
 
 # Check if creating a Bar Plot throws an error
 test_that("createBarPlot for microbenchmark", {
-  p = createBarPlot(microbenchmark.example, "measure.mean", "problem", FALSE)
+  p = createBarPlot(microbenchmark.example, "measure.mean", "problem", FALSE, TRUE)
   expect_true(is.list(p))
   tmp = microbenchmark.example
   tmp$replication = NULL
-  p = createBarPlot(tmp, "measure.mean", "algorithm", FALSE)
+  p = createBarPlot(tmp, "measure.mean", "algorithm", FALSE, FALSE)
   expect_true(is.list(p))
 })
 
 
 # Check if creating a Rank Matrix Bar Plot throws an error
 test_that("createRankMatrixBarPlot for mlr benchmark", {
-  p = createRankMatrixBarPlot(mlr.benchmark.example, "measure.ber.test.mean")
+  p = createRankMatrixBarPlot(mlr.benchmark.example, "measure.ber.test.mean", stacked = TRUE)
   expect_true(is.list(p))
 })
 
 # Check if creating a Rank Matrix Bar Plot throws an error
 test_that("createRankMatrixBarPlot for microbenchmark", {
-  p = createRankMatrixBarPlot(microbenchmark.example)
+  p = createRankMatrixBarPlot(microbenchmark.example, stacked = FALSE)
   expect_true(is.list(p))
 })

@@ -11,15 +11,15 @@
 #' @param measure2 the second measure  for comparison
 #' @param color.by the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param interaction.column will result in colors being an interaction of color.by and this value. Possibilities: "algorithm", "problem", "replication", "none" (default: "none")
-#' @param pointsize the size of ploted point
-#' @param jitter small vertical jitter to deal with overplotting in case of equal scores
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @return a dual measure plot
 #' @export
 #' @examples
-#' createDualMeasurePlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')
-createDualMeasurePlot = function(dt, measure1, measure2, color.by = "algorithm", interaction.column = "none", pointsize = 4L, jitter = 0) {
+#' createDualMeasurePlot(mlr.benchmark.example, "measure.mmce.test.mean","measure.ber.test.mean")
+createDualMeasurePlot = function(dt, measure1, measure2, color.by = "algorithm", interaction.column = "none", regression.line = FALSE) {
   # Checks
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(regression.line)
   checkmate::assert_string(measure1)
   checkmate::assert_true(measure1 %in% getMeasures(dt))
   checkmate::assert_string(measure2)
@@ -28,24 +28,26 @@ createDualMeasurePlot = function(dt, measure1, measure2, color.by = "algorithm",
   checkmate::assert_string(interaction.column)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
   checkmate::assert_true(interaction.column %in% getMainColumns(dt) | interaction.column == "none")
-  checkmate::assert_numeric(pointsize)
-  checkmate::assert_numeric(jitter)
   # Get data
   if (interaction.column != "none") {
     col.op = interaction(dt[[color.by]], dt[[interaction.column]])
   } else {
     col.op = dt[[color.by]]
   }
-  # Create plot
-  p = ggplot2::ggplot(dt, ggplot2::aes_string(x = measure1, y = measure2, col = col.op)) + ggplot2::theme_bw()
-  p = p + ggplot2::geom_point(size = pointsize, position = ggplot2::position_jitter(width = 0, height = jitter))
-  p = p + ggplot2::ylab(measure1)
-  p = p + ggplot2::xlab(measure2)
-  if (interaction.column != "none") {
-    p = p + ggplot2::labs(col = paste(color.by, interaction.column, sep = "."))
+  # Get text
+  if ("replication" %in% getMainColumns(dt)) {
+    text = paste("problem: ", dt$problem, "<br>algorithm: ", dt$algorithm, "<br>replication: ", dt$replication, sep = "")
   } else {
-    p = p + ggplot2::labs(col = color.by)
+    text = paste("problem: ", dt$problem, "<br>algorithm: ", dt$algorithm, sep = "")
   }
-  p = plotly::ggplotly(p)
+  # Create plot
+  p = plotly::plot_ly(dt)
+  p = plotly::add_trace(p, x = dt[[measure1]], y = dt[[measure2]], color = col.op, text = text, type = "scatter", mode = "markers")
+  # Add regression line
+  if (regression.line) {
+    fit = lm(dt[[measure2]] ~ dt[[measure1]])
+    p = plotly::add_lines(p, x = dt[[measure1]], y = fitted(fit), name = "regression")
+  }
+  p = plotly::layout(p, xaxis = list(title = measure1), yaxis = list(title = measure2))
   return(p)
 }

@@ -4,12 +4,14 @@
 \alias{createListRankMatrixBarPlot}
 \title{Create a list rank matrix bar plot}
 \usage{
-createListRankMatrixBarPlot(dt, list.measure)
+createListRankMatrixBarPlot(dt, list.measure, stacked = TRUE)
 }
 \arguments{
 \item{dt}{campatible data table}
 
 \item{list.measure}{the column name containing the list of a specific measure}
+
+\item{stacked}{defines if the bars should be stacked (default: TRUE)}
 }
 \value{
 a plotly rank matrix bar plot

@@ -4,7 +4,8 @@
 \alias{createBarPlot}
 \title{Create a bar plot}
 \usage{
-createBarPlot(dt, measure, color.by = "algorithm", group.color = FALSE)
+createBarPlot(dt, measure, color.by = "algorithm", group.color = FALSE,
+  stacked = FALSE)
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -14,6 +15,8 @@ createBarPlot(dt, measure, color.by = "algorithm", group.color = FALSE)
 \item{color.by}{the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 
 \item{group.color}{instead of coloring the column specified by color.by it will be grouped. Color will be chosen from the remaining main columns instead (default: FALSE)}
+
+\item{stacked}{defines if the grouped bars should be stacked. Just working with "group.color" = TRUE (default: FALSE)}
 }
 \value{
 a plotly bar plot

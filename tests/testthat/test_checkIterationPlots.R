@@ -8,7 +8,7 @@ test_that("createIterationParameterPlot Test", {
 
 # Check if creating a iteration parameter plot with histogram throws an error
 test_that("createIterationParameterPlot with histogram Test", {
-  p = createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", TRUE)
+  p = createIterationParameterPlot(mlr.tuning.example, "measure.acc.test.mean", "C", TRUE, TRUE)
   expect_true(is.list(p))
 })
 
@@ -44,6 +44,6 @@ test_that("createIterationDualMeasurePlot Test mlr tuning", {
 
 # Check if creating a iteration dual measure plot with lines throws an error
 test_that("createIterationDualMeasurePlot Test with lines mlr tuning", {
-  p = createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd", TRUE)
+  p = createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd", TRUE, TRUE)
   expect_true(is.list(p))
 })

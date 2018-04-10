@@ -40,3 +40,33 @@ test_that("getValidPlots for mlr tuning compared to rbenchmark", {
   expect_true(length(plots) > 1)
   expect_true(length(plots) > length(getValidPlots(rbenchmark.example)))
 })
+
+# Check if getMeasures() for mlr benchmark is working correctly
+test_that("getMeasures for mlr benchmark", {
+  measures = getMeasures(mlr.benchmark.example)
+  expect_identical(measures, c("measure.mmce.test.mean", "measure.ber.test.mean", "measure.timetrain.test.mean"))
+})
+
+# Check if getLists() for mlr benchmark is working correctly
+test_that("getLists for mlr benchmark", {
+  measures = getLists(mlr.benchmark.example)
+  expect_identical(measures, c("list.mmce", "list.ber", "list.timetrain"))
+})
+
+# Check if getMainColumns() for mlr benchmark is working correctly
+test_that("getMainColumns for mlr benchmark", {
+  main.columns = getMainColumns(mlr.benchmark.example)
+  expect_identical(main.columns, c("problem", "algorithm", "replication"))
+})
+
+# Check if getParameterColumns() for mlr benchmark is working correctly
+test_that("getParameterColumns for mlr benchmark", {
+  parameter.columns = getParameterColumns(mlr.benchmark.example)
+  expect_identical(parameter.columns, c("problem.parameter", "algorithm.parameter", "replication.parameter"))
+})
+
+# Check if getIterationAlgorithms() for mlr tuning is working correctly
+test_that("getIterationAlgorithms for mlr tuning", {
+  measures = getIterationAlgorithms(mlr.tuning.example)
+  expect_identical(measures, "classif.ksvm")
+})

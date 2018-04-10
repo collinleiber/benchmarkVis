@@ -11,6 +11,7 @@
 #' @param measure the column name containing the results of a measure
 #' @param parameter the algorithm parameter you want to examine
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly scatter plot
@@ -21,6 +22,7 @@ createIterationParameterPlot = function(dt,
   measure,
   parameter,
   show.histogram = FALSE,
+  regression.line = FALSE,
   iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
@@ -32,6 +34,7 @@ createIterationParameterPlot = function(dt,
   checkmate::assert_string(parameter)
   checkmate::assert_string(measure)
   checkmate::assert_logical(show.histogram)
+  checkmate::assert_logical(regression.line)
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
   })))
@@ -52,6 +55,11 @@ createIterationParameterPlot = function(dt,
     name = "Results",
     type = "scatter",
     mode = "markers")
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure ~ parameter, data = new.df)
+    p = plotly::add_lines(p, x = ~parameter, y = fitted(fit), name = "regression")
+  }
   # Plot optional histogram
   if (show.histogram) {
     p = plotly::add_histogram(p,
@@ -305,13 +313,14 @@ createIterationLinePlot = function(dt,
 #' @param measure1 the measure on the x axis
 #' @param measure2 the measure on the y axis
 #' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd")
-createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = FALSE, iteration.algorithm = "default") {
+createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = FALSE, regression.line = FALSE, iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
@@ -319,6 +328,7 @@ createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = F
   dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
   # Checks
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(regression.line)
   checkmate::assert_string(measure1)
   checkmate::assert_string(measure2)
   checkmate::assert_true(measure1 %in% getMeasures(dt))
@@ -341,10 +351,16 @@ createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = F
     text = param.text
   )
   # Create plot
+  p = plotly::plot_ly(new.df)
   if (draw.lines) {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, linetype = ~problem, text = ~text, type = "scatter", mode = "lines+markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, linetype = ~problem, text = ~text, type = "scatter", mode = "lines+markers")
   } else {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, text = ~text, type = "scatter", mode = "markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, text = ~text, type = "scatter", mode = "markers")
+  }
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure2 ~ measure1, data = new.df)
+    p = plotly::add_lines(p, x = ~measure1, y = fitted(fit), name = "regression")
   }
   p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = measure1), yaxis = list(title = measure2))
   return(p)

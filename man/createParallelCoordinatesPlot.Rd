@@ -4,10 +4,12 @@
 \alias{createParallelCoordinatesPlot}
 \title{Create a parallel coordinates plot}
 \usage{
-createParallelCoordinatesPlot(dt)
+createParallelCoordinatesPlot(dt, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{compatible data table}
+
+\item{color.by}{the column to color the lines with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
 \value{
 a plotly parallel coordinates plot

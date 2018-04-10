@@ -85,12 +85,15 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
 #' @param draw.lines draw a line between the points in the original order (default: FALSE)
 #' @param color.by defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param style.by defines the style of the line. Just working with 'draw.lines' = TRUE. Possibilities: "algorithm", "problem", "replication" (default: "problem")
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber")
-createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE, color.by = "algorithm", style.by = "problem") {
+createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE, color.by = "algorithm", style.by = "problem", regression.line = FALSE) {
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(regression.line)
+  checkmate::assert_logical(draw.lines)
   checkmate::assert_string(list.measure1)
   checkmate::assert_string(list.measure2)
   checkmate::assert_true(list.measure1 %in% getLists(dt))
@@ -118,10 +121,16 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
     new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), sep = "")
   }
   # Create plot
+  p = plotly::plot_ly(new.df)
   if (draw.lines) {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, linetype = ~style, text = ~text, type = "scatter", mode = "lines+markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, color = ~color, linetype = ~style, text = ~text, type = "scatter", mode = "lines+markers")
   } else {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, text = ~text, type = "scatter", mode = "markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, color = ~color, text = ~text, type = "scatter", mode = "markers")
+  }
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure2 ~ measure1, data = new.df)
+    p = plotly::add_lines(p, x = ~measure1, y = fitted(fit), name = "regression")
   }
   p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
   return(p)
@@ -135,12 +144,14 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
 #'
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
+#' @param stacked defines if the bars should be stacked (default: TRUE)
 #' @return a plotly rank matrix bar plot
 #' @export
 #' @examples
 #' createListRankMatrixBarPlot(microbenchmark.example, "list.values")
-createListRankMatrixBarPlot = function(dt, list.measure) {
+createListRankMatrixBarPlot = function(dt, list.measure, stacked = TRUE) {
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(stacked)
   checkmate::assert_string(list.measure)
   checkmate::assert_true(list.measure %in% getLists(dt))
   # Get minimum amount of lists
@@ -202,11 +213,17 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     text = ~ text,
     marker = list(line = list(color = "gray", width = 2))
   )
+  # Stack bars
+  if (stacked) {
+    my.barmode = "stack"
+  } else {
+    my.barmode = "base"
+  }
   p = plotly::layout(
     p,
     yaxis = list(title = "frequency"),
     xaxis = list(title = "ranks"),
-    barmode = "stack"
+    barmode = my.barmode
   )
   return(p)
 }

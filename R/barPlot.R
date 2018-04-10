@@ -10,13 +10,15 @@
 #' @param measure the column name containing the results of a measure
 #' @param color.by the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param group.color instead of coloring the column specified by color.by it will be grouped. Color will be chosen from the remaining main columns instead (default: FALSE)
+#' @param stacked defines if the grouped bars should be stacked. Just working with "group.color" = TRUE (default: FALSE)
 #' @return a plotly bar plot
 #' @export
 #' @examples
 #' createBarPlot(mlr.benchmark.example, "measure.mmce.test.mean")
-createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALSE) {
+createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALSE, stacked = FALSE) {
   # Checks
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(stacked)
   checkmate::assert_string(measure)
   checkmate::assert_true(measure %in% getMeasures(dt))
   checkmate::assert_logical(group.color)
@@ -70,11 +72,18 @@ createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALS
       color = ~ color
     )
   }
+  # Stack bars
+  if (stacked & group.color) {
+    my.barmode = "stack"
+  } else {
+    my.barmode = "base"
+  }
   p = plotly::layout(
     p,
     yaxis = list(title = ""),
     xaxis = list(title = measure),
-    margin = list(l = 180)
+    margin = list(l = 180),
+    barmode = my.barmode
   )
   return(p)
 }
@@ -84,20 +93,23 @@ createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALS
 #' @description
 #' Create a plotly rank matrix bar plot out of a benchmarkVis compatible data table.
 #' The created bar plot shows the frequency of the ranks each input achieves depending on a group and measures.
+#' The value defined in "color.by" can get one rank per value in "group.by" and measure.
 #' x-Axis: the ranks.
 #' y-Axis: the frequency.
 #'
 #' @param dt compatible data table
 #' @param ignore.measures a vector of strings describing which measures to leave out of the plot (default: empty)
+#' @param stacked defines if the bars should be stacked (default: TRUE)
 #' @param color.by the column to color the bars with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param group.by the column to group the bars by. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a plotly rank matrix bar plot
 #' @export
 #' @examples
 #' createRankMatrixBarPlot(mlr.benchmark.example, c("measure.timetrain.test.mean","measure.mmce.test.mean"))
-createRankMatrixBarPlot = function(dt, ignore.measures = vector(), color.by = "algorithm", group.by = "problem") {
+createRankMatrixBarPlot = function(dt, ignore.measures = vector(), stacked = TRUE, color.by = "algorithm", group.by = "problem") {
   # Checks
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(stacked)
   checkmate::assert_character(ignore.measures)
   checkmate::assert_true(all(ignore.measures %in% getMeasures(dt)))
   checkmate::assert_string(color.by)
@@ -142,11 +154,17 @@ createRankMatrixBarPlot = function(dt, ignore.measures = vector(), color.by = "a
     color = ~ color,
     marker = list(line = list(color = "gray", width = 2))
   )
+  # Stack bars
+  if (stacked) {
+    my.barmode = "stack"
+  } else {
+    my.barmode = "base"
+  }
   p = plotly::layout(
     p,
     yaxis = list(title = "frequency"),
     xaxis = list(title = "ranks"),
-    barmode = "stack"
+    barmode = my.barmode
   )
   return(p)
 }

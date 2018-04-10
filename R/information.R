@@ -5,6 +5,85 @@
   )
 }
 
+#' @title Get all measures
+#' @description
+#' Get the names of measure columns within the data table.
+#' Measures columns start with "measure."
+#'
+#' @param dt input data table
+#' @return vector containing all measure names
+#' @export
+#' @examples
+#' getMeasures(mlr.benchmark.example)
+getMeasures = function(dt) {
+  return(subset(names(dt), startsWith(names(dt), "measure.")))
+}
+
+#' @title Get all lists
+#' @description
+#' Get the names of list columns within the data table.
+#' List columns start with "list."
+#'
+#' @param dt input data table
+#' @return vector containing all list names
+#' @export
+#' @examples
+#' getLists(mlr.benchmark.example)
+getLists = function(dt) {
+  return(subset(names(dt), startsWith(names(dt), "list.")))
+}
+
+#' @title Get all iteration algorithms
+#' @description
+#' Get the names of algorithms with multiple iterations within the data table.
+#' Algorithms for which the parameters contain "iteration" field.
+#'
+#' @param dt input data table
+#' @return vector containing all iteration algorithm names
+#' @export
+#' @examples
+#' getIterationAlgorithms(mlr.tuning.example)
+getIterationAlgorithms = function(dt) {
+  iteration.algorithms = vector()
+  for (row in nrow(dt)) {
+    if ("iteration" %in% names(dt[[row, "algorithm.parameter"]]) &&
+        !as.character(dt[[row, "algorithm"]]) %in% iteration.algorithms) {
+      iteration.algorithms = c(iteration.algorithms, as.character(dt[[row, "algorithm"]]))
+    }
+  }
+  return(iteration.algorithms)
+}
+
+#' @title Get all main columns
+#' @description
+#' Get the names of main columns within the data table.
+#' Can be "problem", "algorithm", "replication". "Problem" and "Algorithm" are mandatory.
+#'
+#' @param dt input data table
+#' @return vector containing all main column names
+#' @export
+#' @examples
+#' getMainColumns(mlr.benchmark.example)
+getMainColumns = function(dt) {
+  main.columns = c("problem", "algorithm", "replication")
+  return(intersect(names(dt), main.columns))
+}
+
+#' @title Get all parameter columns
+#' @description
+#' Get the names of parameter columns within the data table.
+#' Can be "problem.parameter", "algorithm.parameter", "replication.parameter".
+#'
+#' @param dt input data table
+#' @return vector containing all parameter column names
+#' @export
+#' @examples
+#' getParameterColumns(mlr.benchmark.example)
+getParameterColumns = function(dt) {
+  main.columns = c("problem.parameter", "algorithm.parameter", "replication.parameter")
+  return(intersect(names(dt), main.columns))
+}
+
 #' @title Get list of all possible plots
 #'
 #' @description
@@ -12,6 +91,8 @@
 #'
 #' @return vector containing all possbile plots
 #' @export
+#' @examples
+#' listPlots()
 listPlots = function() {
   methods = lsf.str("package:benchmarkVis")
   condition = sapply(methods, function(x) {
@@ -27,6 +108,8 @@ listPlots = function() {
 #'
 #' @return vector containing all possbile wrappers
 #' @export
+#' @examples
+#' listWrappers()
 listWrappers = function() {
   methods = lsf.str("package:benchmarkVis")
   condition = sapply(methods, function(x) {
@@ -44,6 +127,8 @@ listWrappers = function() {
 #' @param dt input data table
 #' @return Return a list of plots suitable for the given data
 #' @export
+#' @examples
+#' getValidPlots(mlr.benchmark.example)
 getValidPlots = function(dt) {
   all.plots = listPlots() #all plots available in the package
   valid.plots = list()
