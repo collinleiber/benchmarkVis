@@ -12,7 +12,7 @@ test_that("createBarPlot for mlr benchmark", {
   tmp$replication = NULL
   p = createBarPlot(tmp, "measure.ber.test.mean", "algorithm", TRUE)
   expect_true(is.list(p))
-  p = createBarPlot(tmp, "measure.ber.test.mean", "problem", TRUE)
+  p = createBarPlot(tmp, "measure.ber.test.mean", "problem", TRUE, TRUE)
   expect_true(is.list(p))
 })
 
@@ -29,12 +29,12 @@ test_that("createBarPlot for microbenchmark", {
 
 # Check if creating a Rank Matrix Bar Plot throws an error
 test_that("createRankMatrixBarPlot for mlr benchmark", {
-  p = createRankMatrixBarPlot(mlr.benchmark.example, "measure.ber.test.mean")
+  p = createRankMatrixBarPlot(mlr.benchmark.example, "measure.ber.test.mean", stacked = TRUE)
   expect_true(is.list(p))
 })
 
 # Check if creating a Rank Matrix Bar Plot throws an error
 test_that("createRankMatrixBarPlot for microbenchmark", {
-  p = createRankMatrixBarPlot(microbenchmark.example)
+  p = createRankMatrixBarPlot(microbenchmark.example, stacked = FALSE)
   expect_true(is.list(p))
 })

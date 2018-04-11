@@ -5,7 +5,7 @@
 \title{Create a iteration line plot with a measure on x and y aixs}
 \usage{
 createIterationDualMeasurePlot(dt, measure1, measure2, draw.lines = FALSE,
-  iteration.algorithm = "default")
+  regression.line = FALSE, iteration.algorithm = "default")
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -15,6 +15,8 @@ createIterationDualMeasurePlot(dt, measure1, measure2, draw.lines = FALSE,
 \item{measure2}{the measure on the y axis}
 
 \item{draw.lines}{draw a line between the points in the original order (default: FALSE)}
+
+\item{regression.line}{add a regression line to the plot (default: FALSE)}
 
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}

@@ -229,13 +229,13 @@ Following list gives an overview about all implemented plots and their correspon
 | Measure Plot | List Plot | Iteration Plot |
 |---|---|---|
 | Dual Measure Plot | Dual Measure Plot | Dual Measure Plot |
-| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
-| Density Plot | Density Plot | Dual Parameter Plot |
+| Measure Matrix Plot | Measure Matrix Plot | Measure Matrix Plot |
+| Box Plot | Box Plot | Box Plot |
+| Scatter Plot | Scatter Plot | Scatter Plot |
+| Density Plot | Density Plot | Density Plot |
 | Summary Plot | Line Plot | Line Plot |
-| Density Rank Plot | Density Rank Plot | |
-| Box Plot | Box Plot | |
-| Scatter Plot | Scatter Plot | |
-| Measure Matrix Plot | Measure Matrix Plot | |
+| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
+| Density Rank Plot | Density Rank Plot | Dual Parameter Plot |
 | Parallel Coordinates Plot | | |
 | Radar Plot | | |
 | Rank Plot | | |
@@ -263,7 +263,19 @@ createBarPlot(microbenchmark.example, "measure.mean")
 createListLinePlot(microbenchmark.example, "list.values")
 ```
 
+## Plot parameters
+
 If you don't know the needed arguments of a specific plot, take a look into the package documentation. As most of the plots are created with plotly you can interactivly change the visualization.
+
+To get more infomration about the components of your data table execude following commands:
+
+```{r}
+getMeasures(mlr.benchmark.example)
+getLists(mlr.benchmark.example)
+getIterationAlgorithms(mlr.tuning.example)
+getMainColumns(mlr.benchmark.example)
+getParameterColumns(mlr.benchmark.example)
+```
 
 # Shiny application
 
