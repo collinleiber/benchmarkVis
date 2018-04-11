@@ -229,13 +229,13 @@ Following list gives an overview about all implemented plots and their correspon
 | Measure Plot | List Plot | Iteration Plot |
 |---|---|---|
 | Dual Measure Plot | Dual Measure Plot | Dual Measure Plot |
-| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
-| Density Plot | Density Plot | Dual Parameter Plot |
+| Measure Matrix Plot | Measure Matrix Plot | Measure Matrix Plot |
+| Box Plot | Box Plot | Box Plot |
+| Scatter Plot | Scatter Plot | Scatter Plot |
+| Density Plot | Density Plot | Density Plot |
 | Summary Plot | Line Plot | Line Plot |
-| Density Rank Plot | Density Rank Plot | |
-| Box Plot | Box Plot | |
-| Scatter Plot | Scatter Plot | |
-| Measure Matrix Plot | Measure Matrix Plot | |
+| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
+| Density Rank Plot | Density Rank Plot | Dual Parameter Plot |
 | Parallel Coordinates Plot | | |
 | Radar Plot | | |
 | Rank Plot | | |

@@ -12,17 +12,17 @@ test_that("createBarPlot for mlr benchmark", {
   tmp$replication = NULL
   p = createBarPlot(tmp, "measure.ber.test.mean", "algorithm", TRUE)
   expect_true(is.list(p))
-  p = createBarPlot(tmp, "measure.ber.test.mean", "problem", TRUE)
+  p = createBarPlot(tmp, "measure.ber.test.mean", "problem", TRUE, TRUE)
   expect_true(is.list(p))
 })
 
 # Check if creating a Bar Plot throws an error
 test_that("createBarPlot for microbenchmark", {
-  p = createBarPlot(microbenchmark.example, "measure.mean", "problem", FALSE, TRUE)
+  p = createBarPlot(microbenchmark.example, "measure.mean", "problem", FALSE)
   expect_true(is.list(p))
   tmp = microbenchmark.example
   tmp$replication = NULL
-  p = createBarPlot(tmp, "measure.mean", "algorithm", FALSE, FALSE)
+  p = createBarPlot(tmp, "measure.mean", "algorithm", FALSE)
   expect_true(is.list(p))
 })
 
