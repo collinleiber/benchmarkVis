@@ -22,13 +22,7 @@ Imports:
 	jsonlite,
 	GGally,
 	magrittr,
-	dplyr,
-	shiny,
-	shinydashboard,
-	shinyjs,
-	V8,
-	shinyBS,
-	DT
+	dplyr
 Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),
@@ -42,5 +36,11 @@ Suggests:
 	ParamHelpers (>= 1.10),
 	kernlab,
   	knitr,
-  	rmarkdown
+  	rmarkdown,
+	shiny,
+	shinydashboard,
+	shinyjs,
+	V8,
+	shinyBS,
+	DT
 VignetteBuilder: knitr
