@@ -134,3 +134,25 @@ unprettifyPlotName = function(plot.name) {
   unprettified.plot.name = paste0("create", plot.type, plot.name)
   return(unprettified.plot.name)
 }
+
+#' @title Get name of a measure without "measure." prefix
+#'
+#' @description
+#' Get name of a measure without "measure." prefix
+#'
+#' @param measure.name measure name
+#' @return name of the measure without "measure."
+getPrettyMeasureName = function(measure.name) {
+  return(gsub("measure.", "", measure.name))
+}
+
+#' @title Get name of a list measure without "list." prefix
+#'
+#' @description
+#' Get name of a list measure without "list." prefix
+#'
+#' @param measure.name list measure name
+#' @return name of the list measure without "list."
+getPrettyListMeasureName = function(measure.name) {
+  return(gsub("list.", "", measure.name))
+}

@@ -41,7 +41,7 @@ createBoxPlot = function(dt, measure, violin = FALSE, color.by = "algorithm") {
   p = plotly::layout(
     p,
     xaxis = list(title = color.by),
-    yaxis = list(title = measure)
+    yaxis = list(title = getPrettyMeasureName(measure))
   )
   return(p)
 }

@@ -94,3 +94,14 @@ test_that("repList  filled", {
   test.list = repList(list(a = 1, b = "x"), 3)
   expect_identical(list(list(a = 1, b = "x"), list(a = 1, b = "x"), list(a = 1, b = "x")), test.list)
 })
+
+# Check if getPrettyMeasureName is working correctly
+test_that("measure names without prefix", {
+  measure.name = "measure.mmce.test.mean"
+  name = getPrettyMeasureName(measure.name)
+  expect_equal("mmce.test.mean", name)
+
+  measure.name = "list.mmce.test.mean"
+  name = getPrettyListMeasureName(measure.name)
+  expect_equal("mmce.test.mean", name)
+})

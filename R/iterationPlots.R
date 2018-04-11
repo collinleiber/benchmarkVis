@@ -76,7 +76,7 @@ createIterationParameterPlot = function(dt,
     p = plotly::layout(
       p,
       title = iteration.algorithm,
-      yaxis = list(title = measure),
+      yaxis = list(title = getPrettyMeasureName(measure)),
       xaxis = list(title = parameter, overlaying = "x2"),
       xaxis2 = list(side = "top", title = "Count"),
       margin = list(t = 130)
@@ -85,7 +85,7 @@ createIterationParameterPlot = function(dt,
     p = plotly::layout(
       p,
       title = iteration.algorithm,
-      yaxis = list(title = measure),
+      yaxis = list(title = getPrettyMeasureName(measure)),
       xaxis = list(title = parameter)
     )
   }
@@ -172,7 +172,7 @@ createIterationDualParameterPlot = function(dt,
         sep = ""
       ),
       colors = c("green", "blue"),
-      marker = list(colorbar = list(title = measure))
+      marker = list(colorbar = list(title = getPrettyMeasureName(measure)))
     )
   } else {
     p = plotly::plot_ly(
@@ -182,7 +182,7 @@ createIterationDualParameterPlot = function(dt,
       z = ~ me,
       type = "contour"
     )
-    p = plotly::colorbar(p, title = measure)
+    p = plotly::colorbar(p, title = getPrettyMeasureName(measure))
   }
   p = plotly::layout(
     p,
@@ -295,7 +295,7 @@ createIterationLinePlot = function(dt,
       p,
       title = iteration.algorithm,
       xaxis = list(title = "iteration"),
-      yaxis = list(overlaying = "y2", title = measure),
+      yaxis = list(overlaying = "y2", title = getPrettyMeasureName(measure)),
       yaxis2 = list(side = "right", title = parameter)
     )
   } else {
@@ -303,7 +303,7 @@ createIterationLinePlot = function(dt,
       p,
       title = iteration.algorithm,
       xaxis = list(title = "iteration"),
-      yaxis = list(title = measure)
+      yaxis = list(title = getPrettyMeasureName(measure))
     )
   }
   return(p)
@@ -385,8 +385,8 @@ createIterationDualMeasurePlot = function(dt,
   p = plotly::layout(
     p,
     title = iteration.algorithm,
-    xaxis = list(title = measure1),
-    yaxis = list(title = measure2)
+    xaxis = list(title = getPrettyMeasureName(measure1)),
+    yaxis = list(title = getPrettyMeasureName(measure2))
   )
   return(p)
 }
@@ -436,7 +436,7 @@ createIterationScatterPlot = function(dt, measure, iteration.algorithm = "defaul
   )
   p = plotly::layout(p,
     xaxis = list(title = "algorithm"),
-    yaxis = list(title = measure))
+    yaxis = list(title = getPrettyMeasureName(measure)))
   return(p)
 }
 
@@ -486,7 +486,7 @@ createIterationBoxPlot = function(dt,
   p = plotly::layout(
     p,
     xaxis = list(title = iteration.algorithm),
-    yaxis = list(title = measure)
+    yaxis = list(title = getPrettyMeasureName(measure))
   )
   return(p)
 }
@@ -520,7 +520,7 @@ createIterationDensityPlot = function(dt, measure, iteration.algorithm = "defaul
     ggplot2::geom_density() + ggplot2::theme_bw() + ggplot2::theme(legend.position = "none")
   # Convert plot to plotly
   p = plotly::ggplotly(p)
-  p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = measure))
+  p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = getPrettyMeasureName(measure)))
   return(p)
 }
 
