@@ -546,7 +546,7 @@ createIterationMeasureMatrixPlot = function(dt, iteration.algorithm = "default")
   # Checks
   checkmate::assert_data_table(dt)
   # Create plot
-  p = GGally::ggpairs(dt, columns = getMeasures(dt), columnLabels = sapply(getMeasures(dt), getPrettyListMeasureName), ggplot2::aes(colour = algorithm)) +
+  p = GGally::ggpairs(dt, columns = getMeasures(dt), columnLabels = sapply(getMeasures(dt), getPrettyMeasureName), ggplot2::aes(colour = algorithm)) +
     ggplot2::theme_bw()
   p = plotly::ggplotly(p)
   return(p)
