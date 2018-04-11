@@ -268,7 +268,7 @@ createIterationLinePlot = function(dt,
     p,
     x = ~ iteration,
     y = ~ measure,
-    name = measure,
+    name = getPrettyMeasureName(measure),
     text = ~ parameter.text,
     type = "scatter",
     mode = "lines+markers"
