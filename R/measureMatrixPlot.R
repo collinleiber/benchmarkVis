@@ -16,7 +16,7 @@ createMeasureMatrixPlot = function(dt, color.by = "algorithm") {
   checkmate::assert_string(color.by)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
   # Create plot
-  p = GGally::ggpairs(dt, columns = getMeasures(dt), ggplot2::aes_string(colour = color.by)) + ggplot2::theme_bw()
+  p = GGally::ggpairs(dt, columns = getMeasures(dt), columnLabels = sapply(getMeasures(dt), getPrettyMeasureName), ggplot2::aes_string(colour = color.by)) + ggplot2::theme_bw()
   p = plotly::ggplotly(p)
   return(p)
 }

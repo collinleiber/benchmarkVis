@@ -62,13 +62,13 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
     xaxis = "x2")
   p = plotly::layout(
     p,
-    yaxis = list(title = list.measure),
+    yaxis = list(title = getPrettyListMeasureName(list.measure)),
     xaxis = list(overlaying = "x2"),
     xaxis2 = list(side = "top", title = "Count"),
     margin = list(t = 130)
   )
   } else {
-  p = plotly::layout(p, yaxis = list(title = list.measure))
+  p = plotly::layout(p, yaxis = list(title = getPrettyListMeasureName(list.measure)))
 }
   return(p)
 }
@@ -132,7 +132,7 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
     fit = lm(measure2 ~ measure1, data = new.df)
     p = plotly::add_lines(p, x = ~measure1, y = fitted(fit), name = "regression")
   }
-  p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
+  p = plotly::layout(p, xaxis = list(title = getPrettyListMeasureName(list.measure1)), yaxis = list(title = getPrettyListMeasureName(list.measure2)))
   return(p)
 }
 
@@ -268,7 +268,7 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   }
   # Convert plot to plotly
   p = plotly::ggplotly(p)
-  p = plotly::layout(p, xaxis = list(title = list.measure))
+  p = plotly::layout(p, xaxis = list(title = getPrettyListMeasureName(list.measure)))
   return(p)
 }
 
@@ -371,7 +371,7 @@ createListScatterPlot = function(dt, list.measure, color.by = "algorithm") {
   }
   # Create plot
   p = plotly::plot_ly(new.df, x = ~ entry, y = ~ measure, type = "scatter", mode = "markers", color = ~ color, marker = list(size = 10), text = ~ text)
-  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = list.measure), margin = list(b = 150))
+  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = getPrettyListMeasureName(list.measure)), margin = list(b = 150))
   return(p)
 }
 
@@ -427,7 +427,7 @@ createListBoxPlot = function(dt, list.measure, violin = FALSE, color.by = "algor
   p = plotly::layout(
     p,
     xaxis = list(title = "benchmark entry"),
-    yaxis = list(title = list.measure),
+    yaxis = list(title = getPrettyListMeasureName(list.measure)),
     margin = list(b = 150)
   )
   return(p)
@@ -465,7 +465,7 @@ createListMeasureMatrixPlot = function(dt) {
     new.df[[list]] = unlist(dt[[list]])
   }
   # Create plot
-  p = GGally::ggpairs(new.df, columns = getLists(dt), ggplot2::aes(colour = entry)) + ggplot2::theme_bw()
+  p = GGally::ggpairs(new.df, columns = getLists(dt),  columnLabels = sapply(getLists(dt), getPrettyListMeasureName), ggplot2::aes(colour = entry)) + ggplot2::theme_bw()
   p = plotly::ggplotly(p)
   return(p)
 }

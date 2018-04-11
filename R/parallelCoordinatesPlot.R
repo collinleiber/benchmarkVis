@@ -59,7 +59,7 @@ createParallelCoordinatesPlot = function(dt, color.by = "algorithm") {
     measure = getMeasures(dt)[i]
     # Construct parallel coordinates compatible list
     tmp = list(range = c(min(dt[[measure]]), max(dt[[measure]])),
-      label = measure,
+      label = getPrettyMeasureName(measure),
       values = dt[[measure]])
     dim[[i + dim.default]] = tmp
   }

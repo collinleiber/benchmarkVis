@@ -13,7 +13,7 @@ createRadarPlot = function(dt) {
   # Checks
   checkmate::assert_data_table(dt)
   # Create new data frame
-  scores = data.frame("Label" = getMeasures(dt))
+  scores = data.frame("Label" = sapply(getMeasures(dt), getPrettyMeasureName))
   for (row in seq(nrow(dt))) {
     vec = vector()
     for (measure in getMeasures(dt)) {
