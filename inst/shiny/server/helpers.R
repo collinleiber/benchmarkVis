@@ -51,11 +51,48 @@ getValidParameterUI = function(param) {
     })
   }
   else if (grepl("color.by", param.name) ||
-           grepl("group.by", param.name)) {
+           grepl("group.by", param.name) ||
+           grepl("style.by", param.name)) {
     ui.elem = selectInput(
       ui.elem.id,
       ui.elem.text,
       choices = getMainColumns(isolate(current.data$data)),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
+  else if (grepl("interaction.column", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = c("none", getMainColumns(isolate(current.data$data))),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
+  else if (grepl("cumulative.function", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = c("id", "max", "min", "mean"),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
+  else if (grepl("iteration.algorithm", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = getIterationAlgorithms(isolate(current.data$data)),
       selected = FALSE,
       multiple = FALSE
     )
@@ -75,6 +112,18 @@ getValidParameterUI = function(param) {
       current.plot$parameter[[param.name]] = as.logical(eval(parse(text = input.react.name)))
     })
   }
+  else if (grepl("parameter", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = names(isolate(current.data$data)$algorithm.parameter[[1]]),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
   else {
     ui.elem = textInput(ui.elem.id,
                         ui.elem.text,
@@ -82,6 +131,11 @@ getValidParameterUI = function(param) {
     if (is.numeric(param[[1]])) {
       observeEvent(eval(parse(text = input.react.name)), {
         current.plot$parameter[[param.name]] = as.numeric(eval(parse(text = input.react.name)))
+      })
+    }
+    else{
+      observeEvent(eval(parse(text = input.react.name)), {
+        current.plot$parameter[[param.name]] = as.character(eval(parse(text = input.react.name)))
       })
     }
   }

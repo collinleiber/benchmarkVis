@@ -36,7 +36,7 @@ createSummaryPlot = function(dt, measure, color.by = "algorithm", group.by = "pr
   p = ggplot2::ggplot(dt, ggplot2::aes(x = dt[[group.by]], fill = dt[[color.by]])) +
     ggplot2::geom_bar(ggplot2::aes(y = copy$Nor), stat = "identity", position = ggplot2::position_nudge(y = copy$Pos)) +
     ggplot2::geom_col(ggplot2::aes(y = 1), alpha = .1, data = dt) +
-    ggplot2::labs(y = measure,
+    ggplot2::labs(y = getPrettyMeasureName(measure),
                   x = group.by,
       fill = color.by)
   p = p + ggplot2::coord_flip() + ggplot2::theme_bw()

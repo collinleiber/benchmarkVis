@@ -48,6 +48,6 @@ createDualMeasurePlot = function(dt, measure1, measure2, color.by = "algorithm",
     fit = lm(dt[[measure2]] ~ dt[[measure1]])
     p = plotly::add_lines(p, x = dt[[measure1]], y = fitted(fit), name = "regression")
   }
-  p = plotly::layout(p, xaxis = list(title = measure1), yaxis = list(title = measure2))
+  p = plotly::layout(p, xaxis = list(title = getPrettyMeasureName(measure1)), yaxis = list(title = getPrettyMeasureName(measure2)))
   return(p)
 }

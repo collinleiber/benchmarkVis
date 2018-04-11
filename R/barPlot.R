@@ -81,7 +81,7 @@ createBarPlot = function(dt, measure, color.by = "algorithm", group.color = FALS
   p = plotly::layout(
     p,
     yaxis = list(title = ""),
-    xaxis = list(title = measure),
+    xaxis = list(title = getPrettyMeasureName(measure)),
     margin = list(l = 180),
     barmode = my.barmode
   )

@@ -8,6 +8,8 @@ test_that("createRadarPlot for mlr benchmark", {
 
 # Check if creating a Radar throws an error
 test_that("createRadarPlot for microbenchmark", {
-  p = createRadarPlot(microbenchmark.example)
+  tmp = microbenchmark.example
+  tmp$replication = NULL
+  p = createRadarPlot(tmp)
   expect_true(is.list(p))
 })

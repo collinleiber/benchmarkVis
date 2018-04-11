@@ -31,6 +31,6 @@ createScatterPlot = function(dt, measure, color.by = "algorithm", group.by = "pr
   )
   # Create Plot
   p = plotly::plot_ly(new.df, x = ~group, y = ~ measure, color = ~color, type = "scatter", mode = "markers", marker = list(size = 10))
-  p = plotly::layout(p, xaxis = list(title = group.by), yaxis = list(title = measure), margin = list(b = 100))
+  p = plotly::layout(p, xaxis = list(title = group.by), yaxis = list(title = getPrettyMeasureName(measure)), margin = list(b = 100))
   return(p)
 }

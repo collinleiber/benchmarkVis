@@ -5,21 +5,8 @@ library(plotly)
 library(shinyjs)
 library(V8)
 library(shinyBS)
-#needed for shinyapps.io
-#library(devtools)
-#devtools::install_github("collinleiber/benchmarkVis")
-#library(benchmarkVis)
-
-css.errors = "
-.shiny-output-error { visibility: hidden; }
-.shiny-output-error:before {
-visibility: visible;
-content: 'Ooops, some error occurred, you should probably restart the app'; }
-}
-"
-
-js.reset.code = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page
 shinyjs::useShinyjs()
+js.reset.code = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page
 shinyjs::extendShinyjs(text = js.reset.code)
 
 ui.files = list.files(path = "./ui", pattern = "*.R")

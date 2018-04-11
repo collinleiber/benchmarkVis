@@ -34,6 +34,6 @@ createDensityPlot = function(dt, measure, stack.plots = FALSE, color.by = "algor
   p = p + ggplot2::labs(fill = color.by)
   # Convert plot to plotly
   p = plotly::ggplotly(p)
-  p = plotly::layout(p, xaxis = list(title = measure))
+  p = plotly::layout(p, xaxis = list(title = getPrettyMeasureName(measure)))
   return(p)
 }
