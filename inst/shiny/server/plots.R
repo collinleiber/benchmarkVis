@@ -3,6 +3,12 @@ current.plot = reactiveValues(func = NULL,
                               parameter = list(),
                               plot = NULL)
 
+
+output$plotToRender = reactive({
+  return(!is.null(current.plot$plot))
+})
+outputOptions(output, "plotToRender", suspendWhenHidden = FALSE)
+
 observeEvent(input$current.data, {
   if (input$current.data == "submitted data") {
     current.data$data = table$data
@@ -15,6 +21,7 @@ observeEvent(input$current.data, {
 })
 
 observeEvent(input$plotchoice, {
+  current.plot$plot = NULL
   if (input$plotchoice != "none (choose a plot)") {
     plot.func = unprettifyPlotName(input$plotchoice)
     if (plot.func != "") {
@@ -29,10 +36,15 @@ observeEvent(input$plotchoice, {
 })
 
 observeEvent(input$createplot, {
-  plot.function = eval(parse(text = current.plot$func))
-  current.plot$parameter$dt = current.data$data
-  plot.param = current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))]
-  current.plot$plot = do.call(plot.function, plot.param)
+  if (current.plot$func != "createRadarPlot"){
+    plot.function = eval(parse(text = current.plot$func))
+    current.plot$parameter$dt = current.data$data
+    plot.param = current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))]
+    current.plot$plot = do.call(plot.function, plot.param)
+  }
+  else{
+    current.plot$plot = createRadarPlot(current.data$data)
+  }
 })
 
 output$plotSelected = reactive({
@@ -73,7 +85,6 @@ output$plot = renderPlotly({
 })
 
 output$radar = radarchart::renderChartJSRadar({
-  current.plot$plot = createRadarPlot(current.data$data)
   current.plot$plot
 })
 
