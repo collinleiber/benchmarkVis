@@ -214,7 +214,7 @@ createIterationDualParameterPlot = function(dt,
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
-#' @param parameter the algorithm parameter
+#' @param parameter the algorithm parameter (default: "none")
 #' @return a plotly line plot
 #' @export
 #' @examples
@@ -224,7 +224,7 @@ createIterationLinePlot = function(dt,
   cumulative.function = "min",
   show.histogram = FALSE,
   iteration.algorithm = "default",
-  parameter = "None") {
+  parameter = "none") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
@@ -239,7 +239,7 @@ createIterationLinePlot = function(dt,
   checkmate::assert_true(cumulative.function %in% c("id", "max", "min", "mean"))
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
-  })) || parameter == "None")
+  })) || parameter == "none")
   checkmate::assert_true(measure %in% getMeasures(dt))
   # Get parameter for new data table
   iter = sapply(dt$algorithm.parameter, function(x) {
@@ -256,7 +256,7 @@ createIterationLinePlot = function(dt,
     measure = meas,
     parameter.text = param.text)
   # Add parameter to new.df if parameter is defined
-  if (parameter != "None") {
+  if (parameter != "none") {
     param = sapply(dt$algorithm.parameter, function(x) {
       return(x[[parameter]])
     })

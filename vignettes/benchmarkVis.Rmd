@@ -81,7 +81,7 @@ To check if your created data table is really compatible with the benchmarkVis p
 checkStructure(dt)
 ```
 
-If it returnes `TRUE` everything is fine else it will result in an error. For all other input strategies this structure check is executed automatically.
+If it returns `TRUE` everything is fine else it will result in an error. For all other input strategies this structure check is executed automatically.
 
 You can use the created data table with the shiny application by saving it as a csv or json file. Just use:
 
