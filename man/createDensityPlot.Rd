@@ -4,14 +4,14 @@
 \alias{createDensityPlot}
 \title{Create a density plot}
 \usage{
-createDensityPlot(dt, measure, stack.plots = FALSE, color.by = "algorithm")
+createDensityPlot(dt, measure, stacked = FALSE, color.by = "algorithm")
 }
 \arguments{
 \item{dt}{campatible data table}
 
 \item{measure}{the column name of the measure}
 
-\item{stack.plots}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
+\item{stacked}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
 
 \item{color.by}{the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }
