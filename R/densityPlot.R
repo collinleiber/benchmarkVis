@@ -6,16 +6,16 @@
 #'
 #' @param dt campatible data table
 #' @param measure the column name of the measure
-#' @param stack.plots defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
+#' @param stacked defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
 #' @param color.by the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @return a plotly density plot
 #' @export
 #' @examples
 #' createDensityPlot(mlr.benchmark.example, "measure.mmce.test.mean", TRUE)
-createDensityPlot = function(dt, measure, stack.plots = FALSE, color.by = "algorithm") {
+createDensityPlot = function(dt, measure, stacked = FALSE, color.by = "algorithm") {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(measure)
-  checkmate::assert_logical(stack.plots)
+  checkmate::assert_logical(stacked)
   checkmate::assert_true(measure %in% getMeasures(dt))
   checkmate::assert_string(color.by)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
@@ -26,7 +26,7 @@ createDensityPlot = function(dt, measure, stack.plots = FALSE, color.by = "algor
   )
   # Create plot
   p = ggplot2::ggplot(data = new.df, ggplot2::aes(meas, fill = color))  + ggplot2::theme_bw()
-  if (stack.plots) {
+  if (stacked) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
     p = p + ggplot2::geom_density(alpha = 0.4)

@@ -8,17 +8,18 @@
 #'
 #' @param dt compatible data table
 #' @param ignore.measures a vector of strings describing which measures to leave out of the plot (default: empty)
-#' @param stack.plots defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
+#' @param stacked defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
 #' @param color.by the column to color the input with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param group.by the column to group the ranks by. Possibilities: "algorithm", "problem", "replication" (default: "problem")
 #' @return a plotly density rank plot
 #' @export
 #' @examples
 #' createDensityRankPlot(mlr.benchmark.example, c("measure.timetrain.test.mean","measure.mmce.test.mean"))
-createDensityRankPlot = function(dt, ignore.measures = vector(), stack.plots = FALSE, color.by = "algorithm", group.by = "problem") {
+createDensityRankPlot = function(dt, ignore.measures = vector(), stacked = FALSE, color.by = "algorithm", group.by = "problem") {
   # Checks
   checkmate::assert_data_table(dt)
   checkmate::assert_character(ignore.measures)
+  checkmate::assert_logical(stacked)
   checkmate::assert_true(all(ignore.measures %in% getMeasures(dt)))
   checkmate::assert_string(color.by)
   checkmate::assert_string(group.by)
@@ -38,7 +39,7 @@ createDensityRankPlot = function(dt, ignore.measures = vector(), stack.plots = F
   new.df$ranks = ranks
   # Create plot
   p = ggplot2::ggplot(data = new.df, ggplot2::aes(ranks, fill = color))  + ggplot2::theme_bw()
-  if (stack.plots) {
+  if (stacked) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
     p = p + ggplot2::geom_density(alpha = 0.4)
