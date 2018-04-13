@@ -82,7 +82,7 @@ createCritDifferencesPlot = function(dt, measure, group.by = "problem", test.str
   q.nemenyi = qtukey(1 - p.value, n.learners, 1e+06) / sqrt(2L)
   cd.nemenyi = q.nemenyi * sqrt(n.learners * (n.learners +
                                                 1L) / (6L * n.tasks))
-  q.bd = qtukey(1L - (p.value/(n.learners - 1L)), 2L, 1e+06) / sqrt(2L)
+  q.bd = qtukey(1L - (p.value / (n.learners - 1L)), 2L, 1e+06) / sqrt(2L)
   cd.bd = q.bd * sqrt(n.learners * (n.learners + 1L) / (6L *
                                                         n.tasks))
   if (f.rejnull) {
