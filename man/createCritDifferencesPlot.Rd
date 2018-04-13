@@ -13,6 +13,10 @@ createCritDifferencesPlot(dt, measure, group.by = "problem",
 \item{measure}{the measure to plot}
 
 \item{group.by}{the column to group the markers by. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
+
+\item{test.str}{Test for which the critical differences are computed. “bd” for the Bonferroni-Dunn Test. “nemenyi” for the [PMCMR::posthoc.friedman.nemenyi.test] which is comparing all classifiers to each other. Possibilities: "nemenyi", "bd"}
+
+\item{p.value}{P-value for the critical difference}
 }
 \value{
 a crit differences plot
