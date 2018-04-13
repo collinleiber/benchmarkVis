@@ -6,6 +6,8 @@
 #' @param dt compatible data table
 #' @param measure the measure to plot
 #' @param group.by the column to group the markers by. Possibilities: "algorithm", "problem", "replication" (default: "problem")
+#' @param test.str Test for which the critical differences are computed. “bd” for the Bonferroni-Dunn Test. “nemenyi” for the [PMCMR::posthoc.friedman.nemenyi.test] which is comparing all classifiers to each other. Possibilities: "nemenyi", "bd"
+#' @param p.value P-value for the critical difference
 #' @return a crit differences plot
 #' @export
 #' @examples
