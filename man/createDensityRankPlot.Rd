@@ -4,7 +4,7 @@
 \alias{createDensityRankPlot}
 \title{Create a density rank plot}
 \usage{
-createDensityRankPlot(dt, ignore.measures = vector(), stack.plots = FALSE,
+createDensityRankPlot(dt, ignore.measures = vector(), stacked = FALSE,
   color.by = "algorithm", group.by = "problem")
 }
 \arguments{
@@ -12,7 +12,7 @@ createDensityRankPlot(dt, ignore.measures = vector(), stack.plots = FALSE,
 
 \item{ignore.measures}{a vector of strings describing which measures to leave out of the plot (default: empty)}
 
-\item{stack.plots}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
+\item{stacked}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
 
 \item{color.by}{the column to color the input with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 

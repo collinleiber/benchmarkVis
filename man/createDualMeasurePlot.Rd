@@ -5,7 +5,7 @@
 \title{Create a Dual Measure plot}
 \usage{
 createDualMeasurePlot(dt, measure1, measure2, color.by = "algorithm",
-  interaction.column = "none", pointsize = 4L, jitter = 0)
+  interaction.column = "none", regression.line = FALSE)
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -18,9 +18,7 @@ createDualMeasurePlot(dt, measure1, measure2, color.by = "algorithm",
 
 \item{interaction.column}{will result in colors being an interaction of color.by and this value. Possibilities: "algorithm", "problem", "replication", "none" (default: "none")}
 
-\item{pointsize}{the size of ploted point}
-
-\item{jitter}{small vertical jitter to deal with overplotting in case of equal scores}
+\item{regression.line}{add a regression line to the plot (default: FALSE)}
 }
 \value{
 a dual measure plot
@@ -32,5 +30,5 @@ x-Axis: measure1.
 y-Axis: measure2.
 }
 \examples{
-createDualMeasurePlot(mlr.benchmark.example, 'measure.mmce.test.mean','measure.ber.test.mean')
+createDualMeasurePlot(mlr.benchmark.example, "measure.mmce.test.mean","measure.ber.test.mean")
 }

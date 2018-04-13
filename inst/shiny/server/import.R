@@ -25,7 +25,9 @@ data = reactive({
 
 observeEvent(input$new.data, {
   shinyjs::reset("file")
-  shinyjs::reset("importtab")
+  session$reload()
+  #shinyjs::reset("importtab")
+  js$reset()
 })
 
 observeEvent(input$Submit, {

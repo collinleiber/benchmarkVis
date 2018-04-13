@@ -19,7 +19,10 @@ Imports:
 	data.table,
 	ggplot2,
 	radarchart,
-	jsonlite
+	jsonlite,
+	GGally,
+	magrittr,
+	dplyr
 Suggests:
 	testthat,
 	lintr (>= 1.0.0.9001),
@@ -28,20 +31,19 @@ Suggests:
 	rpart,
 	randomForest,
 	mlbench,
+	rbenchmark,
+	rex,
+	ParamHelpers (>= 1.10),
+	kernlab,
+  	knitr,
+  	rmarkdown,
 	shiny,
 	shinydashboard,
 	shinyjs,
 	V8,
 	shinyBS,
-	rbenchmark,
-	rex,
-	DT,
-	ParamHelpers (>= 1.10),
-	kernlab,
 	magrittr,
 	stringi,
 	BBmisc,
-	dplyr,
-    knitr,
-    rmarkdown
+	DT
 VignetteBuilder: knitr

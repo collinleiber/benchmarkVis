@@ -62,13 +62,13 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
     xaxis = "x2")
   p = plotly::layout(
     p,
-    yaxis = list(title = list.measure),
+    yaxis = list(title = getPrettyListMeasureName(list.measure)),
     xaxis = list(overlaying = "x2"),
     xaxis2 = list(side = "top", title = "Count"),
     margin = list(t = 130)
   )
   } else {
-  p = plotly::layout(p, yaxis = list(title = list.measure))
+  p = plotly::layout(p, yaxis = list(title = getPrettyListMeasureName(list.measure)))
 }
   return(p)
 }
@@ -85,12 +85,15 @@ createListLinePlot = function(dt, list.measure, cumulative.function = "id", show
 #' @param draw.lines draw a line between the points in the original order (default: FALSE)
 #' @param color.by defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param style.by defines the style of the line. Just working with 'draw.lines' = TRUE. Possibilities: "algorithm", "problem", "replication" (default: "problem")
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createListDualMeasurePlot(mlr.benchmark.example, "list.mmce", "list.ber")
-createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE, color.by = "algorithm", style.by = "problem") {
+createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.lines = FALSE, color.by = "algorithm", style.by = "problem", regression.line = FALSE) {
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(regression.line)
+  checkmate::assert_logical(draw.lines)
   checkmate::assert_string(list.measure1)
   checkmate::assert_string(list.measure2)
   checkmate::assert_true(list.measure1 %in% getLists(dt))
@@ -118,12 +121,18 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
     new.df$text = paste("iteration: ", new.df$iteration, "<br>problem: ", rep(dt$problem, times), "<br>algorithm: ", rep(dt$algorithm, times), sep = "")
   }
   # Create plot
+  p = plotly::plot_ly(new.df)
   if (draw.lines) {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, linetype = ~style, text = ~text, type = "scatter", mode = "lines+markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, color = ~color, linetype = ~style, text = ~text, type = "scatter", mode = "lines+markers")
   } else {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, color = ~color, text = ~text, type = "scatter", mode = "markers")
+    p = plotly::add_trace(p, x = ~measure1, y = ~measure2, color = ~color, text = ~text, type = "scatter", mode = "markers")
   }
-  p = plotly::layout(p, xaxis = list(title = list.measure1), yaxis = list(title = list.measure2))
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure2 ~ measure1, data = new.df)
+    p = plotly::add_lines(p, x = ~measure1, y = fitted(fit), name = "regression")
+  }
+  p = plotly::layout(p, xaxis = list(title = getPrettyListMeasureName(list.measure1)), yaxis = list(title = getPrettyListMeasureName(list.measure2)))
   return(p)
 }
 
@@ -135,12 +144,14 @@ createListDualMeasurePlot = function(dt, list.measure1, list.measure2, draw.line
 #'
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
+#' @param stacked defines if the bars should be stacked (default: TRUE)
 #' @return a plotly rank matrix bar plot
 #' @export
 #' @examples
 #' createListRankMatrixBarPlot(microbenchmark.example, "list.values")
-createListRankMatrixBarPlot = function(dt, list.measure) {
+createListRankMatrixBarPlot = function(dt, list.measure, stacked = TRUE) {
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(stacked)
   checkmate::assert_string(list.measure)
   checkmate::assert_true(list.measure %in% getLists(dt))
   # Get minimum amount of lists
@@ -202,11 +213,17 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
     text = ~ text,
     marker = list(line = list(color = "gray", width = 2))
   )
+  # Stack bars
+  if (stacked) {
+    my.barmode = "stack"
+  } else {
+    my.barmode = "base"
+  }
   p = plotly::layout(
     p,
     yaxis = list(title = "frequency"),
     xaxis = list(title = "ranks"),
-    barmode = "stack"
+    barmode = my.barmode
   )
   return(p)
 }
@@ -219,15 +236,15 @@ createListRankMatrixBarPlot = function(dt, list.measure) {
 #'
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
-#' @param stack.plots defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
+#' @param stacked defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
 #' @return a plotly density plot
 #' @export
 #' @examples
 #' createListDensityPlot(microbenchmark.example, "list.values", TRUE)
-createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
+createListDensityPlot = function(dt, list.measure, stacked = FALSE) {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
-  checkmate::assert_logical(stack.plots)
+  checkmate::assert_logical(stacked)
   checkmate::assert_true(list.measure %in% getLists(dt))
   # Get length of lists
   times = sapply(dt[[list.measure]], function(x) {
@@ -244,14 +261,14 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
   }
   # Create plot
   p = ggplot2::ggplot(data = new.df, ggplot2::aes(measure, fill = entry)) + ggplot2::theme_bw() + ggplot2::labs(fill = "benchmark entry")
-  if (stack.plots) {
+  if (stacked) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
     p = p + ggplot2::geom_density(alpha = 0.4)
   }
   # Convert plot to plotly
   p = plotly::ggplotly(p)
-  p = plotly::layout(p, xaxis = list(title = list.measure))
+  p = plotly::layout(p, xaxis = list(title = getPrettyListMeasureName(list.measure)))
   return(p)
 }
 
@@ -263,15 +280,15 @@ createListDensityPlot = function(dt, list.measure, stack.plots = FALSE) {
 #'
 #' @param dt campatible data table
 #' @param list.measure the column name containing the list of a specific measure
-#' @param stack.plots defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
+#' @param stacked defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
 #' @return a plotly density plot
 #' @export
 #' @examples
 #' createListDensityRankPlot(microbenchmark.example, "list.values", TRUE)
-createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
+createListDensityRankPlot = function(dt, list.measure, stacked = FALSE) {
   checkmate::assert_data_table(dt)
   checkmate::assert_string(list.measure)
-  checkmate::assert_logical(stack.plots)
+  checkmate::assert_logical(stacked)
   checkmate::assert_true(list.measure %in% getLists(dt))
   # Get minimum amount of lists
   min.iterations = min(sapply(dt[[list.measure]], function(x) {
@@ -304,7 +321,7 @@ createListDensityRankPlot = function(dt, list.measure, stack.plots = FALSE) {
   }
   # Create plot
   p = ggplot2::ggplot(data = new.df, ggplot2::aes(measure, fill = entry))  + ggplot2::theme_bw() + ggplot2::labs(fill = "benchmark entry")
-  if (stack.plots) {
+  if (stacked) {
     p = p + ggplot2::geom_density(position = "stack")
   } else {
     p = p + ggplot2::geom_density(alpha = 0.4)
@@ -354,7 +371,7 @@ createListScatterPlot = function(dt, list.measure, color.by = "algorithm") {
   }
   # Create plot
   p = plotly::plot_ly(new.df, x = ~ entry, y = ~ measure, type = "scatter", mode = "markers", color = ~ color, marker = list(size = 10), text = ~ text)
-  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = list.measure), margin = list(b = 150))
+  p = plotly::layout(p, xaxis = list(title = "benchmark entry"), yaxis = list(title = getPrettyListMeasureName(list.measure)), margin = list(b = 150))
   return(p)
 }
 
@@ -404,14 +421,51 @@ createListBoxPlot = function(dt, list.measure, violin = FALSE, color.by = "algor
   }
   # Create Plot
   p = ggplot2::ggplot(new.df, ggplot2::aes(x = entry, y = measure, fill = color, colour = color)) +
-    geometry + ggplot2::labs(fill = "benchmark entry", col = "benchmark entry") + ggplot2::theme_bw() +
+    geometry + ggplot2::labs(fill = color.by, col = color.by) + ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45, hjust = 0))
   p = plotly::ggplotly(p)
   p = plotly::layout(
     p,
     xaxis = list(title = "benchmark entry"),
-    yaxis = list(title = list.measure),
+    yaxis = list(title = getPrettyListMeasureName(list.measure)),
     margin = list(b = 150)
   )
+  return(p)
+}
+
+#' @title Create a list measure matrix plot
+#'
+#' @description
+#' Create a list measure matrix plot out of a benchmarkVis compatible data table.
+#' The created matrix plot shows all measure results for each benchmark entry.
+#' BEWARE! All list measures need to have the same length.
+#'
+#' @param dt compatible data table
+#' @return a measure matrix plot
+#' @export
+#' @examples
+#' createListMeasureMatrixPlot(mlr.benchmark.example)
+createListMeasureMatrixPlot = function(dt) {
+  # Checks
+  checkmate::assert_data_table(dt)
+  # Get length of lists
+  times = sapply(dt[[getLists(dt)[[1]]]], function(x) {
+    return(length(x))
+  })
+  # Create new plotly compatible data table
+  if ("replication" %in% getMainColumns(dt)) {
+    entry = rep(interaction(dt$problem, dt$algorithm, dt$replication), times)
+  } else {
+    entry = rep(interaction(dt$problem, dt$algorithm), times)
+  }
+  new.df = data.frame(
+    entry = entry
+  )
+  for (list in getLists(dt)) {
+    new.df[[list]] = unlist(dt[[list]])
+  }
+  # Create plot
+  p = GGally::ggpairs(new.df, columns = getLists(dt),  columnLabels = sapply(getLists(dt), getPrettyListMeasureName), ggplot2::aes(colour = entry)) + ggplot2::theme_bw()
+  p = plotly::ggplotly(p)
   return(p)
 }

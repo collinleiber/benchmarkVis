@@ -44,7 +44,7 @@ test_that("createListDensityRankPlot Test microbenchmark", {
 
 # Check if creating a list rank matrix bar plot throws an error
 test_that("createListRankMatrixBarPlot Test mlr benchmark", {
-  p = createListRankMatrixBarPlot(mlr.benchmark.example, "list.ber")
+  p = createListRankMatrixBarPlot(mlr.benchmark.example, "list.ber", TRUE)
   expect_true(is.list(p))
 })
 
@@ -52,7 +52,7 @@ test_that("createListRankMatrixBarPlot Test mlr benchmark", {
 test_that("createListRankMatrixBarPlot Test microbenchmark", {
   tmp = microbenchmark.example
   tmp$replication = NULL
-  p = createListRankMatrixBarPlot(tmp, "list.values")
+  p = createListRankMatrixBarPlot(tmp, "list.values", FALSE)
   expect_true(is.list(p))
 })
 
@@ -66,7 +66,7 @@ test_that("createListDualMeasurePlot Test mlr benchmark", {
 test_that("createListDualMeasurePlot Test with lines mlr benchmark", {
   tmp = mlr.benchmark.example
   tmp$replication = NULL
-  p = createListDualMeasurePlot(tmp, "list.mmce", "list.ber", TRUE)
+  p = createListDualMeasurePlot(tmp, "list.mmce", "list.ber", TRUE, regression.line = TRUE)
   expect_true(is.list(p))
 })
 
@@ -95,5 +95,19 @@ test_that("createListBoxPlot Test microbenchmark with violin", {
   tmp = microbenchmark.example
   tmp$replication = NULL
   p = createListBoxPlot(tmp, "list.values", TRUE)
+  expect_true(is.list(p))
+})
+
+# Check if creating a lsit measure matrix plot throws an error
+test_that("createListMeasureMatrixPlot Test mlr benchmark", {
+  p = createListMeasureMatrixPlot(mlr.benchmark.example)
+  expect_true(is.list(p))
+})
+
+# Check if creating a lsit measure matrix plot throws an error
+test_that("createListMeasureMatrixPlot Test microbenchmark", {
+  tmp = microbenchmark.example
+  tmp$replication = NULL
+  p = createListMeasureMatrixPlot(tmp)
   expect_true(is.list(p))
 })

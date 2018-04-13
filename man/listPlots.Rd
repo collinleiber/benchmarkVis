@@ -12,3 +12,6 @@ vector containing all possbile plots
 \description{
 Get a complete list of all plots implemented within the benchmarkVis application
 }
+\examples{
+listPlots()
+}

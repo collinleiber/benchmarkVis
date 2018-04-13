@@ -6,7 +6,7 @@
 \usage{
 createIterationLinePlot(dt, measure, cumulative.function = "min",
   show.histogram = FALSE, iteration.algorithm = "default",
-  parameter = "None")
+  parameter = "none")
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -20,7 +20,7 @@ createIterationLinePlot(dt, measure, cumulative.function = "min",
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}
 
-\item{parameter}{the algorithm parameter}
+\item{parameter}{the algorithm parameter (default: "none")}
 }
 \value{
 a plotly line plot

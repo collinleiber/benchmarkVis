@@ -5,7 +5,7 @@
 \title{Create a iteration parameter scatter plot}
 \usage{
 createIterationParameterPlot(dt, measure, parameter, show.histogram = FALSE,
-  iteration.algorithm = "default")
+  regression.line = FALSE, iteration.algorithm = "default")
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -15,6 +15,8 @@ createIterationParameterPlot(dt, measure, parameter, show.histogram = FALSE,
 \item{parameter}{the algorithm parameter you want to examine}
 
 \item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
+
+\item{regression.line}{add a regression line to the plot (default: FALSE)}
 
 \item{iteration.algorithm}{the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 (default: "default" - would take the first from getIterationAlgorithms())}

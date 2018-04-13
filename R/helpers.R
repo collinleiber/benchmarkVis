@@ -1,19 +1,7 @@
-# Get the names of measure columns within the data table
-# Measures columns start with "measure."
-getMeasures = function(dt) {
-  return(subset(names(dt), startsWith(names(dt), "measure.")))
-}
-
 # Get the number of measure columns within the data table
 # Measures columns start with "measure."
 getMeasuresCount = function(dt) {
   return(length(getMeasures(dt)))
-}
-
-# Get the names of list columns (eg replication measures) within the data table
-# List columns start with "list."
-getLists = function(dt) {
-  return(subset(names(dt), startsWith(names(dt), "list.")))
 }
 
 # Get the number of list columns (eg replication measures) within the data table
@@ -22,43 +10,16 @@ getListsCount = function(dt) {
   return(length(getLists(dt)))
 }
 
-# Get the names of main columns within the data table
-# Can be "problem", "algorithm", "replication". Problem and Algorithm are mandatory
-getMainColumns = function(dt) {
-  main.columns = c("problem", "algorithm", "replication")
-  return(intersect(names(dt), main.columns))
-}
-
 # Get the number of main columns within the data table
 # Can be "problem", "algorithm", "replication". Problem and Algorithm are mandatory
 getMainColumnsCount = function(dt) {
   return(length(getMainColumns(dt)))
 }
 
-# Get the names of parameter columns within the data table
-# Can be "problem.parameter", "algorithm.parameter", "replication.parameter"
-getParameterColumns = function(dt) {
-  main.columns = c("problem.parameter", "algorithm.parameter", "replication.parameter")
-  return(intersect(names(dt), main.columns))
-}
-
 # Get the number of parameter columns within the data table
 # Can be "problem.parameter", "algorithm.parameter", "replication.parameter"
 getParameterColumnsCount = function(dt) {
   return(length(getParameterColumns(dt)))
-}
-
-# Get the names of algorithms with multiple iterations within the data table
-# Algorithms for which the parameters contain "iteration" field
-getIterationAlgorithms = function(dt) {
-  iteration.algorithms = vector()
-  for (row in nrow(dt)) {
-    if ("iteration" %in% names(dt[[row, "algorithm.parameter"]]) &&
-        !as.character(dt[[row, "algorithm"]]) %in% iteration.algorithms) {
-      iteration.algorithms = c(iteration.algorithms, as.character(dt[[row, "algorithm"]]))
-    }
-  }
-  return(iteration.algorithms)
 }
 
 # Get the number of algorithms with multiple iterations within the data table
@@ -172,4 +133,26 @@ unprettifyPlotName = function(plot.name) {
   plot.name = gsub(" ", "", plot.name)
   unprettified.plot.name = paste0("create", plot.type, plot.name)
   return(unprettified.plot.name)
+}
+
+#' @title Get name of a measure without "measure." prefix
+#'
+#' @description
+#' Get name of a measure without "measure." prefix
+#'
+#' @param measure.name measure name
+#' @return name of the measure without "measure."
+getPrettyMeasureName = function(measure.name) {
+  return(gsub("measure.", "", measure.name))
+}
+
+#' @title Get name of a list measure without "list." prefix
+#'
+#' @description
+#' Get name of a list measure without "list." prefix
+#'
+#' @param measure.name list measure name
+#' @return name of the list measure without "list."
+getPrettyListMeasureName = function(measure.name) {
+  return(gsub("list.", "", measure.name))
 }

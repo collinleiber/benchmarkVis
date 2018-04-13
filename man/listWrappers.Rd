@@ -12,3 +12,6 @@ vector containing all possbile wrappers
 \description{
 Get a complete list of all wrappers implemented within the benchmarkVis application
 }
+\examples{
+listWrappers()
+}

@@ -16,3 +16,6 @@ Return a list of plots suitable for the given data
 Get a complete list of all plots implemented within the benchmarkVis application which are combinable with the input data table.
 (depends on the presence/absence of measures, iteration and list data)
 }
+\examples{
+getValidPlots(mlr.benchmark.example)
+}

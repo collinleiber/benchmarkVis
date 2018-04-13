@@ -4,14 +4,14 @@
 \alias{createListDensityPlot}
 \title{Create a list density plot}
 \usage{
-createListDensityPlot(dt, list.measure, stack.plots = FALSE)
+createListDensityPlot(dt, list.measure, stacked = FALSE)
 }
 \arguments{
 \item{dt}{campatible data table}
 
 \item{list.measure}{the column name containing the list of a specific measure}
 
-\item{stack.plots}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
+\item{stacked}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
 }
 \value{
 a plotly density plot

@@ -5,7 +5,8 @@
 \title{Create a list line plot with a measure on x and y aixs}
 \usage{
 createListDualMeasurePlot(dt, list.measure1, list.measure2,
-  draw.lines = FALSE, color.by = "algorithm", style.by = "problem")
+  draw.lines = FALSE, color.by = "algorithm", style.by = "problem",
+  regression.line = FALSE)
 }
 \arguments{
 \item{dt}{campatible data table}
@@ -19,6 +20,8 @@ createListDualMeasurePlot(dt, list.measure1, list.measure2,
 \item{color.by}{defines the color of the markers. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 
 \item{style.by}{defines the style of the line. Just working with 'draw.lines' = TRUE. Possibilities: "algorithm", "problem", "replication" (default: "problem")}
+
+\item{regression.line}{add a regression line to the plot (default: FALSE)}
 }
 \value{
 a plotly line plot

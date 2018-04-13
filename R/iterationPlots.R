@@ -11,6 +11,7 @@
 #' @param measure the column name containing the results of a measure
 #' @param parameter the algorithm parameter you want to examine
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly scatter plot
@@ -21,6 +22,7 @@ createIterationParameterPlot = function(dt,
   measure,
   parameter,
   show.histogram = FALSE,
+  regression.line = FALSE,
   iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
@@ -32,6 +34,7 @@ createIterationParameterPlot = function(dt,
   checkmate::assert_string(parameter)
   checkmate::assert_string(measure)
   checkmate::assert_logical(show.histogram)
+  checkmate::assert_logical(regression.line)
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
   })))
@@ -44,25 +47,36 @@ createIterationParameterPlot = function(dt,
   new.df = data.frame(parameter = param,
     measure = dt[[measure]])
   # Create plot
-  p = plotly::plot_ly(
-    new.df
-  )
-  p = plotly::add_trace(p, x = ~ parameter,
+  p = plotly::plot_ly(new.df)
+  p = plotly::add_trace(
+    p,
+    x = ~ parameter,
     y = ~ measure,
     name = "Results",
     type = "scatter",
-    mode = "markers")
+    mode = "markers"
+  )
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure ~ parameter, data = new.df)
+    p = plotly::add_lines(p,
+      x = ~ parameter,
+      y = fitted(fit),
+      name = "regression")
+  }
   # Plot optional histogram
   if (show.histogram) {
-    p = plotly::add_histogram(p,
+    p = plotly::add_histogram(
+      p,
       y = ~ measure,
       alpha = 0.4,
       name = "Measure distribution",
-      xaxis = "x2")
+      xaxis = "x2"
+    )
     p = plotly::layout(
       p,
       title = iteration.algorithm,
-      yaxis = list(title = measure),
+      yaxis = list(title = getPrettyMeasureName(measure)),
       xaxis = list(title = parameter, overlaying = "x2"),
       xaxis2 = list(side = "top", title = "Count"),
       margin = list(t = 130)
@@ -71,7 +85,7 @@ createIterationParameterPlot = function(dt,
     p = plotly::layout(
       p,
       title = iteration.algorithm,
-      yaxis = list(title = measure),
+      yaxis = list(title = getPrettyMeasureName(measure)),
       xaxis = list(title = parameter)
     )
   }
@@ -158,7 +172,7 @@ createIterationDualParameterPlot = function(dt,
         sep = ""
       ),
       colors = c("green", "blue"),
-      marker = list(colorbar = list(title = measure))
+      marker = list(colorbar = list(title = getPrettyMeasureName(measure)))
     )
   } else {
     p = plotly::plot_ly(
@@ -168,7 +182,7 @@ createIterationDualParameterPlot = function(dt,
       z = ~ me,
       type = "contour"
     )
-    p = plotly::colorbar(p, title = measure)
+    p = plotly::colorbar(p, title = getPrettyMeasureName(measure))
   }
   p = plotly::layout(
     p,
@@ -200,7 +214,7 @@ createIterationDualParameterPlot = function(dt,
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
-#' @param parameter the algorithm parameter
+#' @param parameter the algorithm parameter (default: "none")
 #' @return a plotly line plot
 #' @export
 #' @examples
@@ -210,7 +224,7 @@ createIterationLinePlot = function(dt,
   cumulative.function = "min",
   show.histogram = FALSE,
   iteration.algorithm = "default",
-  parameter = "None") {
+  parameter = "none") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
@@ -225,7 +239,7 @@ createIterationLinePlot = function(dt,
   checkmate::assert_true(cumulative.function %in% c("id", "max", "min", "mean"))
   checkmate::assert_true(all(sapply(dt$algorithm.parameter, function(x) {
     parameter %in% names(x)
-  })) || parameter == "None")
+  })) || parameter == "none")
   checkmate::assert_true(measure %in% getMeasures(dt))
   # Get parameter for new data table
   iter = sapply(dt$algorithm.parameter, function(x) {
@@ -242,7 +256,7 @@ createIterationLinePlot = function(dt,
     measure = meas,
     parameter.text = param.text)
   # Add parameter to new.df if parameter is defined
-  if (parameter != "None") {
+  if (parameter != "none") {
     param = sapply(dt$algorithm.parameter, function(x) {
       return(x[[parameter]])
     })
@@ -254,7 +268,7 @@ createIterationLinePlot = function(dt,
     p,
     x = ~ iteration,
     y = ~ measure,
-    name = measure,
+    name = getPrettyMeasureName(measure),
     text = ~ parameter.text,
     type = "scatter",
     mode = "lines+markers"
@@ -281,7 +295,7 @@ createIterationLinePlot = function(dt,
       p,
       title = iteration.algorithm,
       xaxis = list(title = "iteration"),
-      yaxis = list(overlaying = "y2", title = measure),
+      yaxis = list(overlaying = "y2", title = getPrettyMeasureName(measure)),
       yaxis2 = list(side = "right", title = parameter)
     )
   } else {
@@ -289,7 +303,7 @@ createIterationLinePlot = function(dt,
       p,
       title = iteration.algorithm,
       xaxis = list(title = "iteration"),
-      yaxis = list(title = measure)
+      yaxis = list(title = getPrettyMeasureName(measure))
     )
   }
   return(p)
@@ -305,13 +319,19 @@ createIterationLinePlot = function(dt,
 #' @param measure1 the measure on the x axis
 #' @param measure2 the measure on the y axis
 #' @param draw.lines draw a line between the points in the original order (default: FALSE)
+#' @param regression.line add a regression line to the plot (default: FALSE)
 #' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
 #' (default: "default" - would take the first from getIterationAlgorithms())
 #' @return a plotly line plot
 #' @export
 #' @examples
 #' createIterationDualMeasurePlot(mlr.tuning.example, "measure.acc.test.mean", "measure.acc.test.sd")
-createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = FALSE, iteration.algorithm = "default") {
+createIterationDualMeasurePlot = function(dt,
+  measure1,
+  measure2,
+  draw.lines = FALSE,
+  regression.line = FALSE,
+  iteration.algorithm = "default") {
   # Get first iteration algorithm
   if (iteration.algorithm == "default") {
     iteration.algorithm = getIterationAlgorithms(dt)[1]
@@ -319,34 +339,216 @@ createIterationDualMeasurePlot = function(dt, measure1, measure2, draw.lines = F
   dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
   # Checks
   checkmate::assert_data_table(dt)
+  checkmate::assert_logical(regression.line)
   checkmate::assert_string(measure1)
   checkmate::assert_string(measure2)
   checkmate::assert_true(measure1 %in% getMeasures(dt))
   checkmate::assert_true(measure2 %in% getMeasures(dt))
-  # Get iteration
-  iter = sapply(dt$algorithm.parameter, function(x) {
-    return(x$iteration)
-  })
+  # Get Text
   param.text = sapply(dt$algorithm.parameter, function(x) {
     # Get index of iteration in algorithm.paramter
     return(toString(paste(names(x), x, sep = " = ")))
   })
   # Create new plotly compatible data table
-  new.df = data.frame(
-    measure1 = dt[[measure1]],
+  new.df = data.frame(measure1 = dt[[measure1]],
     measure2 = dt[[measure2]],
-    problem = dt$problem,
-    algorithm = dt$algorithm,
-    iteration = iter,
-    text = param.text
-  )
+    text = param.text)
   # Create plot
+  p = plotly::plot_ly(new.df)
   if (draw.lines) {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, linetype = ~problem, text = ~text, type = "scatter", mode = "lines+markers")
+    p = plotly::add_trace(
+      p,
+      x = ~ measure1,
+      y = ~ measure2,
+      text = ~ text,
+      type = "scatter",
+      mode = "lines+markers"
+    )
   } else {
-    p = plotly::plot_ly(new.df, x = ~measure1, y = ~measure2, text = ~text, type = "scatter", mode = "markers")
+    p = plotly::add_trace(
+      p,
+      x = ~ measure1,
+      y = ~ measure2,
+      text = ~ text,
+      type = "scatter",
+      mode = "markers"
+    )
   }
-  p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = measure1), yaxis = list(title = measure2))
+  # Add regression line
+  if (regression.line) {
+    fit = lm(measure2 ~ measure1, data = new.df)
+    p = plotly::add_lines(p,
+      x = ~ measure1,
+      y = fitted(fit),
+      name = "regression")
+  }
+  p = plotly::layout(
+    p,
+    title = iteration.algorithm,
+    xaxis = list(title = getPrettyMeasureName(measure1)),
+    yaxis = list(title = getPrettyMeasureName(measure2))
+  )
+  return(p)
+}
+
+#' @title Create a iteration scatter plot
+#'
+#' @description
+#' Create a plotly scatter plot out of a benchmarkVis compatible data table.
+#' The created scatter chart shows the different values for the measure.
+#'
+#' @param dt campatible data table
+#' @param measure the measure on the y axis
+#' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+#' (default: "default" - would take the first from getIterationAlgorithms())
+#' @return a plotly scatter plot
+#' @export
+#' @examples
+#' createIterationScatterPlot(mlr.tuning.example, "measure.acc.test.mean")
+createIterationScatterPlot = function(dt, measure, iteration.algorithm = "default") {
+  # Get first iteration algorithm
+  if (iteration.algorithm == "default") {
+    iteration.algorithm = getIterationAlgorithms(dt)[1]
+  }
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
+  # Checks
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(measure)
+  checkmate::assert_true(measure %in% getMeasures(dt))
+  # Get Text
+  param.text = sapply(dt$algorithm.parameter, function(x) {
+    # Get index of iteration in algorithm.paramter
+    return(toString(paste(names(x), x, sep = " = ")))
+  })
+  # Create new plotly compatible data table
+  new.df = data.frame(measure = dt[[measure]],
+    algorithm = dt$algorithm,
+    text = param.text)
+  # Create plot
+  p = plotly::plot_ly(
+    new.df,
+    x = ~ algorithm,
+    y = ~ measure,
+    text = ~ text,
+    type = "scatter",
+    mode = "markers",
+    marker = list(size = 10)
+  )
+  p = plotly::layout(p,
+    xaxis = list(title = "algorithm"),
+    yaxis = list(title = getPrettyMeasureName(measure)))
+  return(p)
+}
+
+#' @title Create a iteration box plot
+#'
+#' @description
+#' Create a plotly box plot out of a benchmarkVis compatible data table.
+#' The created box chart shows the distribution for the input measure.
+#'
+#' @param dt campatible data table
+#' @param measure the measure on the y axis
+#' @param violin if set to TRUE a violin plot instead of boxplot is produced (default: FALSE)
+#' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+#' (default: "default" - would take the first from getIterationAlgorithms())
+#' @return a plotly box plot
+#' @export
+#' @examples
+#' createIterationBoxPlot(mlr.tuning.example, "measure.acc.test.mean")
+createIterationBoxPlot = function(dt,
+  measure,
+  violin = FALSE,
+  iteration.algorithm = "default") {
+  # Get first iteration algorithm
+  if (iteration.algorithm == "default") {
+    iteration.algorithm = getIterationAlgorithms(dt)[1]
+  }
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
+  # Checks
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(measure)
+  checkmate::assert_logical(violin)
+  checkmate::assert_true(measure %in% getMeasures(dt))
+  # Create plot
+  if (violin) {
+    geometry = ggplot2::geom_violin()
+  } else {
+    geometry = ggplot2::geom_boxplot()
+  }
+  p = ggplot2::ggplot(dt, ggplot2::aes(
+    x = "",
+    y = dt[[measure]],
+    fill = "",
+    colour = ""
+  )) +
+    geometry + ggplot2::theme_bw() + ggplot2::theme(legend.position = "none")
+  p = plotly::ggplotly(p)
+  p = plotly::layout(
+    p,
+    xaxis = list(title = iteration.algorithm),
+    yaxis = list(title = getPrettyMeasureName(measure))
+  )
+  return(p)
+}
+
+#' @title Create a iteration density plot
+#'
+#' @description
+#' Create a plotly density plot out of a benchmarkVis compatible data table.
+#' The created density chart shows the distribution of the specified measure.
+#'
+#' @param dt campatible data table
+#' @param measure the input measure on the x axis
+#' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+#' (default: "default" - would take the first from getIterationAlgorithms())
+#' @return a plotly density plot
+#' @export
+#' @examples
+#' createIterationDensityPlot(mlr.tuning.example, "measure.acc.test.mean")
+createIterationDensityPlot = function(dt, measure, iteration.algorithm = "default") {
+  # Get first iteration algorithm
+  if (iteration.algorithm == "default") {
+    iteration.algorithm = getIterationAlgorithms(dt)[1]
+  }
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
+  # Checks
+  checkmate::assert_data_table(dt)
+  checkmate::assert_string(measure)
+  checkmate::assert_true(measure %in% getMeasures(dt))
+  # Create plot
+  p = ggplot2::ggplot(data = dt, ggplot2::aes(dt[[measure]], fill = "")) +
+    ggplot2::geom_density() + ggplot2::theme_bw() + ggplot2::theme(legend.position = "none")
+  # Convert plot to plotly
+  p = plotly::ggplotly(p)
+  p = plotly::layout(p, title = iteration.algorithm, xaxis = list(title = getPrettyMeasureName(measure)))
+  return(p)
+}
+
+#' @title Create a iteration measure matrix plot
+#'
+#' @description
+#' Create a plotly measure matrix plot out of a benchmarkVis compatible data table.
+#' The created measure matrix chart shows the distribution of each measure as density and scatter plot.
+#'
+#' @param dt campatible data table
+#' @param iteration.algorithm the algorithm to investigate. Algorithm.parameter must contain "iteration" field.
+#' (default: "default" - would take the first from getIterationAlgorithms())
+#' @return a plotly measure matrix plot
+#' @export
+#' @examples
+#' createIterationMeasureMatrixPlot(mlr.tuning.example)
+createIterationMeasureMatrixPlot = function(dt, iteration.algorithm = "default") {
+  # Get first iteration algorithm
+  if (iteration.algorithm == "default") {
+    iteration.algorithm = getIterationAlgorithms(dt)[1]
+  }
+  dt = filterTableForIterationAlgorithm(dt, iteration.algorithm)
+  # Checks
+  checkmate::assert_data_table(dt)
+  # Create plot
+  p = GGally::ggpairs(dt, columns = getMeasures(dt), columnLabels = sapply(getMeasures(dt), getPrettyMeasureName), ggplot2::aes(colour = algorithm)) +
+    ggplot2::theme_bw()
+  p = plotly::ggplotly(p)
   return(p)
 }
 
