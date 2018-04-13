@@ -45,5 +45,6 @@ Suggests:
 	magrittr,
 	stringi,
 	BBmisc,
+	PMCMR,
 	DT
 VignetteBuilder: knitr
