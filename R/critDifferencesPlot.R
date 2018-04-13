@@ -79,11 +79,11 @@ createCritDifferencesPlot = function(dt, measure, group.by = "problem", test.str
     f.rejnull = FALSE
     warning("P-value not computable. Learner performances might be exactly equal.")
   }
-  q.nemenyi = qtukey(1 - p.value, n.learners, 1e+06)/sqrt(2L)
+  q.nemenyi = qtukey(1 - p.value, n.learners, 1e+06) / sqrt(2L)
   cd.nemenyi = q.nemenyi * sqrt(n.learners * (n.learners +
-                                                1L)/(6L * n.tasks))
-  q.bd = qtukey(1L - (p.value/(n.learners - 1L)), 2L, 1e+06)/sqrt(2L)
-  cd.bd = q.bd * sqrt(n.learners * (n.learners + 1L)/(6L *
+                                                1L) / (6L * n.tasks))
+  q.bd = qtukey(1L - (p.value/(n.learners - 1L)), 2L, 1e+06) / sqrt(2L)
+  cd.bd = q.bd * sqrt(n.learners * (n.learners + 1L) / (6L *
                                                         n.tasks))
   if (f.rejnull) {
     form = as.formula(stri_paste(aggr.meas, " ~ learner.id | task.id",
@@ -122,7 +122,7 @@ createCritDifferencesPlot = function(dt, measure, group.by = "problem", test.str
     xend = round(apply(mat + sub, 1, max), 3)
     nem.df = data.table::data.table(xstart, xend, diff = xend - xstart)
     nem.df = nem.df[, data.table::.SD[which.max(data.table::.SD$diff)], by = "xend"]
-    nem.df = nem.df[nem.df$xend - nem.df$xstart > 0,]
+    nem.df = nem.df[nem.df$xend - nem.df$xstart > 0, ]
     nem.df$y = seq(from = 0.1,
                    to = 0.35,
                    length.out = dim(nem.df)[1])
