@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/collinleiber/benchmarkVis.svg?branch=master)](https://travis-ci.org/collinleiber/benchmarkVis) [![codecov](https://codecov.io/github/collinleiber/benchmarkVis/branch/master/graphs/badge.svg)](https://codecov.io/github/collinleiber/benchmarkVis) 
 
-benchmarkVis is a R package to visualize benchmark results in different ways. It is working with standard csv, json and files and can also be combined with several benchmark R packages like [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) , [rbenchmark](https://github.com/eddelbuettel/rbenchmark) or [mlr](https://github.com/mlr-org/mlr) throuhgh integrated wrappers. Thanks to the universal input table structure it is also possible to integrate results from  [batchtools](https://github.com/mllg/batchtools) or frameworks outside the R language like pythons [scikit-learn](http://scikit-learn.org).
+benchmarkVis is a R package to visualize benchmark results in different ways. It is working with standard csv, json and rds files and can also be combined with several R benchmark packages like [microbenchmark](https://github.com/joshuaulrich/microbenchmark/) , [rbenchmark](https://github.com/eddelbuettel/rbenchmark) or [mlr](https://github.com/mlr-org/mlr) through integrated wrappers. Thanks to the universal input table structure it is also possible to integrate results from  [batchtools](https://github.com/mllg/batchtools) or frameworks outside the R language like pythons [scikit-learn](http://scikit-learn.org).
 
 # Getting Started
 
