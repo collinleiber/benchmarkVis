@@ -28,9 +28,9 @@ The table can contain any number of measures and lists. It is important that at 
 
 ## Table components
 
-* __problem:__ The problem that should be solved by an algorithm (e.g. dateset or machine learning task)
+* __problem:__ The problem that should be solved by an algorithm (e.g. dataset or machine learning task)
 * __algorithm:__ The procedure to solve the problem with
-* __replication:__ If you want to try an approach more than one time, you can specify the replication strategy (e.g. repitition or resampling)
+* __replication:__ If you want to try an approach more than one time, you can specify the replication strategy (e.g. repetition or resampling)
 * __\*.parameter:__ Specifies numerical or categorical parameters concerning the corresponding column (e.g. problem properties like data size, algorithm parameters or replication parameters like number of repetitions)
 * __measure.\*:__ The measure to evaluate the result of an algorithm with (e.g. execution time or misclassification error)
 * __list.\*:__ Same as measure columns but contain a vector of results (e.g. results for every single replication)
