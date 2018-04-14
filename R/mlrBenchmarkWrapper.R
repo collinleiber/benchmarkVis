@@ -44,8 +44,7 @@ useMlrBenchmarkWrapper = function(bmr) {
     algorithm = rep(names(bmr$learners), tasks.count),
     algorithm.parameter = rep(algorithm.parameter, tasks.count),
     replication = rep(replication, rep(learner.count, tasks.count)),
-    replication.parameter = rep(replication.parameter, rep(learner.count, tasks.count)),
-    stringsAsFactors = TRUE
+    replication.parameter = rep(replication.parameter, rep(learner.count, tasks.count))
   )
   # Add measures and replication results to data table
   replication.results = list()

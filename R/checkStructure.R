@@ -41,7 +41,7 @@ checkStructure = function(dt) {
   # Check basic structure
   for (x in getMainColumns(dt)) {
     checkmate::assert_false(anyNA(dt[[x]]))
-    checkmate::assert_true(is.factor(dt[[x]]))
+    checkmate::assert_true(is.character(dt[[x]]))
   }
   for (x in getParameterColumns(dt)) {
     checkmate::assert_false(anyNA(dt[[x]]))

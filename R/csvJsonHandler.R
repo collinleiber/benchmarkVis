@@ -14,9 +14,7 @@
 csvImport = function(input.csv) {
   checkmate::assert_true(endsWith(input.csv, ".csv"))
   # Load csv file
-  dt = data.table::fread(input.csv,
-    stringsAsFactors = TRUE,
-    data.table = TRUE)
+  dt = data.table::fread(input.csv)
   # Transform data table
   dt = tableTransformationImport(dt, TRUE)
   # Return created data table
@@ -61,7 +59,7 @@ jsonImport = function(input.json) {
   # Load json file
   json = jsonlite::read_json(input.json, simplifyVector = TRUE)
   # Create data table
-  dt = data.table::data.table(json, stringsAsFactors = TRUE)
+  dt = data.table::data.table(json)
   # Transform data table
   dt = tableTransformationImport(dt, FALSE)
   # Return created data table

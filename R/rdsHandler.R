@@ -12,7 +12,7 @@ rdsImport = function(input.rds) {
   # Load rds file
   rds = readRDS(input.rds)
   # Create data table
-  dt = data.table::data.table(rds, stringsAsFactors = TRUE)
+  dt = data.table::data.table(rds)
   # Check structure
   checkmate::assert_true(checkStructure(dt))
   # Return created data table

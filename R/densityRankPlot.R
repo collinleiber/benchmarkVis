@@ -31,7 +31,7 @@ createDensityRankPlot = function(dt, ignore.measures = vector(), stacked = FALSE
   ranks = vector()
   for (measure in getMeasures(dt)) {
     if (!measure %in% ignore.measures) {
-      for (p in levels(dt[[group.by]])) {
+      for (p in unique(dt[[group.by]])) {
         ranks = c(ranks, rank(dt[dt[[group.by]] == p, ][[measure]], ties.method = "min"))
       }
     }
