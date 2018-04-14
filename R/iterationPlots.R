@@ -255,13 +255,6 @@ createIterationLinePlot = function(dt,
   new.df = data.frame(iteration = iter,
     measure = meas,
     parameter.text = param.text)
-  # Add parameter to new.df if parameter is defined
-  if (parameter != "none") {
-    param = sapply(dt$algorithm.parameter, function(x) {
-      return(x[[parameter]])
-    })
-    new.df$parameter = param
-  }
   # Create plot
   p = plotly::plot_ly(new.df)
   p = plotly::add_trace(
@@ -281,7 +274,12 @@ createIterationLinePlot = function(dt,
       name = "Measure distribution")
   }
   # Plot optional parameter scatters
-  if (parameter != "None") {
+  if (parameter != "none") {
+    # Add parameter to new.df if parameter is defined
+    param = sapply(dt$algorithm.parameter, function(x) {
+      return(x[[parameter]])
+    })
+    new.df$parameter = param
     p = plotly::add_trace(
       p,
       x = ~ iteration,

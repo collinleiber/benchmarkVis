@@ -92,7 +92,6 @@ transformation.apply = function(original.data,
       ) ||
       (
         column.type(original.data[, column]) == "vector" &&
-        !is.character(original.data[[column]]) &&
         check.transform.list.to.value(transform.function)
       )) {
         if (transform.func == "rank")
@@ -107,7 +106,6 @@ transformation.apply = function(original.data,
       }
       # List -> List transformation
       else if (column.type(original.data[, column]) == "vector" &&
-                !is.character(original.data[[column]]) &&
                check.transform.list.to.list(transform.function)) {
         if (transform.func == "rank")
           transformed.column = lapply(original.data[, column], rank)
@@ -223,7 +221,9 @@ check.transform.list.to.list = function(transform.fun) {
 column.type = function(column) {
   if (is.numeric(column))
     return("values")
-  if (!(FALSE %in% lapply(column, is.vector)))
+  if (!(FALSE %in% lapply(column, function(x) {
+      return(is.vector(x) && !is.character(x))
+    })))
     return("vector")
   return("other")
 }
