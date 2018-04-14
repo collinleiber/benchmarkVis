@@ -20,7 +20,7 @@ Benchmarking is a good way to compare the performances of different algorithms. 
 
 | problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.\* | list.\* |
 |---|---|---|---|---|---|---|---|
-| character | list | character | list | character | list | numeric | vector |
+| character | list | character | list | character | list | numeric | numeric vector |
 | mandatory | optional | mandatory | optional | optional | optional | optional | optional |
 
 As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
