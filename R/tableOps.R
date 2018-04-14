@@ -117,7 +117,7 @@ transformation.apply = function(original.data,
           })
         new.column.name = paste(column, "_", transform.func, "", sep  = "")
       }
-      # Uncorrect tranformation
+      # Incorrect tranformation
       else {
         transformed.column = NULL
         next
