@@ -13,7 +13,7 @@ This vignette is supposed to give you a short and easy introduction into the ben
 
 The purpose of the package is to provide a flexible and simple to use framework to visualize benchmark results. 
 
-Benchmarking is a good way to compare the performances of different algorithms. To evaluate the results often the same procedures are used. But even though different benchmarks normally contain similar information, the structure can differ significantly. This increases the effort to visualize and analyze them. You have to do the same creation steps over and over again with just a few little changes. At this point the benchmarkVis package comes into play. It aims to convert various formats into a default data table which then can be visualized in multiple ways. 
+Benchmarking is a good way to compare the performances of different algorithms. To evaluate the results often the same procedures are used. But even though different benchmarks normally contain similar information, the structure can differ significantly. This increases the effort to visualize and analyze them. You have to do the same creation steps over and over again with just a few little changes. At this point the benchmarkVis package comes into play. It aims to convert various formats into a default data table which can be visualized in multiple ways. 
 
 The package offers several differant plots which range from simple bar charts to complex parallel coordinates plots. All the functionalities are also provided from an interactive shiny application to simplify the workflow even more. This includes comprehensive methods to manipulate the input benchmark data. 
 
