@@ -32,7 +32,7 @@ tabpanel.plots = list(
       )
     ),
     conditionalPanel(
-      "input.createplot > 0 && output.plotSelected == true",
+      "input.createplot > 0 && output.plotSelected == true && output.plotToRender == true",
       conditionalPanel(
         "input.plotchoice == 'Measure: Radar Plot'",
         radarchart::chartJSRadarOutput("radar", width = "450", height = "300")

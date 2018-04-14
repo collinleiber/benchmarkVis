@@ -113,16 +113,22 @@ checkStructure(dt)
 
 If it returns `TRUE` everything is fine else it will result in an error. For all other input strategies this structure check is executed automatically.
 
-You can use the created data table with the shiny application by saving it as a csv or json file. Just use:
+You can use the created data table with the shiny application by saving it as a csv, json or rds file. Just use:
 
 ```r
-csvExport(dt)
+csvExport(dt, file.path = "PATH")
 ```
 
 or
 
 ```r
-jsonExport(dt)
+jsonExport(dt, file.path = "PATH")
+```
+
+or
+
+```r
+rdsExport(dt, file.path = "PATH")
 ```
 
 ### 2. Use csv file
