@@ -85,12 +85,14 @@ transformation.apply = function(original.data,
   for (transform.func in transformation.functions) {
     transform.function = eval.function(transform.func)
     for (column in columns.to.transform) {
+      # Measure -> Measure or List -> Measure transformation
       if ((
         column.type(original.data[, column]) == "values" &&
         check.transform.value.to.value(transform.function)
       ) ||
       (
         column.type(original.data[, column]) == "vector" &&
+        !is.character(original.data[[column]]) &&
         check.transform.list.to.value(transform.function)
       )) {
         if (transform.func == "rank")
@@ -103,7 +105,9 @@ transformation.apply = function(original.data,
         }
         new.column.name = paste(column.name, "_", transform.func, "", sep  = "")
       }
+      # List -> List transformation
       else if (column.type(original.data[, column]) == "vector" &&
+                !is.character(original.data[[column]]) &&
                check.transform.list.to.list(transform.function)) {
         if (transform.func == "rank")
           transformed.column = lapply(original.data[, column], rank)
@@ -113,6 +117,7 @@ transformation.apply = function(original.data,
           })
         new.column.name = paste(column, "_", transform.func, "", sep  = "")
       }
+      # Uncorrect tranformation
       else {
         transformed.column = NULL
         next

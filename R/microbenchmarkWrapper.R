@@ -21,9 +21,9 @@ useMicrobenchmarkWrapper = function(benchmark) {
   # Create data table
   dt = data.table::data.table(
     problem = "unknown",
-    algorithm = summary$expr,
+    algorithm = as.character(summary$expr),
     algorithm.parameter = repList(list(unit = attr(summary, "unit")), nrow(summary)),
-    replication = "repitition",
+    replication = "repetition",
     replication.parameter = repList(list(iters = summary$neval[[1]]), nrow(summary)),
     measure.min = summary$min,
     measure.lq = summary$lq,
@@ -32,8 +32,7 @@ useMicrobenchmarkWrapper = function(benchmark) {
     measure.uq = summary$uq,
     measure.max = summary$max,
     # Get the replication values out of the benchmark result
-    list.values = lapply(summary$expr, function(x) benchmark[benchmark$expr == x, ]$time),
-    stringsAsFactors = TRUE
+    list.values = lapply(summary$expr, function(x) benchmark[benchmark$expr == x, ]$time)
   )
   # Check structure
   checkmate::assert_true(checkStructure(dt))

@@ -24,12 +24,11 @@ useRbenchmarkWrapper = function(benchmark) {
   # Create data table
   dt = data.table::data.table(
     problem = "unknown",
-    algorithm = benchmark$test,
-    replication = "repitition",
+    algorithm = as.character(benchmark$test),
+    replication = "repetition",
     replication.parameter = lapply(benchmark$replications, function(x) {
       list(iters = x)
-    }),
-    stringsAsFactors = TRUE
+    })
   )
   # Check the possible measures
   measures = c("elapsed",

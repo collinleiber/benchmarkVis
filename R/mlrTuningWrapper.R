@@ -34,10 +34,9 @@ useMlrTuningWrapper = function(res) {
         params[[ele]] = data$data[[ele]][[x]]
       }
       return(params)
-    }),
+    })
     #replication = "unknown",
-    #replication.parameter = repList(list(), length(data$data[[1]])),
-    stringsAsFactors = TRUE
+    #replication.parameter = repList(list(), length(data$data[[1]]))
   )
   # Add measures
   for (ele in names(res$y)) {

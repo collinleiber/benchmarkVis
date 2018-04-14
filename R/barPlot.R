@@ -122,19 +122,19 @@ createRankMatrixBarPlot = function(dt, ignore.measures = vector(), stacked = TRU
   for (measure in getMeasures(dt)) {
     if (!measure %in% ignore.measures) {
       tmp = vector()
-      for (p in levels(dt[[group.by]])) {
+      for (p in unique(dt[[group.by]])) {
         tmp = c(tmp, rank(dt[dt[[group.by]] == p, ][[measure]], ties.method = "min"))
       }
       new.df[[measure]] = tmp
     }
   }
   # Create final data frame
-  color.count = length(levels(new.df$color))
-  compact.df = data.frame(color = rep(levels(new.df$color), rep(color.count, color.count)),
+  color.count = length(unique(new.df$color))
+  compact.df = data.frame(color = rep(unique(new.df$color), rep(color.count, color.count)),
     rank = as.factor(rep(seq(color.count), color.count)))
   # Count ranks
   counter = vector()
-  for (color in levels(new.df$color)) {
+  for (color in unique(new.df$color)) {
     for (i in seq(color.count)) {
       count = 0
       for (measure in getMeasures(new.df)) {

@@ -165,7 +165,7 @@ test_that("Column type detection works properly", {
   data = mlr.benchmark.example
   expect_equal(column.type(data$measure.mmce.test.mean), "values")
   expect_equal(column.type(data$list.mmce), "vector")
-  expect_equal(column.type(data$problem), "other")
+  expect_equal(column.type(data$problem), "vector")
 })
 
 test_that("Numeric column names detection works properly", {
