@@ -14,7 +14,7 @@ benchmarkVis is a R package to visualize benchmark results in different ways. It
 	
 # Description
 
-Benchmarking is a good way to compare the performances of different algorithms. To evaluate the results often the same procedures are used. But even though different benchmarks normally contain similar information, the structure can differ significantly. This increases the effort to visualize and analyze them. You have to do the same creation steps over and over again with just a few little changes. At this point the benchmarkVis package comes into play. It aims to convert various formats into a default data table which then can be visualized in multiple ways. 
+Benchmarking is a good way to compare the performances of different algorithms. To evaluate the results often the same procedures are used. But even though different benchmarks normally contain similar information, the structure can differ significantly. This increases the effort to visualize and analyze them. You have to do the same creation steps over and over again with just a few little changes. At this point the benchmarkVis package comes into play. It aims to convert various formats into a default data table which can be visualized in multiple ways. 
 
 # Compatible data table
 
