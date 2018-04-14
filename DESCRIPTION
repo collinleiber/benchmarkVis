@@ -1,12 +1,12 @@
 Package: benchmarkVis
 Title: Benchmark result visualisation
-Version: 0.0.0.1
+Version: 0.1.0
 Authors@R: c(
 	person("Collin", "Leiber", email = "c.leiber@campus.lmu.de", role = c("aut", "cre")),
 	person("Alona", "Sydorova", email = "alona.sydorova@campus.lmu.de", role = "aut"),
 	person("Kunlan", "Li", email = "li.kunlan@campus.lmu.de", role = "aut"))
 Description: Implementation of an intuitive Shiny application to easily visualize benachmark results
-Depends: R (>= 3.4.2)
+Depends: R (>= 3.0.2)
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -35,8 +35,8 @@ Suggests:
 	rex,
 	ParamHelpers (>= 1.10),
 	kernlab,
-  	knitr,
-  	rmarkdown,
+  knitr,
+  rmarkdown,
 	shiny,
 	shinydashboard,
 	shinyjs,

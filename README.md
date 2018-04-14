@@ -18,15 +18,43 @@ Benchmarking is a good way to compare the performances of different algorithms. 
 
 # Compatible data table
 
-| problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.1 | measure.2 | list.1 | list.2 |
-|---|---|---|---|---|---|---|---|---|---|
-| factor | list | factor | list | factor | list | numeric | numeric | vector | vector |
-| mandatory | optional | mandatory | optional | optional | optional | optional | optional | optional | optional |
+| problem | problem.parameter | algorithm | algorithm.parameter | replication | replication.parameter | measure.\* | list.\* |
+|---|---|---|---|---|---|---|---|
+| character | list | character | list | character | list | numeric | vector |
+| mandatory | optional | mandatory | optional | optional | optional | optional | optional |
 
 As you can see, each column has a fixed name and data type. Also some of the columns are optional while others are mandatory.
 The table can contain any number of measures and lists. It is important that at least one column of type measure or list is contained and that the column names start with "measure." / "list.".
 
+## Table components
+
+* __problem:__ The problem that should be solved by an algorithm (e.g. dateset or machine learning task)
+* __algorithm:__ The procedure to solve the problem with
+* __replication:__ If you want to try an approach more than one time, you can specify the replication strategy (e.g. repitition or resampling)
+* __\*.parameter:__ Specifies numerical or categorical parameters concerning the corresponding column (e.g. problem properties like data size, algorithm parameters or replication parameters like number of repetitions)
+* __measure.\*:__ The measure to evaluate the result of an algorithm which was applied to a problem (e.g. execution time or misclassification error)
+* __list.\*:__ Same as measure columns but contain a vector of results (e.g. results of every single repitition)
+
+To get the components of your input data table you can use following methods:
+
+```r
+getMeasures(data.table)
+getLists(data.table)
+getMainColumns(data.table)
+getParameterColumns(data.table)
+```
+
+The main columns always consist of `problem` and `algorithm` and can also contain `replication`.
+
+## Algorithms with changing parameters
+
 One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the corresponding algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
+
+To see all so called `iteartion algorithms` in your data table just execude:
+
+```r
+getIterationAlgorithms(data.table)
+```
 
 # Quick Start
 
