@@ -61,7 +61,7 @@ createTuningLinePlot = function(dt,
   })
   # define color
   if ("replication" %in% getMainColumns(dt)) {
-    new.df$color = interaction(new.df$problem, new.df$algorithm, new.df$replicaiton)
+    new.df$color = interaction(new.df$problem, new.df$algorithm, new.df$replication)
   } else {
     new.df$color = interaction(new.df$problem, new.df$algorithm)
   }

@@ -8,7 +8,7 @@ test_that("createParameterScatterPlot Test", {
 
 # Check if creating a parameter scatter plot with histogram throws an error
 test_that("createParameterScatterPlot with histogram Test", {
-  p = createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", TRUE, TRUE)
+  p = createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", "problem", TRUE, TRUE)
   expect_true(is.list(p))
 })
 

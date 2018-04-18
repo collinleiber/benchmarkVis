@@ -49,8 +49,8 @@ test_that("getMeasures for mlr benchmark", {
 
 # Check if getLists() for mlr benchmark is working correctly
 test_that("getLists for mlr benchmark", {
-  measures = getLists(mlr.benchmark.example)
-  expect_identical(measures, c("list.mmce", "list.ber", "list.timetrain"))
+  lists = getLists(mlr.benchmark.example)
+  expect_identical(lists, c("list.mmce", "list.ber", "list.timetrain"))
 })
 
 # Check if getMainColumns() for mlr benchmark is working correctly
@@ -67,6 +67,14 @@ test_that("getParameterColumns for mlr benchmark", {
 
 # Check if getTunings() for mlr tuning is working correctly
 test_that("getTunings for mlr tuning", {
-  measures = getTunings(mlr.tuning.example)
-  expect_identical(measures, list(c("TuneControlRandom", "classif.ksvm"), c("TuneControlGrid", "classif.ksvm")))
+  tuning = getTunings(mlr.tuning.example)
+  expect_identical(tuning, list(c("TuneControlRandom", "classif.ksvm"), c("TuneControlGrid", "classif.ksvm")))
+})
+
+# Check if getTunings() for mlr tuning is working correctly
+test_that("getTunings for mlr tuning with replication", {
+  tmp = mlr.tuning.example
+  tmp$replication = rep("none", nrow(tmp))
+  tuning = getTunings(tmp)
+  expect_identical(tuning, list(c("TuneControlRandom", "classif.ksvm", "none"), c("TuneControlGrid", "classif.ksvm", "none")))
 })

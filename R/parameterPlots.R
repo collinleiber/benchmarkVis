@@ -11,16 +11,18 @@
 #' @param measure the column name containing the results of a measure
 #' @param parameter.column the parameter column which contains the parameter
 #' @param parameter the parameter you want to examine
+#' @param color.by the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @param show.histogram shows the histogram of the measure values in the background (default: FALSE)
 #' @param regression.line add a regression line to the plot (default: FALSE)
 #' @return a plotly scatter plot
 #' @export
 #' @examples
-#' createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", TRUE)
+#' createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", "algorithm", TRUE)
 createParameterScatterPlot = function(dt,
   measure,
   parameter.column,
   parameter,
+  color.by = "algorithm",
   show.histogram = FALSE,
   regression.line = FALSE) {
   # Checks
@@ -30,6 +32,8 @@ createParameterScatterPlot = function(dt,
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_string(color.by)
+  checkmate::assert_true(color.by %in% getMainColumns(dt))
   checkmate::assert_logical(show.histogram)
   checkmate::assert_logical(regression.line)
   # Create new df as filtered dt
@@ -42,22 +46,15 @@ createParameterScatterPlot = function(dt,
     return(x[[parameter]])
   })
   new.df$me = new.df[[measure]]
-  # define color
-  if ("replication" %in% getMainColumns(dt)) {
-    new.df$color = interaction(new.df$problem, new.df$algorithm, new.df$replicaiton)
-  } else {
-    new.df$color = interaction(new.df$problem, new.df$algorithm)
-  }
   # Create plot
   p = plotly::plot_ly(new.df)
   p = plotly::add_trace(
     p,
     x = ~ param,
     y = ~ me,
-    name = "Results",
     type = "scatter",
     mode = "markers",
-    color = ~ color,
+    color = new.df[[color.by]],
     text = ~ paste0(
       parameter,
       ": ",

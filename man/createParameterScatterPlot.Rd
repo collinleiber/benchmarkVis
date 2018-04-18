@@ -5,7 +5,7 @@
 \title{Create a parameter scatter plot}
 \usage{
 createParameterScatterPlot(dt, measure, parameter.column, parameter,
-  show.histogram = FALSE, regression.line = FALSE)
+  color.by = "algorithm", show.histogram = FALSE, regression.line = FALSE)
 }
 \arguments{
 \item{dt}{compatible data table}
@@ -15,6 +15,8 @@ createParameterScatterPlot(dt, measure, parameter.column, parameter,
 \item{parameter.column}{the parameter column which contains the parameter}
 
 \item{parameter}{the parameter you want to examine}
+
+\item{color.by}{the column to color the markers with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 
 \item{show.histogram}{shows the histogram of the measure values in the background (default: FALSE)}
 
@@ -31,5 +33,5 @@ x-Axis: the parameter.
 y-Axis: the measure.
 }
 \examples{
-createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", TRUE)
+createParameterScatterPlot(mlr.tuning.example, "measure.acc.test.mean", "algorithm.parameter", "C", "algorithm", TRUE)
 }
