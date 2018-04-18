@@ -65,8 +65,8 @@ test_that("getParameterColumns for mlr benchmark", {
   expect_identical(parameter.columns, c("problem.parameter", "algorithm.parameter", "replication.parameter"))
 })
 
-# Check if getIterationAlgorithms() for mlr tuning is working correctly
-test_that("getIterationAlgorithms for mlr tuning", {
-  measures = getIterationAlgorithms(mlr.tuning.example)
-  expect_identical(measures, "classif.ksvm")
+# Check if getTunings() for mlr tuning is working correctly
+test_that("getTunings for mlr tuning", {
+  measures = getTunings(mlr.tuning.example)
+  expect_identical(measures, list(c("TuneControlRandom", "classif.ksvm"), c("TuneControlGrid", "classif.ksvm")))
 })

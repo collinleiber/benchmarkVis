@@ -32,7 +32,18 @@ test_that("MlrTuningWrapper Test", {
     show.info = FALSE
   )
   dt = useMlrTuningWrapper(res)
+  # Second tune control strategy
+  ctrl = mlr::makeTuneControlGrid(resolution = 15L)
+  res = mlr::tuneParams(
+    "classif.ksvm",
+    task = mlr::iris.task,
+    resampling = rdesc,
+    par.set = num.ps,
+    control = ctrl,
+    measures = list(mlr::acc, mlr::setAggregation(mlr::acc, test.sd)),
+    show.info = FALSE
+  )
+  dt = rbind(dt, useMlrTuningWrapper(res))
   # Identical?
-  # expect_identical(dt, mlr.tuning.example)
   expect_equal(dt, mlr.tuning.example)
 })

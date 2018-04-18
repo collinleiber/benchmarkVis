@@ -56,13 +56,15 @@ checkStructure = function(dt) {
     checkmate::assert_true(is.vector(dt[[x]]))
     checkmate::assert_true(all(sapply(dt[[x]], is.numeric)))
   }
-  # Check iteration algorithms. Iteration parameter must be included
-  for (x in getIterationAlgorithms(dt)) {
-    checkmate::assert_true(all(sapply(dt[dt$algorithm == x, ]$algorithm.parameter, function(x) {
-      "iteration" %in% names(x)
-    })))
+  # Check tuning sessions
+  for (entry in getTunings(dt)) {
     # Check for duplicate iteration values
-    checkmate::assert_true(0 == anyDuplicated(sapply(dt[dt$algorithm == x, ]$algorithm.parameter, function(x) {
+    if ("replication" %in% getMainColumns(dt)) {
+      tmp = dt[dt$problem == entry[1] & dt$algorithm == entry[2] & dt$replication == entry[3], ]
+    } else {
+      tmp = dt[dt$problem == entry[1] & dt$algorithm == entry[2], ]
+    }
+    checkmate::assert_true(0 == anyDuplicated(sapply(tmp$algorithm.parameter, function(x) {
       x$iteration
     })))
   }

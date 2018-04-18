@@ -88,18 +88,6 @@ getValidParameterUI = function(param) {
       current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
     })
   }
-  else if (grepl("iteration.algorithm", param.name)) {
-    ui.elem = selectInput(
-      ui.elem.id,
-      ui.elem.text,
-      choices = getIterationAlgorithms(isolate(current.data$data)),
-      selected = FALSE,
-      multiple = FALSE
-    )
-    observeEvent(eval(parse(text = input.react.name)), {
-      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
-    })
-  }
   else if (typeof(param[[1]]) == "logical") {
     ui.elem = selectInput(
       ui.elem.id,
@@ -112,11 +100,37 @@ getValidParameterUI = function(param) {
       current.plot$parameter[[param.name]] = as.logical(eval(parse(text = input.react.name)))
     })
   }
+  else if (grepl("parameter.column", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = getParameterColumns(isolate(current.data$data)),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
+  else if (grepl("tuning.parameter", param.name)) {
+    ui.elem = selectInput(
+      ui.elem.id,
+      ui.elem.text,
+      choices = c(names(isolate(current.data$data)$algorithm.parameter[[1]]), "none"),
+      selected = FALSE,
+      multiple = FALSE
+    )
+    observeEvent(eval(parse(text = input.react.name)), {
+      current.plot$parameter[[param.name]] = eval(parse(text = input.react.name))
+    })
+  }
   else if (grepl("parameter", param.name)) {
     ui.elem = selectInput(
       ui.elem.id,
       ui.elem.text,
-      choices = names(isolate(current.data$data)$algorithm.parameter[[1]]),
+      choices = c(names(isolate(current.data$data)$problem.parameter[[1]]),
+        names(isolate(current.data$data)$algorithm.parameter[[1]]),
+        names(isolate(current.data$data)$replication.parameter[[1]])),
       selected = FALSE,
       multiple = FALSE
     )

@@ -22,10 +22,10 @@ getParameterColumnsCount = function(dt) {
   return(length(getParameterColumns(dt)))
 }
 
-# Get the number of algorithms with multiple iterations within the data table
-# Algorithms for which the parameters contain "iteration" field
-getIterationAlgorithmsCount = function(dt) {
-  return(length(getIterationAlgorithms(dt)))
+# Get the number of algorithm tunings within the data table
+# Combinations of (problem, algorithm, replication) for which the algorithm.parameter contains "iteration" field
+getTuningsCount = function(dt) {
+  return(length(getTunings(dt)))
 }
 
 # Return a list containing multiple lists of type input.list (Default = list()).
@@ -102,13 +102,17 @@ getPrettyPlotList = function(input.list) {
 #' @return name of the plot in a readable format
 getPrettyPlotName = function(plot.name) {
   plot.name = strsplit(plot.name, "create")[[1]][2]
-  if (startsWith(plot.name, "Iteration")) {
-    plot.type = "Iteration"
-    plot.name = strsplit(plot.name, "Iteration")[[1]][2]
-  }
-  else if (startsWith(plot.name, "List")) {
+  if (startsWith(plot.name, "List")) {
     plot.type = "List"
     plot.name = strsplit(plot.name, "List")[[1]][2]
+  }
+  else if (startsWith(plot.name, "Parameter")) {
+    plot.type = "Parameter"
+    plot.name = strsplit(plot.name, "Parameter")[[1]][2]
+  }
+  else if (startsWith(plot.name, "Tuning")) {
+    plot.type = "Tuning"
+    plot.name = strsplit(plot.name, "Tuning")[[1]][2]
   }
   else {
     plot.type = "Measure"
