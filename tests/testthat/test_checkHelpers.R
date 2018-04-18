@@ -24,10 +24,10 @@ test_that("getParameterColumnsCount for microbenchmark", {
   expect_equal(count, 2)
 })
 
-# Check if getIterationAlgorithmsCount() for mlr tuning is working correctly
-test_that("getIterationAlgorithmsCount  mlr tuning", {
-  count = getIterationAlgorithmsCount(mlr.tuning.example)
-  expect_equal(count, 1)
+# Check if getTuningsCount() for mlr tuning is working correctly
+test_that("getTuningsCount  mlr tuning", {
+  count = getTuningsCount(mlr.tuning.example)
+  expect_equal(count, 2)
 })
 
 # Check if getCumulativeValues() min is working correctly
@@ -61,26 +61,29 @@ test_that("getPrettyPlotList test", {
   expect_true(length(plots) > 0)
   expect_true(all(sapply(plots, function(x) {
     startsWith(x, "Measure: ") ||
-      startsWith(x, "List: ") || startsWith(x, "Iteration: ")
+      startsWith(x, "List: ") || startsWith(x, "Parameter: ") ||
+          startsWith(x, "Tuning: ")
   })))
 })
 
 # Check if getPrettyPlotName() is working correctly
 test_that("getPrettyPlotName test", {
   expect_equal(getPrettyPlotName("createScatterPlot"), "Measure: Scatter Plot")
-  expect_equal(getPrettyPlotName("createIterationDualParameterPlot"), "Iteration: Dual Parameter Plot")
+  expect_equal(getPrettyPlotName("createParameterScatterPlot"), "Parameter: Scatter Plot")
   expect_equal(getPrettyPlotName("createListLinePlot"), "List: Line Plot")
   expect_equal(getPrettyPlotName("createListDualMeasurePlot"), "List: Dual Measure Plot")
-  expect_equal(getPrettyPlotName("createIterationDualMeasurePlot"), "Iteration: Dual Measure Plot")
+  expect_equal(getPrettyPlotName("createParameterDualPlot"), "Parameter: Dual Plot")
+  expect_equal(getPrettyPlotName("createTuningLinePlot"), "Tuning: Line Plot")
 })
 
 # Check if unprettifyPlotName() is working correctly
 test_that("unprettifyPlotName test", {
   expect_equal(unprettifyPlotName("Measure: Scatter Plot"), "createScatterPlot")
-  expect_equal(unprettifyPlotName("Iteration: Dual Parameter Plot"), "createIterationDualParameterPlot")
+  expect_equal(unprettifyPlotName("Parameter: Scatter Plot"), "createParameterScatterPlot")
   expect_equal(unprettifyPlotName("List: Line Plot"), "createListLinePlot")
   expect_equal(unprettifyPlotName("List: Dual Measure Plot"), "createListDualMeasurePlot")
-  expect_equal(unprettifyPlotName("Iteration: Dual Measure Plot"), "createIterationDualMeasurePlot")
+  expect_equal(unprettifyPlotName("Parameter: Dual Plot"), "createParameterDualPlot")
+  expect_equal(unprettifyPlotName("Tuning: Line Plot"), "createTuningLinePlot")
 })
 
 # Check if repList is working correctly

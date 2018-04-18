@@ -11,7 +11,7 @@ createDensityPlot(dt, measure, stacked = FALSE, color.by = "algorithm")
 
 \item{measure}{the column name of the measure}
 
-\item{stacked}{defines if the density curves should be stacked. Alternative is transparent. Default: FALSE}
+\item{stacked}{defines if the density curves should be stacked. Alternative is transparent (default: FALSE)}
 
 \item{color.by}{the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")}
 }

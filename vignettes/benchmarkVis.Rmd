@@ -67,14 +67,14 @@ getParameterColumns(data.table)
 
 The main columns always consist of `problem` and `algorithm` and can also contain `replication`.
 
-### Algorithms with changing parameters
+### Algorithm tuning
 
-One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the corresponding algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
+One special case occurs if you try to tune your algorithm by changing its parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameter list of the corresponding algorithm. It is important that no value occurs multiple times for the same combination of problem, algorithm and replication.
 
-To see all so called `iteartion algorithms` in your data table just execude:
+To see all tuning combinations in your data table just execute:
 
 ```r
-getIterationAlgorithms(data.table)
+getTunings(data.table)
 ```
 
 ## Input Data Types
@@ -254,28 +254,30 @@ you are ready to go.
 
 # Create Plots
 
-The main feature of the package is to create different kinds of plots. These can roughly be devided into three groups:
+The main feature of the package is to create different kinds of plots. These can roughly be devided into four groups:
 
 * Measure plots
 * List plots
-* Iteration plots
+* Parameter plots
+* Tuning plots
 
 Following list gives an overview about all implemented plots and their corresponding group.
 
-| Measure Plot | List Plot | Iteration Plot |
-|---|---|---|
-| Dual Measure Plot | Dual Measure Plot | Dual Measure Plot |
-| Measure Matrix Plot | Measure Matrix Plot | Measure Matrix Plot |
-| Box Plot | Box Plot | Box Plot |
-| Scatter Plot | Scatter Plot | Scatter Plot |
-| Density Plot | Density Plot | Density Plot |
-| Summary Plot | Line Plot | Line Plot |
-| Rank Matrix Bar Plot | Rank Matrix Bar Plot | Parameter Plot |
-| Density Rank Plot | Density Rank Plot | Dual Parameter Plot |
-| Parallel Coordinates Plot | | |
-| Radar Plot | | |
-| Rank Plot | | |
-| Bar Plot | | |
+| Measure Plot | List Plot | Parameter Plot | Tuning Plot |
+|---|---|---|---|
+| Box Plot | Box Plot | Box Plot | |
+| Scatter Plot | Scatter Plot | Scatter Plot | |
+| Density Plot | Density Plot | Density Plot | |
+| Dual Measure Plot | Dual Measure Plot | Dual Plot | |
+| Measure Matrix Plot | Measure Matrix Plot | Measure Matrix Plot | |
+| Density Rank Plot | Density Rank Plot | | |
+| Rank Matrix Bar Plot | Rank Matrix Bar Plot | | |
+| | Line Plot | | Line Plot |
+| Summary Plot | | | |
+| Parallel Coordinates Plot | | | |
+| Radar Plot | | | |
+| Rank Plot | | | |
+| Bar Plot | | | |
 
 There is no guarantee that the list provided above is up to date. 
 To see a full list with all possible charts use the method:
@@ -303,14 +305,14 @@ createListLinePlot(microbenchmark.example, "list.values")
 
 If you don't know the needed arguments of a specific plot, take a look into the package documentation. As most of the plots are created with plotly you can interactivly change the visualization.
 
-To get more information about the components of your data table execude following commands:
+To get more information about the components of your data table execute following commands:
 
 ```{r}
 getMeasures(mlr.benchmark.example)
 getLists(mlr.benchmark.example)
-getIterationAlgorithms(mlr.tuning.example)
 getMainColumns(mlr.benchmark.example)
 getParameterColumns(mlr.benchmark.example)
+getTunings(mlr.tuning.example)
 ```
 
 # Shiny application

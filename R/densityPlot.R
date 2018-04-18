@@ -6,7 +6,7 @@
 #'
 #' @param dt campatible data table
 #' @param measure the column name of the measure
-#' @param stacked defines if the density curves should be stacked. Alternative is transparent. Default: FALSE
+#' @param stacked defines if the density curves should be stacked. Alternative is transparent (default: FALSE)
 #' @param color.by the column to color the density area with. Possibilities: "algorithm", "problem", "replication" (default: "algorithm")
 #' @return a plotly density plot
 #' @export

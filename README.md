@@ -46,14 +46,14 @@ getParameterColumns(data.table)
 
 The main columns always consist of `problem` and `algorithm` and can also contain `replication`.
 
-## Algorithms with changing parameters
+## Algorithm tuning
 
-One special case occurs if you change algorithm parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameters list of the corresponding algorithm. It is important that this value is defined for every entry of the algorithm and that no value occurs multiple times.
+One special case occurs if you try to tune your algorithm by changing its parameters through multiple iterations. If this is the case you need to add the numeric field `iteration` to the algorithm.parameter list of the corresponding algorithm. It is important that no value occurs multiple times for the same combination of problem, algorithm and replication.
 
-To see all so called `iteartion algorithms` in your data table just execude:
+To see all tuning combinations in your data table just execute:
 
 ```r
-getIterationAlgorithms(data.table)
+getTunings(data.table)
 ```
 
 # Quick Start
