@@ -39,7 +39,11 @@ get.aggr.data = function() {
   aggfun.list = isolate(input$aggrf)
   aggcol = isolate(input$aggrcol)
   aggfun = parser.function.list(aggfun.list)
-  result = aggregation.apply(groupby, aggfun, aggcol, aggregated.data$dt)
+  result = tryCatch(aggregation.apply(groupby, aggfun, aggcol, aggregated.data$dt), error = function(e) FALSE)
+  # Catch error from aggregation -> return original table
+  if (is.logical(result) && result == FALSE) {
+    return(aggregated.data$dt)
+  }
   return(result)
 }
 
@@ -77,9 +81,13 @@ get.transform.data = function() {
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
-  result = transformation.apply(original.data,
+  result = tryCatch(transformation.apply(original.data,
                                 columns.to.transform,
-                                transformation.functions)
+                                transformation.functions), error = function(e) FALSE)
+  # Catch error from transformation -> return original table
+  if (is.logical(result) && result == FALSE) {
+    return(aggregated.data$dt)
+  }
   return(result)
 }
 

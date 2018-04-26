@@ -40,10 +40,10 @@ observeEvent(input$createplot, {
     plot.function = eval(parse(text = current.plot$func))
     current.plot$parameter$dt = current.data$data
     plot.param = current.plot$parameter[!unlist(lapply(current.plot$parameter, is.null))]
-    current.plot$plot = do.call(plot.function, plot.param)
+    current.plot$plot = try(do.call(plot.function, plot.param))
   }
   else{
-    current.plot$plot = createRadarPlot(current.data$data)
+    current.plot$plot = try(createRadarPlot(current.data$data))
   }
 })
 

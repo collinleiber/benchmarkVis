@@ -63,6 +63,7 @@ getMeasures(data.table)
 getLists(data.table)
 getMainColumns(data.table)
 getParameterColumns(data.table)
+getParameters(data.table, parameter.column)
 ```
 
 The main columns always consist of `problem` and `algorithm` and can also contain `replication`.
@@ -312,6 +313,7 @@ getMeasures(mlr.benchmark.example)
 getLists(mlr.benchmark.example)
 getMainColumns(mlr.benchmark.example)
 getParameterColumns(mlr.benchmark.example)
+getParameters(mlr.benchmark.example, "algorithm.parameter")
 getTunings(mlr.tuning.example)
 ```
 

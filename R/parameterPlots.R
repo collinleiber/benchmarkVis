@@ -32,6 +32,7 @@ createParameterScatterPlot = function(dt,
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_true(parameter %in% getParameters(dt, parameter.column))
   checkmate::assert_string(color.by)
   checkmate::assert_true(color.by %in% getMainColumns(dt))
   checkmate::assert_logical(show.histogram)
@@ -134,9 +135,11 @@ createParameterDualPlot = function(dt,
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_true(parameter %in% getParameters(dt, parameter.column))
   checkmate::assert_string(parameter.column2)
   checkmate::assert_true(parameter.column2 %in% getParameterColumns(dt))
   checkmate::assert_string(parameter2)
+  checkmate::assert_true(parameter2 %in% getParameters(dt, parameter.column2))
   checkmate::assert_logical(plot.area)
   # Create new df as filtered dt
   new.df = dt[apply(dt, 1, function(x) {
@@ -224,6 +227,7 @@ createParameterBoxPlot = function(dt,
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_true(parameter %in% getParameters(dt, parameter.column))
   checkmate::assert_logical(violin)
   # Create new df as filtered dt
   new.df = dt[apply(dt, 1, function(x) {
@@ -283,6 +287,7 @@ createParameterDensityPlot = function(dt, measure,
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_true(parameter %in% getParameters(dt, parameter.column))
   checkmate::assert_logical(stacked)
   # Create new df as filtered dt
   new.df = dt[apply(dt, 1, function(x) {
@@ -326,6 +331,7 @@ createParameterMeasureMatrixPlot = function(dt, parameter.column, parameter) {
   checkmate::assert_string(parameter.column)
   checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
   checkmate::assert_string(parameter)
+  checkmate::assert_true(parameter %in% getParameters(dt, parameter.column))
   # Create new df as filtered dt
   new.df = dt[apply(dt, 1, function(x) {
     return(parameter %in% names(x[[parameter.column]]))
