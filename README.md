@@ -42,6 +42,7 @@ getMeasures(data.table)
 getLists(data.table)
 getMainColumns(data.table)
 getParameterColumns(data.table)
+getParameters(data.table, parameter.column)
 ```
 
 The main columns always consist of `problem` and `algorithm` and can also contain `replication`.

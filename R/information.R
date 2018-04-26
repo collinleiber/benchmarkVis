@@ -16,6 +16,7 @@
 #' @examples
 #' getMeasures(mlr.benchmark.example)
 getMeasures = function(dt) {
+  checkmate::assert_data_frame(dt)
   return(subset(names(dt), startsWith(names(dt), "measure.")))
 }
 
@@ -30,6 +31,7 @@ getMeasures = function(dt) {
 #' @examples
 #' getLists(mlr.benchmark.example)
 getLists = function(dt) {
+  checkmate::assert_data_frame(dt)
   return(subset(names(dt), startsWith(names(dt), "list.")))
 }
 
@@ -44,6 +46,7 @@ getLists = function(dt) {
 #' @examples
 #' getMainColumns(mlr.benchmark.example)
 getMainColumns = function(dt) {
+  checkmate::assert_data_frame(dt)
   main.columns = c("problem", "algorithm", "replication")
   return(intersect(names(dt), main.columns))
 }
@@ -59,8 +62,34 @@ getMainColumns = function(dt) {
 #' @examples
 #' getParameterColumns(mlr.benchmark.example)
 getParameterColumns = function(dt) {
+  checkmate::assert_data_frame(dt)
   main.columns = c("problem.parameter", "algorithm.parameter", "replication.parameter")
   return(intersect(names(dt), main.columns))
+}
+
+#' @title Get all parameters of a specified parameter column
+#' @description
+#' Get the names of parameters in the specified parameter column within the data table.
+#'
+#' @param dt input data
+#' @param parameter.column the parameter column (can be "problem.parameter", "algorithm.parameter", "replication.parameter")
+#' @return vector containing all parameter names for the parameter column
+#' @export
+#' @examples
+#' getParameters(mlr.benchmark.example, "algorithm.parameter")
+getParameters = function(dt, parameter.column) {
+  checkmate::assert_data_frame(dt)
+  checkmate::assert_string(parameter.column)
+  checkmate::assert_true(parameter.column %in% getParameterColumns(dt))
+  parameters = vector()
+  for (row in seq(nrow(dt))) {
+    for (entry in names(dt[[row, parameter.column]])) {
+      if (!entry %in% parameters) {
+        parameters = c(parameters, entry)
+      }
+    }
+  }
+  return(parameters)
 }
 
 #' @title Get all tuning sessions
@@ -75,6 +104,7 @@ getParameterColumns = function(dt) {
 #' @examples
 #' getTunings(mlr.tuning.example)
 getTunings = function(dt) {
+  checkmate::assert_data_frame(dt)
   tuning.combination = list()
   i = 1
   for (row in seq(nrow(dt))) {
@@ -142,6 +172,7 @@ listWrappers = function() {
 #' @examples
 #' getValidPlots(mlr.benchmark.example)
 getValidPlots = function(dt) {
+  checkmate::assert_data_frame(dt)
   all.plots = listPlots() #all plots available in the package
   valid.plots = list()
   if (getMeasuresCount(dt) > 0) {

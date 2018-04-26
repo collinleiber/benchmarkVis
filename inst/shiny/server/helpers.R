@@ -116,7 +116,7 @@ getValidParameterUI = function(param) {
     ui.elem = selectInput(
       ui.elem.id,
       ui.elem.text,
-      choices = c(names(isolate(current.data$data)$algorithm.parameter[[1]]), "none"),
+      choices = c(getParameters(isolate(current.data$data), "algorithm.parameter"), "none"),
       selected = FALSE,
       multiple = FALSE
     )
@@ -125,12 +125,13 @@ getValidParameterUI = function(param) {
     })
   }
   else if (grepl("parameter", param.name)) {
+    #print(isolate(input$param_parameter.column))
     ui.elem = selectInput(
       ui.elem.id,
       ui.elem.text,
-      choices = c(names(isolate(current.data$data)$problem.parameter[[1]]),
-        names(isolate(current.data$data)$algorithm.parameter[[1]]),
-        names(isolate(current.data$data)$replication.parameter[[1]])),
+      choices = c(getParameters(isolate(current.data$data), "problem.parameter"),
+        getParameters(isolate(current.data$data), "algorithm.parameter"),
+        getParameters(isolate(current.data$data), "replication.parameter")),
       selected = FALSE,
       multiple = FALSE
     )

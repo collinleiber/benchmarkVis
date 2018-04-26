@@ -65,6 +65,18 @@ test_that("getParameterColumns for mlr benchmark", {
   expect_identical(parameter.columns, c("problem.parameter", "algorithm.parameter", "replication.parameter"))
 })
 
+# Check if getParameters() for mlr tuning is working correctly
+test_that("getParameters for mlr tuning", {
+  parameters = getParameters(mlr.tuning.example, "algorithm.parameter")
+  expect_identical(parameters, c("iteration", "C", "sigma"))
+})
+
+# Check if getParameters() for mlr benchmark is working correctly
+test_that("getParameters for mlr benchmark", {
+  parameters = getParameters(mlr.benchmark.example, "problem.parameter")
+  expect_identical(parameters, c("target", "size"))
+})
+
 # Check if getTunings() for mlr tuning is working correctly
 test_that("getTunings for mlr tuning", {
   tuning = getTunings(mlr.tuning.example)
