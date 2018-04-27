@@ -168,13 +168,6 @@ test_that("Column type detection works properly", {
   expect_equal(column.type(data$problem), "other")
 })
 
-test_that("Numeric column names detection works properly", {
-  data = mlr.benchmark.example
-  column.names.to.be = list("measure.mmce.test.mean", "measure.ber.test.mean", "measure.timetrain.test.mean", "list.mmce", "list.ber", "list.timetrain")
-  column.names.detected = get.num.columns.name(data)
-  expect_equal(column.names.detected, column.names.to.be)
-})
-
 test_that("Parsing of a list of functions works properly", {
   functions = "mean,sd,rank"
   functions.parsed = parser.function.list(functions)

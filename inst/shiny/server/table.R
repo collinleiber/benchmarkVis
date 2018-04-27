@@ -10,11 +10,11 @@ aggregated.data = reactiveValues(
 observeEvent(input$Submit, {
   req(data()) #only execute the rest, if dataframe is available
   req(input$Submit) #only show the content if user has submitted
-  aggregated.data$dt = data()
+  aggregated.data$dt = tableTransformationExport(table$data, TRUE)
 })
 
 observeEvent(input$Reset, {
-  aggregated.data$dt = table$data
+  aggregated.data$dt = tableTransformationExport(table$data, TRUE)
 })
 
 observeEvent(input$Aggregation, {
@@ -50,7 +50,6 @@ get.aggr.data = function() {
 output$table.aggregation = renderUI({
   req(data()) #only execute the rest, if dataframe is available
   req(input$Submit) #only show the content if user has submitted
-  data = data()
   list(
     selectInput(
       "gcolumns",
@@ -65,7 +64,7 @@ output$table.aggregation = renderUI({
     selectInput(
       "aggrcol",
       "Aggregated Column",
-      get.num.columns.name(aggregated.data$dt),
+      getMeasures(aggregated.data$dt),
       selected = FALSE,
       multiple = TRUE
     )
@@ -77,7 +76,7 @@ observeEvent(input$Transformation, {
 })
 
 get.transform.data = function() {
-  original.data = isolate(aggregated.data$dt)
+  original.data = tableTransformationImport(isolate(aggregated.data$dt), TRUE)
   columns.to.transform = isolate(input$trancols)
   transformation.functions = isolate(input$tranfuns)
   transformation.functions = parser.function.list(transformation.functions)
@@ -88,16 +87,15 @@ get.transform.data = function() {
   if (is.logical(result) && result == FALSE) {
     return(aggregated.data$dt)
   }
-  return(result)
+  return(tableTransformationExport(result, TRUE))
 }
 
 output$table.transformation = renderUI({
-  trancols = get.num.columns.name(aggregated.data$dt)
   list(
     selectInput(
       "trancols",
       "Transformation Columns",
-      trancols,
+      c(getMeasures(aggregated.data$dt), getLists(aggregated.data$dt)),
       selected = FALSE,
       multiple = TRUE
     ),
@@ -112,12 +110,13 @@ output$DataTable = DT::renderDataTable(
   aggregated.data$dt,
   filter = "top",
   extensions = c("Buttons", "ColReorder", "FixedColumns"),
+  rownames = FALSE,
   options = list(
     pageLength = 10,
-    lengthMenu = c(5, 10, 15, 20),
+    #lengthMenu = c(5, 10, 15, 20),
     scrollX = TRUE,
-    dom = "Bfrtip",
-    buttons = c(I("colvis"), "copy", "csv", "pdf", "print"),
+    dom = "Blfrtip",
+    buttons = c(I("colvis"), "copy", "csv"),
     colReorder = TRUE,
     dom = "t",
     fixedColumns = list(leftColumns = 1),

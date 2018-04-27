@@ -241,28 +241,6 @@ eval.function = function(fun) {
   return(fun)
 }
 
-#' @title get numeric columns' names for a dataframe
-#'
-#' @description
-#' detects numeric columns' names for a dataframe
-#' for numeric values as well as lists of numeric values
-#'
-#' @param data a dataframe
-#' @return list of the numeric column names
-get.num.columns.name = function(data) {
-  colnames = list()
-  for (col_name in names(data)) {
-    if (is.numeric(data[, col_name])) {
-      colnames = c(colnames, col_name)
-    }
-    else if (is.vector(data[, col_name]) &&
-             !(FALSE %in% lapply(data[, col_name], is.numeric))) {
-      colnames = c(colnames, col_name)
-    }
-  }
-  return(colnames)
-}
-
 #' @title parse the text input of a list of functions
 #'
 #' @description
