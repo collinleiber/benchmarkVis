@@ -92,14 +92,25 @@ jsonExport = function(dt, file.path) {
   )
 }
 
-# Do all the table tranformations needed for file import
-# For csv & json: Transform parameter lists
-# For csv only: Transform vectors
+#' @title Transform table for import
+#'
+#' @description
+#' Do all the table tranformations needed for file import. Convert columns from string to lists.
+#' For csv & json: Transform parameter lists
+#' For csv only: Transform vectors
+#'
+#' @param dt the not yet benchmarkVis compatible data table
+#' @param is.csv working with csv or json file
+#' @return transformed table
 tableTransformationImport = function(dt, is.csv) {
   checkmate::assert_true(checkColumnNames(dt))
   # Parse the columns containing list strings back to lists
   for (column.name in getParameterColumns(dt)) {
     dt[[column.name]] = lapply(dt[[column.name]], stringToList)
+  }
+  # Parse measure columns to numeric if they are string
+  for (column.name in getMeasures(dt)) {
+    dt[[column.name]] = as.numeric(dt[[column.name]])
   }
   # Just for CSV files
   if (is.csv) {
@@ -114,9 +125,16 @@ tableTransformationImport = function(dt, is.csv) {
   return(dt)
 }
 
-# Do all the table tranformations needed for file export.
-# For csv & json: Transform parameter lists
-# For csv only: Transform vectors
+#' @title Transform table for export
+#'
+#' @description
+#' Do all the table tranformations needed for file export. Convert columns from lists to strings.
+#' For csv & json: Transform parameter lists
+#' For csv only: Transform vectors
+#'
+#' @param dt the benchmarkVis compatible data table
+#' @param is.csv working with csv or json file
+#' @return transformed table
 tableTransformationExport = function(dt, is.csv) {
   # Create copy of the original data table
   dt.copy = cbind(dt)

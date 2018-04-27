@@ -14,14 +14,14 @@ observeEvent(input$current.data, {
     current.data$data = table$data
   }
   else if (input$current.data == "aggregated data") {
-    current.data$data = aggregated.data$dt
+    current.data$data = tableTransformationImport(aggregated.data$dt, TRUE)
+    current.data$data = current.data$data[isolate(input$DataTable_rows_all), ]
   }
   updateSelectInput(session, "plotchoice",
                     selected = "none (choose a plot)")
 })
 
 observeEvent(input$plotchoice, {
-  current.plot$plot = NULL
   if (input$plotchoice != "none (choose a plot)") {
     plot.func = unprettifyPlotName(input$plotchoice)
     if (plot.func != "") {
