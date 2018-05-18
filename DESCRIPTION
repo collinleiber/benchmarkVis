@@ -42,5 +42,8 @@ Suggests:
 	shinyjs,
 	V8,
 	shinyBS,
+	magrittr,
+	stringi,
+	BBmisc,
 	DT
 VignetteBuilder: knitr

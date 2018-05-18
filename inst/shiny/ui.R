@@ -5,6 +5,8 @@ library(plotly)
 library(shinyjs)
 library(V8)
 library(shinyBS)
+library(stringi)
+library(BBmisc)
 shinyjs::useShinyjs()
 js.reset.code = "shinyjs.reset = function() {history.go(0)}" # Define the js method that resets the page
 shinyjs::extendShinyjs(text = js.reset.code)
